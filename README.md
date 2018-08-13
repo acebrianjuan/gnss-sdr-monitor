@@ -1,7 +1,7 @@
 # gnss-sdr-monitor
 A graphical user interface to monitor the GNSS-SDR status in real-time
 
-![](https://github.com/acebrianjuan/gnss-sdr-monitor/blob/master/screenshots/gnss-sdr-monitor.png)
+![](./screenshots/gnss-sdr-monitor.png)
 
 <table style="width:100%">
   <tr>
