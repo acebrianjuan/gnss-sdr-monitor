@@ -1,5 +1,5 @@
 /*!
- * \file channel_table_model.cc
+ * \file channel_table_model.cpp
  * \brief Implementation of a model for storing the channels information
  * in a table-like data structure.
  *
