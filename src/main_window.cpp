@@ -116,10 +116,10 @@ Main_Window::Main_Window(QWidget *parent) :
     ui->tableView->setShowGrid(false);
     ui->tableView->verticalHeader()->hide();
     ui->tableView->horizontalHeader()->setStretchLastSection(true);
-    ui->tableView->setItemDelegateForColumn(4, new Constellation_Delegate());
-    ui->tableView->setItemDelegateForColumn(5, new Cn0_Delegate());
-    ui->tableView->setItemDelegateForColumn(6, new Doppler_Delegate());
-    ui->tableView->setItemDelegateForColumn(8, new LED_Delegate());
+    ui->tableView->setItemDelegateForColumn(5, new Constellation_Delegate());
+    ui->tableView->setItemDelegateForColumn(6, new Cn0_Delegate());
+    ui->tableView->setItemDelegateForColumn(7, new Doppler_Delegate());
+    ui->tableView->setItemDelegateForColumn(9, new LED_Delegate());
     //ui->tableView->setAlternatingRowColors(true);
     //ui->tableView->setSelectionBehavior(QTableView::SelectRows);
 

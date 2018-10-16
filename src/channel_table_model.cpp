@@ -50,7 +50,7 @@ Channel_Table_Model::Channel_Table_Model()
     map_signal_pretty_name["5X"] = "E5a";
     map_signal_pretty_name["L5"] = "L5";
 
-    columns = 10;
+    columns = 11;
     buffer_size = DEFAULT_BUFFER_SIZE;
 }
 
@@ -117,24 +117,27 @@ QVariant Channel_Table_Model::data(const QModelIndex &index, int role) const
                     return channel.PRN;
 
                 case 3 :
-                    return 0;
+                    return channel.Acq_doppler_hz;
 
-                case 4 :
-                    return channel_prompt_iq;
+                case 4:
+                    return channel.Acq_delay_samples;
 
                 case 5 :
-                    return channel_cn0;
+                    return channel_prompt_iq;
 
                 case 6 :
-                    return channel_doppler;
+                    return channel_cn0;
 
                 case 7 :
-                    return channel.TOW_at_current_symbol_ms;
+                    return channel_doppler;
 
                 case 8 :
-                    return channel.Flag_valid_word;
+                    return channel.TOW_at_current_symbol_ms;
 
                 case 9 :
+                    return channel.Flag_valid_word;
+
+                case 10 :
                     return channel.Pseudorange_m;
                 }
             }
@@ -158,18 +161,21 @@ QVariant Channel_Table_Model::data(const QModelIndex &index, int role) const
                     return QVariant::Invalid;
 
                 case 5 :
-                    return channel_cn0_cbuf.back();
+                    return QVariant::Invalid;
 
                 case 6 :
-                    return channel_doppler_cbuf.back();
+                    return channel_cn0_cbuf.back();
 
                 case 7 :
-                    return QVariant::Invalid;
+                    return channel_doppler_cbuf.back();
 
                 case 8 :
                     return QVariant::Invalid;
 
                 case 9 :
+                    return QVariant::Invalid;
+
+                case 10 :
                     return QVariant::Invalid;
                 }
 
@@ -206,24 +212,27 @@ QVariant Channel_Table_Model::headerData(int section, Qt::Orientation orientatio
                 return "PRN";
 
             case 3 :
-                return "ACQ";
+                return "ACQ Doppler";
 
             case 4 :
-                return "Constellation";
+                return "ACQ Code Phase";
 
             case 5 :
-                return "C/N0";
+                return "Constellation";
 
             case 6 :
-                return "Doppler";
+                return "C/N0";
 
             case 7 :
-                return "TOW [ms]";
+                return "Doppler";
 
             case 8 :
-                return "TLM";
+                return "TOW [ms]";
 
             case 9 :
+                return "TLM";
+
+            case 10 :
                 return "Pseudorange [m]";
             }
         }
