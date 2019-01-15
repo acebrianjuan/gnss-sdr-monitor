@@ -61,4 +61,4 @@ FORMS += \
         preferences_dialog.ui
 
 RESOURCES += \
-    qml.qrc
+    resources.qrc
