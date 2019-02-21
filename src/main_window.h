@@ -66,6 +66,7 @@ public:
 private:
     Ui::Main_Window *ui;
     //QQmlApplicationEngine *engine;
+    QDockWidget *map_dock;
     QQuickWidget *map_widget;
     //QQuickView *map;
     QQuickItem *item;

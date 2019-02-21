@@ -3,9 +3,10 @@ import QtQuick.Window 2.0
 import QtLocation 5.6
 import QtPositioning 5.6
 
-Item {
-    //width: 512
-    //height: 512
+Item
+{
+    width: 512
+    height: 512
     //visible: true
     id: root
     property variant cttc: QtPositioning.coordinate(41.27504, 1.987709)
