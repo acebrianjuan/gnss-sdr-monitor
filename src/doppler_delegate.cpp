@@ -41,7 +41,6 @@
 
 Doppler_Delegate::Doppler_Delegate(QWidget *parent) : QStyledItemDelegate(parent)
 {
-    qDebug() << "Doppler_Delegate" << "\t" << "Constructed";
 }
 
 Doppler_Delegate::~Doppler_Delegate()
