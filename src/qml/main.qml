@@ -18,7 +18,7 @@ Item
         plugin: Plugin
         {
             id: mapPlugin
-            name: "osm"
+            name: "esri"
         }
         center: cttc
         zoomLevel: 15
