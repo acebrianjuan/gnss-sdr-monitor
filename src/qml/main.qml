@@ -7,7 +7,6 @@ Item
 {
     width: 512
     height: 512
-    //visible: true
     id: root
     property variant cttc: QtPositioning.coordinate(41.27504, 1.987709)
 
@@ -37,17 +36,6 @@ Item
                 height: 10
                 radius: width/2
                 color: "red"
-            }
-
-            function recenter(lat, lon)
-            {
-                clearMapItems();
-                marker.coordinate.latitude = lat;
-                marker.coordinate.longitude = lon;
-                addMapItem(marker);
-                map.center.latitude = lat;
-                map.center.longitude = lon;
-                map.update();
             }
         }
     }
