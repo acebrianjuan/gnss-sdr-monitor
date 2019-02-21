@@ -188,21 +188,6 @@ void Main_Window::clear_entries()
     clear->setEnabled(false);
 }
 
-/*
-void Main_Window::set_map_location()
-{
-    double lat = rand() % 50 + 1;
-    double lon = rand() % 5 + 1;
-
-    qDebug() << "lat :\t" << lat << "\t" << "lon :\t" << lon;
-
-    QGeoCoordinate *coord = new QGeoCoordinate();
-    coord->setLatitude(lat);
-    coord->setLongitude(lon);
-    map_widget->rootObject()->setProperty("center", QVariant::fromValue(coord));
-}
-*/
-
 void Main_Window::quit()
 {
     save_settings();

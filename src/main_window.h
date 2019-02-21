@@ -65,10 +65,8 @@ public:
 
 private:
     Ui::Main_Window *ui;
-    //QQmlApplicationEngine *engine;
     QDockWidget *map_dock;
     QQuickWidget *map_widget;
-    //QQuickView *map;
     QQuickItem *item;
     QTimer *timer;
     Channel_Table_Model *model;
@@ -88,7 +86,6 @@ public slots:
     void toggle_capture();
     void add_entry();
     void clear_entries();
-    //void set_map_location();
     void quit();
     void show_preferences();
     void set_port();
