@@ -41,7 +41,6 @@
 
 Cn0_Delegate::Cn0_Delegate(QWidget *parent) : QStyledItemDelegate(parent)
 {
-    qDebug() << "Cn0_Delegate" << "\t" << "Constructed";
 }
 
 Cn0_Delegate::~Cn0_Delegate()

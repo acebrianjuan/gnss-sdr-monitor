@@ -44,8 +44,6 @@
 
 Constellation_Delegate::Constellation_Delegate(QWidget *parent) : QStyledItemDelegate(parent)
 {
-    qDebug() << "Constellation_Delegate" << "\t" << "Constructed";
-
     timer = new QTimer(this);
     timer->start(1000);
 }

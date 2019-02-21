@@ -38,7 +38,6 @@
 
 LED_Delegate::LED_Delegate(QObject *parent)
 {
-    qDebug() << "LED_Delegate" << "\t" << "Constructed";
 }
 
 LED_Delegate::~LED_Delegate()
