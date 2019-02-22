@@ -73,11 +73,6 @@ Main_Window::Main_Window(QWidget *parent) :
     //ui->gridLayout->addWidget(map_widget, 1, 1, Qt::AlignCenter);
 
 
-    // QTimer.
-    timer = new QTimer(this);
-    timer->start(1000);
-
-
     // QMenuBar.
     ui->actionQuit->setIcon(QIcon::fromTheme("application-exit"));
     ui->actionQuit->setShortcuts(QKeySequence::Quit);

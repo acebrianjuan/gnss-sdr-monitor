@@ -35,7 +35,6 @@
 #define CONSTELLATION_DELEGATE_H
 
 #include <QStyledItemDelegate>
-#include <QTimer>
 #include "qcustomplot.h"
 
 class Constellation_Delegate : public QStyledItemDelegate
@@ -63,7 +62,6 @@ private:
     mutable std::vector<int> channels_id;
     mutable std::map<int, QCustomPlot*> plots;
 
-    QTimer *timer;
     int button_x, button_y;
     //int button_w, button_h;
     //QRect button_r;

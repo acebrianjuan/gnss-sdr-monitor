@@ -37,15 +37,12 @@
 #include <QApplication>
 #include <QMouseEvent>
 #include <QDebug>
-#include <QTimer>
 #include <QModelIndex>
 
 #define SPARKLINE_MIN_EM_WIDTH 10
 
 Constellation_Delegate::Constellation_Delegate(QWidget *parent) : QStyledItemDelegate(parent)
 {
-    timer = new QTimer(this);
-    timer->start(1000);
 }
 
 Constellation_Delegate::~Constellation_Delegate()
