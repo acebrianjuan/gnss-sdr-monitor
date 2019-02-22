@@ -73,7 +73,7 @@ private:
     QUdpSocket *socket_monitor_pvt;
     std::vector<Gnss_Synchro> stocks;
     std::vector<int> channels;
-    unsigned int port;
+    quint16 port_gnss_synchro;
     QSettings settings;
 
     QAction *start;
