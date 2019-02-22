@@ -116,7 +116,7 @@ Main_Window::Main_Window(QWidget *parent) :
 
 
     // Socket.
-    socket = new QUdpSocket(this);
+    socket_gnss_synchro = new QUdpSocket(this);
 
 
     // QStautsBar
@@ -130,7 +130,7 @@ Main_Window::Main_Window(QWidget *parent) :
 
 
     // Connect Signals & Slots.
-    connect(socket, &QUdpSocket::readyRead, this, &Main_Window::add_entry);
+    connect(socket_gnss_synchro, &QUdpSocket::readyRead, this, &Main_Window::add_entry);
     connect(qApp, &QApplication::aboutToQuit, this, &Main_Window::quit);
 
 
@@ -159,9 +159,9 @@ void Main_Window::toggle_capture()
 
 void Main_Window::add_entry()
 {
-    while (socket->hasPendingDatagrams())
+    while (socket_gnss_synchro->hasPendingDatagrams())
     {
-        QNetworkDatagram datagram = socket->receiveDatagram();
+        QNetworkDatagram datagram = socket_gnss_synchro->receiveDatagram();
         stocks = read_gnss_synchro(datagram.data().data(), datagram.data().size());
 
         /*
@@ -272,6 +272,6 @@ void Main_Window::set_port()
     port = settings.value("port", DEFAULT_PORT).toInt();
     settings.endGroup();
 
-    socket->disconnectFromHost();
-    socket->bind(QHostAddress::LocalHost, port);
+    socket_gnss_synchro->disconnectFromHost();
+    socket_gnss_synchro->bind(QHostAddress::LocalHost, port);
 }

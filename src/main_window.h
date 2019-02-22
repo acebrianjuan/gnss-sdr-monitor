@@ -69,7 +69,7 @@ private:
     QQuickWidget *map_widget;
     QQuickItem *item;
     Channel_Table_Model *model;
-    QUdpSocket *socket;
+    QUdpSocket *socket_gnss_synchro;
     std::vector<Gnss_Synchro> stocks;
     std::vector<int> channels;
     unsigned int port;
