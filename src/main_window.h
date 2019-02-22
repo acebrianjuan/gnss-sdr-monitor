@@ -74,6 +74,7 @@ private:
     std::vector<Gnss_Synchro> stocks;
     std::vector<int> channels;
     quint16 port_gnss_synchro;
+    quint16 port_monitor_pvt;
     QSettings settings;
 
     QAction *start;
