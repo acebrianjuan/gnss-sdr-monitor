@@ -68,7 +68,6 @@ private:
     QDockWidget *map_dock;
     QQuickWidget *map_widget;
     QQuickItem *item;
-    QTimer *timer;
     Channel_Table_Model *model;
     QUdpSocket *socket;
     std::vector<Gnss_Synchro> stocks;
