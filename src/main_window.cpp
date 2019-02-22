@@ -115,8 +115,9 @@ Main_Window::Main_Window(QWidget *parent) :
     //ui->tableView->setSelectionBehavior(QTableView::SelectRows);
 
 
-    // Socket.
+    // Sockets.
     socket_gnss_synchro = new QUdpSocket(this);
+    socket_monitor_pvt = new QUdpSocket(this);
 
 
     // QStautsBar
