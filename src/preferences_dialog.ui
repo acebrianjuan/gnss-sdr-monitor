@@ -17,19 +17,19 @@
    <item>
     <layout class="QFormLayout" name="formLayout">
      <item row="1" column="0">
-      <widget class="QLabel" name="port_label">
+      <widget class="QLabel" name="port_gnss_synchro_label">
        <property name="text">
-        <string>Port:</string>
+        <string>GNSS_Synchro port:</string>
        </property>
       </widget>
      </item>
      <item row="1" column="1">
-      <widget class="QSpinBox" name="port_spinBox">
+      <widget class="QSpinBox" name="port_gnss_synchro_spinBox">
        <property name="maximum">
         <number>65535</number>
        </property>
        <property name="value">
-        <number>1337</number>
+        <number>0</number>
        </property>
       </widget>
      </item>
@@ -47,6 +47,20 @@
        </property>
        <property name="value">
         <number>1000</number>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="port_monitor_pvt_label">
+       <property name="text">
+        <string>Monitor_Pvt port:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QSpinBox" name="port_monitor_pvt_spinBox">
+       <property name="maximum">
+        <number>65535</number>
        </property>
       </widget>
      </item>
