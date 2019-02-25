@@ -131,7 +131,7 @@ Main_Window::Main_Window(QWidget *parent) :
 
 
     // Connect Signals & Slots.
-    connect(socket_gnss_synchro, &QUdpSocket::readyRead, this, &Main_Window::add_entry);
+    connect(socket_gnss_synchro, &QUdpSocket::readyRead, this, &Main_Window::receive_gnss_synchro);
     connect(qApp, &QApplication::aboutToQuit, this, &Main_Window::quit);
 
 
@@ -158,7 +158,7 @@ void Main_Window::toggle_capture()
     }
 }
 
-void Main_Window::add_entry()
+void Main_Window::receive_gnss_synchro()
 {
     while (socket_gnss_synchro->hasPendingDatagrams())
     {
