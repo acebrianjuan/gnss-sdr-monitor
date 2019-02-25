@@ -66,5 +66,4 @@ void Preferences_Dialog::on_accept()
     settings.endGroup();
 
     qDebug() << "Preferences Saved";
-    //this->accept();
 }
