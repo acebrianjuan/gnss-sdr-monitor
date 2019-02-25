@@ -270,9 +270,11 @@ void Main_Window::set_port()
 {
     QSettings settings;
     settings.beginGroup("Preferences_Dialog");
-    port_gnss_synchro = settings.value("port", DEFAULT_PORT).toInt();
+    port_gnss_synchro = settings.value("port_gnss_synchro", DEFAULT_PORT).toInt();
+    port_monitor_pvt = settings.value("port_monitor_pvt", DEFAULT_PORT).toInt();
     settings.endGroup();
 
     socket_gnss_synchro->disconnectFromHost();
     socket_gnss_synchro->bind(QHostAddress::LocalHost, port_gnss_synchro);
+    socket_monitor_pvt->bind(QHostAddress::LocalHost, port_monitor_pvt);
 }
