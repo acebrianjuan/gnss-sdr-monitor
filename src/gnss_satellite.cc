@@ -47,9 +47,7 @@ Gnss_Satellite::Gnss_Satellite(const std::string& system_, uint32_t PRN_)
 }
 
 
-Gnss_Satellite::~Gnss_Satellite()
-{
-}
+Gnss_Satellite::~Gnss_Satellite() = default;
 
 
 void Gnss_Satellite::reset()
@@ -69,10 +67,16 @@ void Gnss_Satellite::reset()
 
 std::ostream& operator<<(std::ostream& out, const Gnss_Satellite& sat)  // output
 {
-    std::string tag("");
-    std::string tag2("");
-    if (sat.get_system().compare("Galileo") == 0) tag = "E";
-    if (sat.get_PRN() < 10) tag2 = "0";
+    std::string tag;
+    std::string tag2;
+    if (sat.get_system() == "Galileo")
+        {
+            tag = "E";
+        }
+    if (sat.get_PRN() < 10)
+        {
+            tag2 = "0";
+        }
     out << sat.get_system() << " PRN " << tag << tag2 << sat.get_PRN() << " (Block " << sat.get_block() << ")";
     return out;
 }
@@ -81,9 +85,9 @@ std::ostream& operator<<(std::ostream& out, const Gnss_Satellite& sat)  // outpu
 bool operator==(const Gnss_Satellite& sat1, const Gnss_Satellite& sat2)
 {
     bool equal = false;
-    if (sat1.get_system().compare(sat2.get_system()) == 0)
+    if (sat1.get_system() == sat2.get_system())
         {
-            if (sat1.get_PRN() == (sat2.get_PRN()))
+            if (sat1.get_PRN() == sat2.get_PRN())
                 {
                     equal = true;
                 }
@@ -113,7 +117,7 @@ Gnss_Satellite& Gnss_Satellite::operator=(const Gnss_Satellite &rhs) {
 void Gnss_Satellite::set_system(const std::string& system_)
 {
     // Set the satellite system {"GPS", "Glonass", "SBAS", "Galileo", "Compass"}
-    std::set<std::string>::iterator it = system_set.find(system_);
+    auto it = system_set.find(system_);
 
     if (it != system_set.cend())
         {
@@ -129,7 +133,7 @@ void Gnss_Satellite::set_system(const std::string& system_)
 
 void Gnss_Satellite::update_PRN(uint32_t PRN_)
 {
-    if (system.compare("Glonass") != 0)
+    if (system != "Glonass")
         {
             DLOG(INFO) << "Trying to update PRN for not GLONASS system";
             PRN = 0;
@@ -153,12 +157,12 @@ void Gnss_Satellite::update_PRN(uint32_t PRN_)
 void Gnss_Satellite::set_PRN(uint32_t PRN_)
 {
     // Set satellite's PRN
-    if (system.compare("") == 0)
+    if (system.empty())
         {
             DLOG(INFO) << "Trying to define PRN while system is not defined";
             PRN = 0;
         }
-    if (system.compare("GPS") == 0)
+    if (system == "GPS")
         {
             if (PRN_ < 1 or PRN_ > 32)
                 {
@@ -170,7 +174,7 @@ void Gnss_Satellite::set_PRN(uint32_t PRN_)
                     PRN = PRN_;
                 }
         }
-    else if (system.compare("Glonass") == 0)
+    else if (system == "Glonass")
         {
             if (PRN_ < 1 or PRN_ > 24)
                 {
@@ -182,7 +186,7 @@ void Gnss_Satellite::set_PRN(uint32_t PRN_)
                     PRN = PRN_;
                 }
         }
-    else if (system.compare("SBAS") == 0)
+    else if (system == "SBAS")
         {
             if (PRN_ == 120)
                 {
@@ -214,7 +218,7 @@ void Gnss_Satellite::set_PRN(uint32_t PRN_)
                     PRN = 0;
                 }
         }
-    else if (system.compare("Galileo") == 0)
+    else if (system == "Galileo")
         {
             if (PRN_ < 1 or PRN_ > 36)
                 {
@@ -226,6 +230,19 @@ void Gnss_Satellite::set_PRN(uint32_t PRN_)
                     PRN = PRN_;
                 }
         }
+    else if (system == "Beidou")
+        {
+            if (PRN_ < 1 or PRN_ > 37)
+                {
+                    DLOG(INFO) << "This PRN is not defined";
+                    PRN = 0;
+                }
+            else
+                {
+                    PRN = PRN_;
+                }
+        }
+
     else
         {
             DLOG(INFO) << "System " << system << " is not defined";
@@ -280,7 +297,7 @@ std::string Gnss_Satellite::get_block() const
 std::string Gnss_Satellite::what_block(const std::string& system_, uint32_t PRN_)
 {
     std::string block_ = "Unknown";
-    if (system_.compare("GPS") == 0)
+    if (system_ == "GPS")
         {
             // info from https://www.navcen.uscg.gov/?Do=constellationStatus
             switch (PRN_)
@@ -386,7 +403,7 @@ std::string Gnss_Satellite::what_block(const std::string& system_, uint32_t PRN_
                 }
         }
 
-    if (system_.compare("Glonass") == 0)
+    if (system_ == "Glonass")
         {
             // Info from http://www.sdcm.ru/smglo/grupglo?version=eng&site=extern
             // See also http://www.glonass-center.ru/en/GLONASS/
@@ -492,7 +509,7 @@ std::string Gnss_Satellite::what_block(const std::string& system_, uint32_t PRN_
                     block_ = std::string("Unknown");
                 }
         }
-    if (system_.compare("SBAS") == 0)
+    if (system_ == "SBAS")
         {
             switch (PRN_)
                 {
@@ -518,7 +535,7 @@ std::string Gnss_Satellite::what_block(const std::string& system_, uint32_t PRN_
                     block_ = std::string("Unknown");
                 }
         }
-    if (system_.compare("Galileo") == 0)
+    if (system_ == "Galileo")
         {
             // Check http://en.wikipedia.org/wiki/List_of_Galileo_satellites and https://www.gsc-europa.eu/system-status/Constellation-Information
             switch (PRN_)
@@ -600,6 +617,57 @@ std::string Gnss_Satellite::what_block(const std::string& system_, uint32_t PRN_
                     break;
                 case 36:
                     block_ = std::string("FOC-FM19");  // Galileo Full Operational Capability (FOC) satellite FM19 / GSAT0219, launched on Jul. 25, 2018. UNDER COMMISSIONING.
+                    break;
+                default:
+                    block_ = std::string("Unknown(Simulated)");
+                }
+        }
+    if (system_ == "Beidou")
+        {
+            // Check https://en.wikipedia.org/wiki/List_of_BeiDou_satellites
+            switch (PRN_)
+                {
+                case 19:
+                    block_ = std::string("BEIDOU-3 M1");  //!<Slot B-7; launched 2017/11/05
+                    break;
+                case 20:
+                    block_ = std::string("BEIDOU-3 M2");  //!<Slot B-5; launched 2017/11/05
+                    break;
+                case 21:
+                    block_ = std::string("BEIDOU 3M5");  //!<Slot B-?; launched 2018/02/12
+                    break;
+                case 22:
+                    block_ = std::string("BEIDOU 3M6");  //!<Slot B-6; launched 2018/02/12
+                    break;
+                case 23:
+                    block_ = std::string("BEIDOU 3M9");  //!<Slot C-7; launched 2018/07/29
+                    break;
+                case 24:
+                    block_ = std::string("BEIDOU 3M10");  //!<Slot C-1; launched 2018/07/29
+                    break;
+                case 25:
+                    block_ = std::string("BEIDOU 3M12");  //!<Slot C-8; launched 2018/08/24
+                    break;
+                case 26:
+                    block_ = std::string("BEIDOU 3M11");  //!<Slot C-2; launched 2018/08/24
+                    break;
+                case 27:
+                    block_ = std::string("BEIDOU 3M3");  //!<Slot A-?; launched 2018/01/11
+                    break;
+                case 28:
+                    block_ = std::string("BEIDOU 3M4");  //!<Slot A-?; launched 2018/01/11
+                    break;
+                case 29:
+                    block_ = std::string("BEIDOU 3M7");  //!<Slot A-?; launched 2018/03/29
+                    break;
+                case 30:
+                    block_ = std::string("BEIDOU 3M8");  //!<Slot A-?; launched 2018/03/29
+                    break;
+                case 32:
+                    block_ = std::string("BEIDOU 3M13");  //!<Slot B-1?; launched 2018/09/19
+                    break;
+                case 33:
+                    block_ = std::string("BEIDOU 3M14");  //!<Slot B-3; launched 2018/09/19
                     break;
                 default:
                     block_ = std::string("Unknown(Simulated)");

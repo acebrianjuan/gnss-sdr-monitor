@@ -54,7 +54,8 @@ HEADERS += \
         cn0_delegate.h \
         doppler_delegate.h \
         led_delegate.h \
-        preferences_dialog.h
+        preferences_dialog.h \
+        monitor_pvt.h
 
 FORMS += \
         main_window.ui \
