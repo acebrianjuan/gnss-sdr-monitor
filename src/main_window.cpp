@@ -62,7 +62,7 @@ Main_Window::Main_Window(QWidget *parent) :
 
 
     // Map: QQuickWidget.
-    map_dock = new QDockWidget(this);
+    map_dock = new QDockWidget("Map", this);
     map_widget = new QQuickWidget(this);
     map_widget->setSource(QUrl(QStringLiteral("qrc:/qml/main.qml")));
     map_widget->setResizeMode(QQuickWidget::SizeRootObjectToView);
