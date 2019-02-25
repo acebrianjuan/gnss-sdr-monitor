@@ -165,11 +165,6 @@ void Main_Window::add_entry()
         QNetworkDatagram datagram = socket_gnss_synchro->receiveDatagram();
         stocks = read_gnss_synchro(datagram.data().data(), datagram.data().size());
 
-        /*
-        statusBar()->showMessage("Listening on UDP port " + QString::number(port) + ": "
-                                 + QString::number(datagram.data().size()) + " bytes");
-                                 */
-
         if(stop->isEnabled())
         {
             model->populate_channels(stocks);
@@ -221,18 +216,6 @@ void Main_Window::save_settings()
     }
     settings.endArray();
     settings.endGroup();
-
-    /*
-    settings.beginGroup("Channel_Table_Model");
-    settings.setValue("buffer_size", buffer_size);
-    settings.endGroup();
-    */
-
-    /*
-    settings.beginGroup("socket");
-    settings.setValue("port", port);
-    settings.endGroup();
-    */
 
     qDebug() << "Settings Saved";
 }
