@@ -8,8 +8,7 @@ Map
     property variant cttc: QtPositioning.coordinate(41.27504, 1.987709)
 
     id: map
-    width: 512
-    height: 512
+    height: 300
 
     plugin: Plugin
     {

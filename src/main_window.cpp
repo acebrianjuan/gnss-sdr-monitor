@@ -65,12 +65,9 @@ Main_Window::Main_Window(QWidget *parent) :
     map_dock = new QDockWidget(this);
     map_widget = new QQuickWidget(this);
     map_widget->setSource(QUrl(QStringLiteral("qrc:/qml/main.qml")));
-    //map_widget->setMinimumSize(512, 512);
-    //map_widget->setMaximumSize(512, 512);
     map_widget->setResizeMode(QQuickWidget::SizeRootObjectToView);
     map_dock->setWidget(map_widget);
-    addDockWidget(Qt::RightDockWidgetArea, map_dock);
-    //ui->gridLayout->addWidget(map_widget, 1, 1, Qt::AlignCenter);
+    addDockWidget(Qt::TopDockWidgetArea, map_dock);
 
 
     // QMenuBar.
