@@ -18,21 +18,4 @@ Map
     }
     center: cttc
     zoomLevel: 15
-
-    MapQuickItem
-    {
-        id: marker
-        coordinate: cttc
-        anchorPoint.x: icon.width * 0.5
-        anchorPoint.y: icon.height * 0.5
-
-        sourceItem: Rectangle
-        {
-            id: icon
-            width: 10
-            height: 10
-            radius: width/2
-            color: "red"
-        }
-    }
 }
