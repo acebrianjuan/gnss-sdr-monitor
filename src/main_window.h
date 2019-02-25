@@ -85,7 +85,7 @@ private:
 
 public slots:
     void toggle_capture();
-    void add_entry();
+    void receive_gnss_synchro();
     void clear_entries();
     void quit();
     void show_preferences();
