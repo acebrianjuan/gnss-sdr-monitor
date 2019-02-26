@@ -44,7 +44,8 @@ SOURCES += \
         cn0_delegate.cpp \
         doppler_delegate.cpp \
         led_delegate.cpp \
-        preferences_dialog.cpp
+        preferences_dialog.cpp \
+        monitor_pvt_wrapper.cpp
 
 HEADERS += \
         main_window.h \
@@ -55,11 +56,12 @@ HEADERS += \
         doppler_delegate.h \
         led_delegate.h \
         preferences_dialog.h \
-        monitor_pvt.h
+        monitor_pvt.h \
+        monitor_pvt_wrapper.h
 
 FORMS += \
         main_window.ui \
         preferences_dialog.ui
 
 RESOURCES += \
-    resources.qrc
+        resources.qrc
