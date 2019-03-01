@@ -44,6 +44,8 @@
 #include <QGeoCoordinate>
 
 #include "gnss_synchro.h"
+#include "monitor_pvt.h"
+#include "monitor_pvt_wrapper.h"
 #include "channel_table_model.h"
 #include "qcustomplot.h"
 
@@ -60,6 +62,7 @@ public:
     explicit Main_Window(QWidget *parent = nullptr);
     ~Main_Window();
     std::vector<Gnss_Synchro> read_gnss_synchro(char buff[], int bytes);
+    Monitor_Pvt read_monitor_pvt(char buff[], int bytes);
     void save_settings();
     void load_settings();
 
@@ -72,6 +75,8 @@ private:
     QUdpSocket *socket_gnss_synchro;
     QUdpSocket *socket_monitor_pvt;
     std::vector<Gnss_Synchro> stocks;
+    Monitor_Pvt_Wrapper *m_monitor_pvt_wrapper;
+    Monitor_Pvt m_monitor_pvt;
     std::vector<int> channels;
     quint16 port_gnss_synchro;
     quint16 port_monitor_pvt;
@@ -86,6 +91,7 @@ private:
 public slots:
     void toggle_capture();
     void receive_gnss_synchro();
+    void receive_monitor_pvt();
     void clear_entries();
     void quit();
     void show_preferences();
