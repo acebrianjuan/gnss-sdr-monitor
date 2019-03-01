@@ -40,10 +40,9 @@
 
 #include <QtNetwork/QHostAddress>
 #include <QtNetwork/QNetworkDatagram>
-
 #include <QGeoLocation>
 #include <QGeoCoordinate>
-
+#include <QQmlContext>
 #include <QStringList>
 #include <QDebug>
 
@@ -61,9 +60,14 @@ Main_Window::Main_Window(QWidget *parent) :
     ui->setupUi(this);
 
 
+    // Monitor_Pvt_Wrapper.
+    m_monitor_pvt_wrapper = new Monitor_Pvt_Wrapper();
+
+
     // Map: QQuickWidget.
     map_dock = new QDockWidget("Map", this);
     map_widget = new QQuickWidget(this);
+    map_widget->rootContext()->setContextProperty("m_monitor_pvt_wrapper", m_monitor_pvt_wrapper);
     map_widget->setSource(QUrl(QStringLiteral("qrc:/qml/main.qml")));
     map_widget->setResizeMode(QQuickWidget::SizeRootObjectToView);
     map_dock->setWidget(map_widget);
@@ -129,6 +133,7 @@ Main_Window::Main_Window(QWidget *parent) :
 
     // Connect Signals & Slots.
     connect(socket_gnss_synchro, &QUdpSocket::readyRead, this, &Main_Window::receive_gnss_synchro);
+    connect(socket_monitor_pvt, &QUdpSocket::readyRead, this, &Main_Window::receive_monitor_pvt);
     connect(qApp, &QApplication::aboutToQuit, this, &Main_Window::quit);
 
 
@@ -170,6 +175,21 @@ void Main_Window::receive_gnss_synchro()
     }
 }
 
+void Main_Window::receive_monitor_pvt()
+{
+    while (socket_monitor_pvt->hasPendingDatagrams())
+    {
+        QNetworkDatagram datagram = socket_monitor_pvt->receiveDatagram();
+        m_monitor_pvt = read_monitor_pvt(datagram.data().data(), datagram.data().size());
+
+        if(stop->isEnabled())
+        {
+            m_monitor_pvt_wrapper->add_monitor_pvt(m_monitor_pvt);
+            //clear->setEnabled(true);
+        }
+    }
+}
+
 void Main_Window::clear_entries()
 {
     model->clear_channels();
@@ -196,6 +216,23 @@ std::vector<Gnss_Synchro> Main_Window::read_gnss_synchro(char buff[], int bytes)
     }
 
     return stocks;
+}
+
+Monitor_Pvt Main_Window::read_monitor_pvt(char buff[], int bytes)
+{
+    try
+    {
+        std::string archive_data(&buff[0], bytes);
+        std::istringstream archive_stream(archive_data);
+        boost::archive::binary_iarchive archive(archive_stream);
+        archive >> m_monitor_pvt;
+    }
+    catch (std::exception& e)
+    {
+        qDebug() << e.what();
+    }
+
+    return m_monitor_pvt;
 }
 
 void Main_Window::save_settings()
