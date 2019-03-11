@@ -57,6 +57,14 @@ Main_Window::Main_Window(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::Main_Window)
 {
+    // Use a timer to delay updating the model to a fixed amount of times per second
+    updateTimer.setInterval(500);
+    updateTimer.setSingleShot(true);
+    connect(&updateTimer, &QTimer::timeout, [this]
+    {
+        model->update();
+    });
+
     ui->setupUi(this);
 
 
@@ -162,8 +170,10 @@ void Main_Window::toggle_capture()
 
 void Main_Window::receive_gnss_synchro()
 {
+    bool newData = false;
     while (socket_gnss_synchro->hasPendingDatagrams())
     {
+        newData = true;
         QNetworkDatagram datagram = socket_gnss_synchro->receiveDatagram();
         stocks = read_gnss_synchro(datagram.data().data(), datagram.data().size());
 
@@ -172,6 +182,10 @@ void Main_Window::receive_gnss_synchro()
             model->populate_channels(stocks);
             clear->setEnabled(true);
         }
+    }
+    if (newData && !updateTimer.isActive())
+    {
+        updateTimer.start();
     }
 }
 
