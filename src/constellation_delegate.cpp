@@ -144,9 +144,12 @@ void Constellation_Delegate::paint(QPainter *painter, const QStyleOptionViewItem
         plot = plots.at(index.row());
     }
 
-    plot->graph(0)->setData(x_data, y_data);
-    plot->rescaleAxes();
-    plot->replot();
+    if (plot->isVisible())
+    {
+        plot->graph(0)->setData(x_data, y_data);
+        plot->rescaleAxes();
+        plot->replot(QCustomPlot::rpQueuedReplot);
+    }
 
 
     double min_x = 0;
