@@ -142,10 +142,13 @@ void Cn0_Delegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
         plot = plots.at(index.row());
     }
 
-    plot->graph(0)->setData(x_data, y_data);
-    plot->graph(0)->rescaleAxes(true);
-    plot->xAxis->setRange(x_data.first(), x_data.last());
-    plot->replot();
+    if (plot->isVisible())
+    {
+        plot->graph(0)->setData(x_data, y_data);
+        plot->graph(0)->rescaleAxes(true);
+        plot->xAxis->setRange(x_data.first(), x_data.last());
+        plot->replot(QCustomPlot::rpQueuedReplot);
+    }
 
 
     double min_y = 0;
