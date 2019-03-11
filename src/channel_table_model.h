@@ -54,7 +54,7 @@ public:
     int get_columns();
     void set_buffer_size();
 
-    // List of virual functions that must be implemented in a read-only table model.
+    // List of virtual functions that must be implemented in a read-only table model.
     int rowCount(const QModelIndex &parent) const;
     int columnCount(const QModelIndex &parent) const;
     QVariant data(const QModelIndex &index, int role) const;

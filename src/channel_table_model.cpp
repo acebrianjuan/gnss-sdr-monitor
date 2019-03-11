@@ -379,11 +379,6 @@ void Channel_Table_Model::clear_channel(int ch_id)
 
 void Channel_Table_Model::clear_channels()
 {
-    /*
-    channels.clear();
-    channels_id.clear();
-    */
-
     channels_id.clear();
     channels.clear();
     channels_signal.clear();
