@@ -42,6 +42,14 @@
 
 Channel_Table_Model::Channel_Table_Model()
 {
+    map_signal_pretty_name["1C"] = "L1 C/A";
+    map_signal_pretty_name["1B"] = "E1";
+    map_signal_pretty_name["1G"] = "L1 C/A";
+    map_signal_pretty_name["2S"] = "L2C";
+    map_signal_pretty_name["2G"] = "L2 C/A";
+    map_signal_pretty_name["5X"] = "E5a";
+    map_signal_pretty_name["L5"] = "L5";
+
     columns = 10;
     buffer_size = DEFAULT_BUFFER_SIZE;
 }
@@ -385,15 +393,6 @@ void Channel_Table_Model::clear_channels()
 
 QString Channel_Table_Model::get_signal_pretty_name(Gnss_Synchro ch)
 {
-    std::map<std::string, QString> map_signal_pretty_name;
-    map_signal_pretty_name["1C"] = "L1 C/A";
-    map_signal_pretty_name["1B"] = "E1";
-    map_signal_pretty_name["1G"] = "L1 C/A";
-    map_signal_pretty_name["2S"] = "L2C";
-    map_signal_pretty_name["2G"] = "L2 C/A";
-    map_signal_pretty_name["5X"] = "E5a";
-    map_signal_pretty_name["L5"] = "L5";
-
     QString system_name;
 
     if (ch.System != '\0')

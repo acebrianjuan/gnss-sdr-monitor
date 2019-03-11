@@ -76,6 +76,8 @@ protected:
 public slots:
     Gnss_Synchro get_channel_data(int key);
 
+private:
+    std::map<std::string, QString> map_signal_pretty_name;
 };
 
 #endif // CHANNEL_TABLE_MODEL_H
