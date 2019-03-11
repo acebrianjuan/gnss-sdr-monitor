@@ -43,6 +43,8 @@ class Channel_Table_Model : public QAbstractTableModel
 public:
     Channel_Table_Model();
 
+    void update();
+
     void populate_channels(std::vector<Gnss_Synchro> stocks);
     void populate_channel(Gnss_Synchro ch);
     void clear_channel(int ch_id);

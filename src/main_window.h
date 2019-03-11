@@ -81,6 +81,7 @@ private:
     quint16 port_gnss_synchro;
     quint16 port_monitor_pvt;
     QSettings settings;
+    QTimer updateTimer;
 
     QAction *start;
     QAction *stop;

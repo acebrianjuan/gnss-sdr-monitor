@@ -54,6 +54,12 @@ Channel_Table_Model::Channel_Table_Model()
     buffer_size = DEFAULT_BUFFER_SIZE;
 }
 
+void Channel_Table_Model::update()
+{
+    beginResetModel();
+    endResetModel();
+}
+
 int Channel_Table_Model::rowCount(const QModelIndex &parent) const
 {
     return channels.size();
@@ -237,8 +243,6 @@ void Channel_Table_Model::populate_channel(Gnss_Synchro ch)
 {
     if (ch.fs != 0) // Channel is valid.
     {
-        beginResetModel();
-
 
         if (channels.find(ch.Channel_ID) != channels.end()) // Channel exists.
         {
@@ -349,15 +353,11 @@ void Channel_Table_Model::populate_channel(Gnss_Synchro ch)
         {
             channels_id.push_back(ch.Channel_ID);
         }
-
-        endResetModel();
     }
 }
 
 void Channel_Table_Model::clear_channel(int ch_id)
 {
-    beginResetModel();
-
     channels_id.erase(std::remove(channels_id.begin(), channels_id.end(), ch_id), channels_id.end());
     channels.erase(ch_id);
     channels_signal.erase(ch_id);
@@ -366,14 +366,10 @@ void Channel_Table_Model::clear_channel(int ch_id)
     channels_prompt_q.erase(ch_id);
     channels_cn0.erase(ch_id);
     channels_doppler.erase(ch_id);
-
-    endResetModel();
 }
 
 void Channel_Table_Model::clear_channels()
 {
-    beginResetModel();
-
     /*
     channels.clear();
     channels_id.clear();
@@ -387,8 +383,6 @@ void Channel_Table_Model::clear_channels()
     channels_prompt_q.clear();
     channels_cn0.clear();
     channels_doppler.clear();
-
-    endResetModel();
 }
 
 QString Channel_Table_Model::get_signal_pretty_name(Gnss_Synchro ch)
@@ -399,11 +393,11 @@ QString Channel_Table_Model::get_signal_pretty_name(Gnss_Synchro ch)
     {
         if (ch.System == 'G')
         {
-            system_name = "GPS";
+            system_name = QStringLiteral("GPS");
         }
         else if (ch.System == 'E')
         {
-            system_name = "Galileo";
+            system_name = QStringLiteral("Galileo");
         }
 
         if (map_signal_pretty_name.find(ch.Signal) != map_signal_pretty_name.end())
