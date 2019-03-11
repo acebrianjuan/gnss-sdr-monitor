@@ -207,6 +207,7 @@ void Main_Window::receive_monitor_pvt()
 void Main_Window::clear_entries()
 {
     model->clear_channels();
+    model->update();
     clear->setEnabled(false);
 }
 
