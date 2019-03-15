@@ -62,95 +62,6 @@ void Doppler_Delegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
     }
 
 
-    QCustomPlot *plot;
-
-    if (plots.find(index.row()) == plots.end())
-    {
-        QColor text_color = QColor("#EFF0F1");
-        QColor grid_color = QColor("#4D4D4D");
-        QColor background_color = QColor("#333333");
-        QColor marker_color = QColor("#FFAA00");
-
-        plot = new QCustomPlot();
-        plots[index.row()] = plot;
-
-        plot->setVisible(false);
-        plot->addGraph();
-
-        QPen marker_pen;
-        marker_color.setAlpha(150);
-        marker_pen.setColor(marker_color);
-        plot->graph(0)->setPen(marker_pen);
-        plot->graph(0)->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ssDisc, 2));
-
-        plot->xAxis->setLabel("RX Time [s]");
-        plot->xAxis->setLabelColor(text_color);
-        plot->xAxis->setTickLabelRotation(30);
-        plot->xAxis->setSubTicks(false);
-
-        plot->yAxis->setLabel("Doppler [Hz]");
-        plot->yAxis->setLabelColor(text_color);
-        plot->yAxis->setSubTicks(false);
-
-        plot->xAxis2->setVisible(true);
-        plot->xAxis2->setTicks(false);
-        plot->xAxis2->setTickLabels(false);
-        plot->xAxis2->setBasePen(Qt::NoPen);
-
-        plot->yAxis2->setVisible(true);
-        plot->yAxis2->setTicks(false);
-        plot->yAxis2->setTickLabels(false);
-        plot->yAxis2->setBasePen(Qt::NoPen);
-
-        // add title layout element:
-        QString title = index.model()->headerData(index.column(), Qt::Horizontal, Qt::DisplayRole).toString();
-        title.append(" CH ").append(index.model()->data(index.siblingAtColumn(0), Qt::DisplayRole).toString());
-        index.model()->headerData(index.column(), Qt::Horizontal, Qt::DisplayRole).toString();
-        plot->xAxis2->setLabel(title);
-        plot->xAxis2->setLabelFont(QFont("sans", 10, QFont::Bold));
-        plot->xAxis2->setLabelColor(text_color);
-
-        // set some pens, brushes and backgrounds:
-        plot->xAxis->setBasePen(QPen(text_color, 1));
-        plot->yAxis->setBasePen(QPen(text_color, 1));
-
-        plot->xAxis->setTickPen(QPen(text_color, 1));
-        plot->yAxis->setTickPen(QPen(text_color, 1));
-
-        plot->xAxis->setSubTickPen(QPen(text_color, 1));
-        plot->yAxis->setSubTickPen(QPen(text_color, 1));
-
-        plot->xAxis->setTickLabelColor(text_color);
-        plot->yAxis->setTickLabelColor(text_color);
-
-        plot->xAxis->grid()->setPen(QPen(grid_color, 1, Qt::SolidLine));
-        plot->yAxis->grid()->setPen(QPen(grid_color, 1, Qt::SolidLine));
-
-        plot->xAxis->grid()->setZeroLinePen(Qt::NoPen);
-        plot->yAxis->grid()->setZeroLinePen(Qt::NoPen);
-
-        QCPLineEnding le = QCPLineEnding::esHalfBar;
-        le.setInverted(true);
-        plot->xAxis->setUpperEnding(le);
-        plot->yAxis->setUpperEnding(QCPLineEnding::esHalfBar);
-
-        plot->setBackground(QBrush(background_color, Qt::SolidPattern));
-        plot->axisRect()->setBackground(QBrush(background_color, Qt::SolidPattern));
-    }
-    else
-    {
-        plot = plots.at(index.row());
-    }
-
-    if (plot->isVisible())
-    {
-        plot->graph(0)->setData(x_data, y_data);
-        plot->graph(0)->rescaleAxes(true);
-        plot->xAxis->setRange(x_data.first(), x_data.last());
-        plot->replot();
-    }
-
-
     double min_y = 0;
     double max_y = 1;
     int em_w = option.fontMetrics.height();
@@ -252,20 +163,4 @@ QSize Doppler_Delegate::sizeHint(const QStyleOptionViewItem &option,
                                  const QModelIndex &index) const
 {
     return QSize(option.fontMetrics.height() * SPARKLINE_MIN_EM_WIDTH, QStyledItemDelegate::sizeHint(option, index).height());
-}
-
-bool Doppler_Delegate::editorEvent(QEvent *event, QAbstractItemModel *model, const QStyleOptionViewItem &option, const QModelIndex &index)
-{
-    if ( event->type() == QEvent::MouseButtonRelease )
-    {
-        qDebug() << "Click : " << index.row();
-
-        QCustomPlot *plot = plots.at(index.row());
-        if (!plot->isVisible())
-        {
-            plot->setGeometry(0, 0, 300, 200);
-            plot->setVisible(true);
-        }
-    }
-    return true;
 }
