@@ -40,10 +40,7 @@
 
 #include <QtNetwork/QHostAddress>
 #include <QtNetwork/QNetworkDatagram>
-#include <QGeoLocation>
-#include <QGeoCoordinate>
 #include <QQmlContext>
-#include <QStringList>
 #include <QDebug>
 
 #include <boost/archive/binary_iarchive.hpp>
@@ -127,16 +124,6 @@ Main_Window::Main_Window(QWidget *parent) :
     // Sockets.
     socket_gnss_synchro = new QUdpSocket(this);
     socket_monitor_pvt = new QUdpSocket(this);
-
-
-    // QStautsBar
-    //statusBar()->showMessage("Listening on UDP port " + QString::number(port));
-
-
-    // StyleSheet.
-    //setStyleSheet( styleSheet().append("QWidget {background-color: #333333; color: #EFF0F1;}"));
-    //setStyleSheet( styleSheet().append("QStatusBar{border-top: 1px outset grey;}"));
-    //setStyleSheet( styleSheet().append("QToolTip { color: #fff; background-color: #000; border: none; }"));
 
 
     // Connect Signals & Slots.

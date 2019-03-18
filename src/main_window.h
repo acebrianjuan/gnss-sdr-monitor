@@ -37,11 +37,7 @@
 #include <QAbstractTableModel>
 #include <QtNetwork/QUdpSocket>
 #include <QSettings>
-#include <QQmlApplicationEngine>
 #include <QQuickWidget>
-#include <QQuickView>
-#include <QQuickItem>
-#include <QGeoCoordinate>
 
 #include "gnss_synchro.h"
 #include "monitor_pvt.h"
@@ -69,7 +65,6 @@ private:
     Ui::Main_Window *ui;
     QDockWidget *map_dock;
     QQuickWidget *map_widget;
-    QQuickItem *item;
     Channel_Table_Model *model;
     QUdpSocket *socket_gnss_synchro;
     QUdpSocket *socket_monitor_pvt;
