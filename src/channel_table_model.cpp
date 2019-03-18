@@ -440,3 +440,8 @@ void Channel_Table_Model::set_buffer_size()
     buffer_size = size;
     clear_channels();
 }
+
+int Channel_Table_Model::get_channel_id(int row)
+{
+    return channels_id.at(row);
+}

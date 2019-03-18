@@ -53,6 +53,7 @@ public:
     QList<QVariant> get_list_from_cbuf(boost::circular_buffer<double> cbuf);
     int get_columns();
     void set_buffer_size();
+    int get_channel_id(int row);
 
     // List of virtual functions that must be implemented in a read-only table model.
     int rowCount(const QModelIndex &parent) const;
