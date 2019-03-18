@@ -47,7 +47,6 @@
 #include "monitor_pvt.h"
 #include "monitor_pvt_wrapper.h"
 #include "channel_table_model.h"
-#include "qcustomplot.h"
 
 namespace Ui {
 class Main_Window;

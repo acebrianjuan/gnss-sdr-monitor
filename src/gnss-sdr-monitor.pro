@@ -39,7 +39,6 @@ SOURCES += \
         main.cpp \
         main_window.cpp \
         channel_table_model.cpp \
-        qcustomplot.cpp \
         constellation_delegate.cpp \
         cn0_delegate.cpp \
         doppler_delegate.cpp \
@@ -50,7 +49,6 @@ SOURCES += \
 HEADERS += \
         main_window.h \
         channel_table_model.h \
-        qcustomplot.h \
         constellation_delegate.h \
         cn0_delegate.h \
         doppler_delegate.h \
