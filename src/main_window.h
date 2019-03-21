@@ -38,6 +38,8 @@
 #include <QtNetwork/QUdpSocket>
 #include <QSettings>
 #include <QQuickWidget>
+#include <QTimer>
+#include <QChartView>
 
 #include "gnss_synchro.h"
 #include "monitor_pvt.h"
@@ -48,6 +50,10 @@ namespace Ui {
 class Main_Window;
 }
 
+namespace QtCharts {
+class QChart;
+}
+
 class Main_Window : public QMainWindow
 {
     Q_OBJECT
@@ -56,6 +62,7 @@ class Main_Window : public QMainWindow
 public:
     explicit Main_Window(QWidget *parent = nullptr);
     ~Main_Window();
+
     std::vector<Gnss_Synchro> read_gnss_synchro(char buff[], int bytes);
     Monitor_Pvt read_monitor_pvt(char buff[], int bytes);
     void save_settings();
@@ -83,6 +90,10 @@ private:
 
     int buffer_size;
 
+    std::map<int, QPair<QtCharts::QChart*, QtCharts::QChartView*>> plots_constellation;
+    std::map<int, QPair<QtCharts::QChart*, QtCharts::QChartView*>> plots_cn0;
+    std::map<int, QPair<QtCharts::QChart*, QtCharts::QChartView*>> plots_doppler;
+
 public slots:
     void toggle_capture();
     void receive_gnss_synchro();
@@ -91,7 +102,10 @@ public slots:
     void quit();
     void show_preferences();
     void set_port();
+    void expand_plot(const QModelIndex &index);
 
+protected:
+    virtual void closeEvent(QCloseEvent *event) override;
 };
 
 #endif // MAIN_WINDOW_H
