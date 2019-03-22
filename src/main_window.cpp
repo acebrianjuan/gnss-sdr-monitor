@@ -147,24 +147,28 @@ void Main_Window::closeEvent(QCloseEvent *event)
     // Close all plot windows.
     for(auto const &ch : plots_constellation)
     {
-        auto const &chartView = ch.second.second;
+        auto const &chartView = ch.second;
         chartView->deleteLater();
         //chartView = nullptr;
     }
+    //qDeleteAll(plots_constellation);
+    plots_constellation.clear();
 
     for(auto const &ch : plots_cn0)
     {
-        auto const &chartView = ch.second.second;
+        auto const &chartView = ch.second;
         chartView->deleteLater();
         //chartView = nullptr;
     }
+    plots_cn0.clear();
 
     for(auto const &ch : plots_doppler)
     {
-        auto const &chartView = ch.second.second;
+        auto const &chartView = ch.second;
         chartView->deleteLater();
         //chartView = nullptr;
     }
+    plots_doppler.clear();
 
     QMainWindow::closeEvent(event);
 }
@@ -383,12 +387,11 @@ void Main_Window::expand_plot(const QModelIndex &index)
                 chart->axisY()->setRange(min_y, max_y);
             });
 
-            plots_constellation[index.row()] = qMakePair(chart, chartView);
+            plots_constellation[index.row()] = chartView;
         }
         else
         {
-            QChart *chart = plots_constellation.at(index.row()).first;
-            chartView = plots_constellation.at(index.row()).second;
+            chartView = plots_constellation.at(index.row());
         }
     }
     else if (index.column() == 6) // CN0
@@ -440,16 +443,15 @@ void Main_Window::expand_plot(const QModelIndex &index)
                 chart->axisY()->setRange(min_y, max_y);
             });
 
-            plots_cn0[index.row()] = qMakePair(chart, chartView);
+            plots_cn0[index.row()] = chartView;
         }
         else
         {
-            QChart *chart = plots_cn0.at(index.row()).first;
             /*qDebug() << chart << chart->parent();
             Q_ASSERT(qobject_cast<QDialog*>(chart->parent()));
             dialog = static_cast<QDialog*>(chart->parent());
             */
-            chartView = plots_cn0.at(index.row()).second;
+            chartView = plots_cn0.at(index.row());
         }
     }
     else if (index.column() == 7) // Doppler
@@ -501,12 +503,11 @@ void Main_Window::expand_plot(const QModelIndex &index)
                 chart->axisY()->setRange(min_y, max_y);
             });
 
-            plots_doppler[index.row()] = qMakePair(chart, chartView);
+            plots_doppler[index.row()] = chartView;
         }
         else
         {
-            QChart *chart = plots_doppler.at(index.row()).first;
-            chartView = plots_doppler.at(index.row()).second;
+            chartView = plots_doppler.at(index.row());
         }
     }
 

@@ -90,9 +90,9 @@ private:
 
     int buffer_size;
 
-    std::map<int, QPair<QtCharts::QChart*, QtCharts::QChartView*>> plots_constellation;
-    std::map<int, QPair<QtCharts::QChart*, QtCharts::QChartView*>> plots_cn0;
-    std::map<int, QPair<QtCharts::QChart*, QtCharts::QChartView*>> plots_doppler;
+    std::map<int, QtCharts::QChartView*> plots_constellation;
+    std::map<int, QtCharts::QChartView*> plots_cn0;
+    std::map<int, QtCharts::QChartView*> plots_doppler;
 
 public slots:
     void toggle_capture();
@@ -105,7 +105,7 @@ public slots:
     void expand_plot(const QModelIndex &index);
 
 protected:
-    virtual void closeEvent(QCloseEvent *event) override;
+    void closeEvent(QCloseEvent *event) override;
 };
 
 #endif // MAIN_WINDOW_H
