@@ -365,24 +365,29 @@ void Main_Window::expand_plot(const QModelIndex &index)
 
             // Update chart on timer timeout.
             connect(&updateTimer, &QTimer::timeout, [chart, series, index](){
+                QPointF p;
                 QVector<QPointF> points;
-                QVector<double> points_x;
-                QVector<double> points_y;
+
+                double min_x = DBL_MAX;
+                double min_y = DBL_MAX;
+
+                double max_x = -DBL_MAX;
+                double max_y = -DBL_MAX;
+
                 QList<QVariant> var = index.data(Qt::DisplayRole).toList();
                 for(int i = 0; i < var.size(); i++)
                 {
-                    points_x << var.at(i).toPointF().x();
-                    points_y << var.at(i).toPointF().y();
-                    points << var.at(i).toPointF();
+                    p = var.at(i).toPointF();
+                    points << p;
+
+                    min_x = std::min(min_x, p.x());
+                    min_y = std::min(min_y, p.y());
+
+                    max_x = std::max(max_x, p.x());
+                    max_y = std::max(max_y, p.y());
                 }
 
                 series->replace(points);
-
-                double min_x = *std::min_element(points_x.constBegin(), points_x.constEnd());
-                double min_y = *std::min_element(points_y.constBegin(), points_y.constEnd());
-
-                double max_x = *std::max_element(points_x.constBegin(), points_x.constEnd());
-                double max_y = *std::max_element(points_y.constBegin(), points_y.constEnd());
 
                 chart->axisX()->setRange(min_x, max_x);
                 chart->axisY()->setRange(min_y, max_y);
@@ -421,24 +426,29 @@ void Main_Window::expand_plot(const QModelIndex &index)
 
             // Update chart on timer timeout.
             connect(&updateTimer, &QTimer::timeout, [chart, series, index](){
+                QPointF p;
                 QVector<QPointF> points;
-                QVector<double> points_x;
-                QVector<double> points_y;
+
+                double min_x = DBL_MAX;
+                double min_y = DBL_MAX;
+
+                double max_x = -DBL_MAX;
+                double max_y = -DBL_MAX;
+
                 QList<QVariant> var = index.data(Qt::DisplayRole).toList();
                 for(int i = 0; i < var.size(); i++)
                 {
-                    points_x << var.at(i).toPointF().x();
-                    points_y << var.at(i).toPointF().y();
-                    points << var.at(i).toPointF();
+                    p = var.at(i).toPointF();
+                    points << p;
+
+                    min_x = std::min(min_x, p.x());
+                    min_y = std::min(min_y, p.y());
+
+                    max_x = std::max(max_x, p.x());
+                    max_y = std::max(max_y, p.y());
                 }
 
                 series->replace(points);
-
-                double min_x = *std::min_element(points_x.constBegin(), points_x.constEnd());
-                double min_y = *std::min_element(points_y.constBegin(), points_y.constEnd());
-
-                double max_x = *std::max_element(points_x.constBegin(), points_x.constEnd());
-                double max_y = *std::max_element(points_y.constBegin(), points_y.constEnd());
 
                 chart->axisX()->setRange(min_x, max_x);
                 chart->axisY()->setRange(min_y, max_y);
@@ -448,10 +458,6 @@ void Main_Window::expand_plot(const QModelIndex &index)
         }
         else
         {
-            /*qDebug() << chart << chart->parent();
-            Q_ASSERT(qobject_cast<QDialog*>(chart->parent()));
-            dialog = static_cast<QDialog*>(chart->parent());
-            */
             chartView = plots_cn0.at(index.row());
         }
     }
@@ -481,24 +487,29 @@ void Main_Window::expand_plot(const QModelIndex &index)
 
             // Update chart on timer timeout.
             connect(&updateTimer, &QTimer::timeout, [chart, series, index](){
+                QPointF p;
                 QVector<QPointF> points;
-                QVector<double> points_x;
-                QVector<double> points_y;
+
+                double min_x = DBL_MAX;
+                double min_y = DBL_MAX;
+
+                double max_x = -DBL_MAX;
+                double max_y = -DBL_MAX;
+
                 QList<QVariant> var = index.data(Qt::DisplayRole).toList();
                 for(int i = 0; i < var.size(); i++)
                 {
-                    points_x << var.at(i).toPointF().x();
-                    points_y << var.at(i).toPointF().y();
-                    points << var.at(i).toPointF();
+                    p = var.at(i).toPointF();
+                    points << p;
+
+                    min_x = std::min(min_x, p.x());
+                    min_y = std::min(min_y, p.y());
+
+                    max_x = std::max(max_x, p.x());
+                    max_y = std::max(max_y, p.y());
                 }
 
                 series->replace(points);
-
-                double min_x = *std::min_element(points_x.constBegin(), points_x.constEnd());
-                double min_y = *std::min_element(points_y.constBegin(), points_y.constEnd());
-
-                double max_x = *std::max_element(points_x.constBegin(), points_x.constEnd());
-                double max_y = *std::max_element(points_y.constBegin(), points_y.constEnd());
 
                 chart->axisX()->setRange(min_x, max_x);
                 chart->axisY()->setRange(min_y, max_y);
