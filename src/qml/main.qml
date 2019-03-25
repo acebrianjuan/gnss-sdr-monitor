@@ -3,7 +3,7 @@ import QtQuick.Window 2.0
 import QtLocation 5.6
 import QtPositioning 5.6
 import QtQuick.Controls 2.2
-import QtQuick.Layouts 1.11
+import QtQuick.Layouts 1.3
 
 Map
 {
