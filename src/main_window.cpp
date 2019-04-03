@@ -411,7 +411,7 @@ void Main_Window::expand_plot(const QModelIndex &index)
             QLineSeries *series = new QLineSeries(chart);
             chart->addSeries(series);
             chart->createDefaultAxes();
-            chart->axisX()->setTitleText("RX Time [s]");
+            chart->axisX()->setTitleText("TOW [s]");
             chart->axisY()->setTitleText("C/N0 [db-Hz]");
             chart->layout()->setContentsMargins(0, 0, 0, 0);
 
@@ -472,7 +472,7 @@ void Main_Window::expand_plot(const QModelIndex &index)
             QLineSeries *series = new QLineSeries(chart);
             chart->addSeries(series);
             chart->createDefaultAxes();
-            chart->axisX()->setTitleText("RX Time [s]");
+            chart->axisX()->setTitleText("TOW [s]");
             chart->axisY()->setTitleText("Doppler [Hz]");
             chart->layout()->setContentsMargins(0, 0, 0, 0);
 
