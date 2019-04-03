@@ -212,19 +212,19 @@ QVariant Channel_Table_Model::headerData(int section, Qt::Orientation orientatio
                 return "PRN";
 
             case 3 :
-                return "ACQ Doppler";
+                return "ACQ Doppler [Hz]";
 
             case 4 :
-                return "ACQ Code Phase";
+                return "ACQ Code Phase [samples]";
 
             case 5 :
                 return "Constellation";
 
             case 6 :
-                return "C/N0";
+                return "C/N0 [dB-Hz]";
 
             case 7 :
-                return "Doppler";
+                return "Doppler [Hz]";
 
             case 8 :
                 return "TOW [ms]";
