@@ -87,6 +87,7 @@ private:
     QAction *start;
     QAction *stop;
     QAction *clear;
+    QAction *close_plots_action;
 
     int buffer_size;
 
@@ -103,6 +104,7 @@ public slots:
     void show_preferences();
     void set_port();
     void expand_plot(const QModelIndex &index);
+    void close_plots();
 
 protected:
     void closeEvent(QCloseEvent *event) override;

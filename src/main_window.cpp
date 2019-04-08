@@ -96,12 +96,14 @@ Main_Window::Main_Window(QWidget *parent) :
     stop = ui->mainToolBar->addAction("Stop");
     clear = ui->mainToolBar->addAction("Clear");
     ui->mainToolBar->addSeparator();
+    close_plots_action = ui->mainToolBar->addAction("Close Plots");
     start->setEnabled(false);
     stop->setEnabled(true);
     clear->setEnabled(false);
     connect(start, &QAction::triggered, this, &Main_Window::toggle_capture);
     connect(stop, &QAction::triggered, this, &Main_Window::toggle_capture);
     connect(clear, &QAction::triggered, this, &Main_Window::clear_entries);
+    connect(close_plots_action, &QAction::triggered, this, &Main_Window::close_plots);
 
 
     // Model.
@@ -144,31 +146,7 @@ Main_Window::~Main_Window()
 
 void Main_Window::closeEvent(QCloseEvent *event)
 {
-    // Close all plot windows.
-    for(auto const &ch : plots_constellation)
-    {
-        auto const &chartView = ch.second;
-        chartView->deleteLater();
-        //chartView = nullptr;
-    }
-    //qDeleteAll(plots_constellation);
-    plots_constellation.clear();
-
-    for(auto const &ch : plots_cn0)
-    {
-        auto const &chartView = ch.second;
-        chartView->deleteLater();
-        //chartView = nullptr;
-    }
-    plots_cn0.clear();
-
-    for(auto const &ch : plots_doppler)
-    {
-        auto const &chartView = ch.second;
-        chartView->deleteLater();
-        //chartView = nullptr;
-    }
-    plots_doppler.clear();
+    close_plots();
 
     QMainWindow::closeEvent(event);
 }
@@ -530,4 +508,32 @@ void Main_Window::expand_plot(const QModelIndex &index)
 
     chartView->resize(400, 300);
     chartView->show();
+}
+
+void Main_Window::close_plots()
+{
+    for(auto const &ch : plots_constellation)
+    {
+        auto const &chartView = ch.second;
+        chartView->deleteLater();
+        //chartView = nullptr;
+    }
+    //qDeleteAll(plots_constellation);
+    plots_constellation.clear();
+
+    for(auto const &ch : plots_cn0)
+    {
+        auto const &chartView = ch.second;
+        chartView->deleteLater();
+        //chartView = nullptr;
+    }
+    plots_cn0.clear();
+
+    for(auto const &ch : plots_doppler)
+    {
+        auto const &chartView = ch.second;
+        chartView->deleteLater();
+        //chartView = nullptr;
+    }
+    plots_doppler.clear();
 }
