@@ -255,13 +255,15 @@ void Channel_Table_Model::populate_channel(Gnss_Synchro ch)
 
         if (channels.find(ch.Channel_ID) != channels.end()) // Channel exists.
         {
+            /*
             int c1 = QString::compare(QString(channels.at(ch.Channel_ID).System),
                                       QString(ch.System), Qt::CaseInsensitive);
             int c2 = QString::compare(QString(channels.at(ch.Channel_ID).Signal),
                                       QString(ch.Signal), Qt::CaseInsensitive);
+            */
             bool c3 = channels.at(ch.Channel_ID).PRN != ch.PRN;
 
-            if (c1 != 0 || c2 != 0 || c3)
+            if (/* c1 != 0 || c2 != 0 || */ c3)
             {
                 // Reset channel.
                 clear_channel(ch.Channel_ID);
