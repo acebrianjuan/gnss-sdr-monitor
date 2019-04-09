@@ -512,7 +512,7 @@ void Main_Window::expand_plot(const QModelIndex &index)
         return;
     }
 
-    chartView->resize(400, 300);
+    chartView->resize(400, 180);
     chartView->show();
 }
 
