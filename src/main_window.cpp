@@ -146,7 +146,7 @@ Main_Window::~Main_Window()
 
 void Main_Window::closeEvent(QCloseEvent *event)
 {
-    close_plots();
+    delete_plots();
 
     QMainWindow::closeEvent(event);
 }
@@ -529,4 +529,28 @@ void Main_Window::close_plots()
         auto const &chartView = ch.second;
         chartView->close();
     }
+}
+
+void Main_Window::delete_plots()
+{
+    for(auto const &ch : plots_constellation)
+    {
+        auto const &chartView = ch.second;
+        chartView->deleteLater();
+    }
+    plots_constellation.clear();
+
+    for(auto const &ch : plots_cn0)
+    {
+        auto const &chartView = ch.second;
+        chartView->deleteLater();
+    }
+    plots_cn0.clear();
+
+    for(auto const &ch : plots_doppler)
+    {
+        auto const &chartView = ch.second;
+        chartView->deleteLater();
+    }
+    plots_doppler.clear();
 }
