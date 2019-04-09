@@ -515,25 +515,18 @@ void Main_Window::close_plots()
     for(auto const &ch : plots_constellation)
     {
         auto const &chartView = ch.second;
-        chartView->deleteLater();
-        //chartView = nullptr;
+        chartView->close();
     }
-    //qDeleteAll(plots_constellation);
-    plots_constellation.clear();
 
     for(auto const &ch : plots_cn0)
     {
         auto const &chartView = ch.second;
-        chartView->deleteLater();
-        //chartView = nullptr;
+        chartView->close();
     }
-    plots_cn0.clear();
 
     for(auto const &ch : plots_doppler)
     {
         auto const &chartView = ch.second;
-        chartView->deleteLater();
-        //chartView = nullptr;
+        chartView->close();
     }
-    plots_doppler.clear();
 }
