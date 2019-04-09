@@ -331,8 +331,10 @@ void Main_Window::expand_plot(const QModelIndex &index)
             chart->axisX()->setTitleText("I prompt");
             chart->axisY()->setTitleText("Q prompt");
             chart->layout()->setContentsMargins(0, 0, 0, 0);
+            chart->setContentsMargins(-18, -18, -14, -16);
 
             chartView = new QChartView(chart);
+            chartView->setContentsMargins(0, 0, 0, 0);
 
             connect(this, &QMainWindow::destroyed, chartView, &QObject::deleteLater);
 
@@ -392,8 +394,10 @@ void Main_Window::expand_plot(const QModelIndex &index)
             chart->axisX()->setTitleText("TOW [s]");
             chart->axisY()->setTitleText("C/N0 [db-Hz]");
             chart->layout()->setContentsMargins(0, 0, 0, 0);
+            chart->setContentsMargins(-18, -18, -14, -16);
 
             chartView = new QChartView(chart);
+            chartView->setContentsMargins(0, 0, 0, 0);
 
             connect(this, &QMainWindow::destroyed, chartView, &QObject::deleteLater);
 
@@ -453,8 +457,10 @@ void Main_Window::expand_plot(const QModelIndex &index)
             chart->axisX()->setTitleText("TOW [s]");
             chart->axisY()->setTitleText("Doppler [Hz]");
             chart->layout()->setContentsMargins(0, 0, 0, 0);
+            chart->setContentsMargins(-18, -18, -14, -16);
 
             chartView = new QChartView(chart);
+            chartView->setContentsMargins(0, 0, 0, 0);
 
             connect(this, &QMainWindow::destroyed, chartView, &QObject::deleteLater);
 
