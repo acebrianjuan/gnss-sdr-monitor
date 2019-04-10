@@ -106,6 +106,7 @@ public slots:
     void expand_plot(const QModelIndex &index);
     void close_plots();
     void delete_plots();
+    //void map_contents();
 
 protected:
     void closeEvent(QCloseEvent *event) override;

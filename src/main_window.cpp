@@ -63,6 +63,8 @@ Main_Window::Main_Window(QWidget *parent) :
         model->update();
     });
 
+    //connect(&updateTimer, &QTimer::timeout, this, &Main_Window::map_contents);
+
     ui->setupUi(this);
 
 
@@ -560,3 +562,12 @@ void Main_Window::delete_plots()
     }
     plots_doppler.clear();
 }
+
+/*
+void Main_Window::map_contents()
+{
+    qDebug() << "plots_constellation: " << plots_constellation.size();
+    qDebug() << "plots_cn0: " << plots_cn0.size();
+    qDebug() << "plots_doppler: " << plots_doppler.size();
+}
+*/
