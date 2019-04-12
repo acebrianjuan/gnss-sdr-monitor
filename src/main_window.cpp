@@ -346,7 +346,7 @@ void Main_Window::expand_plot(const QModelIndex &index)
             });
 
             // Update chart on timer timeout.
-            connect(&updateTimer, &QTimer::timeout, [chart, series, index](){
+            connect(&updateTimer, &QTimer::timeout, chart, [chart, series, index](){
                 QPointF p;
                 QVector<QPointF> points;
 
@@ -409,7 +409,7 @@ void Main_Window::expand_plot(const QModelIndex &index)
             });
 
             // Update chart on timer timeout.
-            connect(&updateTimer, &QTimer::timeout, [chart, series, index](){
+            connect(&updateTimer, &QTimer::timeout, chart, [chart, series, index](){
                 QPointF p;
                 QVector<QPointF> points;
 
@@ -472,7 +472,7 @@ void Main_Window::expand_plot(const QModelIndex &index)
             });
 
             // Update chart on timer timeout.
-            connect(&updateTimer, &QTimer::timeout, [chart, series, index](){
+            connect(&updateTimer, &QTimer::timeout, chart, [chart, series, index](){
                 QPointF p;
                 QVector<QPointF> points;
 
