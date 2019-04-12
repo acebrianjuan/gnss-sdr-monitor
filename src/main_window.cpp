@@ -336,6 +336,7 @@ void Main_Window::expand_plot(const QModelIndex &index)
             chart->setContentsMargins(-18, -18, -14, -16);
 
             chartView = new QChartView(chart);
+            chartView->setRenderHint(QPainter::Antialiasing);
             chartView->setContentsMargins(0, 0, 0, 0);
 
             connect(this, &QMainWindow::destroyed, chartView, &QObject::deleteLater);
@@ -399,6 +400,7 @@ void Main_Window::expand_plot(const QModelIndex &index)
             chart->setContentsMargins(-18, -18, -14, -16);
 
             chartView = new QChartView(chart);
+            chartView->setRenderHint(QPainter::Antialiasing);
             chartView->setContentsMargins(0, 0, 0, 0);
 
             connect(this, &QMainWindow::destroyed, chartView, &QObject::deleteLater);
@@ -462,6 +464,7 @@ void Main_Window::expand_plot(const QModelIndex &index)
             chart->setContentsMargins(-18, -18, -14, -16);
 
             chartView = new QChartView(chart);
+            chartView->setRenderHint(QPainter::Antialiasing);
             chartView->setContentsMargins(0, 0, 0, 0);
 
             connect(this, &QMainWindow::destroyed, chartView, &QObject::deleteLater);
