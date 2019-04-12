@@ -327,7 +327,7 @@ void Main_Window::expand_plot(const QModelIndex &index)
             chart->legend()->hide();
 
             QScatterSeries *series = new QScatterSeries(chart);
-            series->setMarkerSize(10);
+            series->setMarkerSize(8);
             chart->addSeries(series);
             chart->createDefaultAxes();
             chart->axisX()->setTitleText("I prompt");
