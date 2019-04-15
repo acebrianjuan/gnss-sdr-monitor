@@ -57,7 +57,6 @@ class QChart;
 class Main_Window : public QMainWindow
 {
     Q_OBJECT
-    //Q_PROPERTY(QGeoCoordinate position READ position WRITE set_position NOTIFY position_changed)
 
 public:
     explicit Main_Window(QWidget *parent = nullptr);

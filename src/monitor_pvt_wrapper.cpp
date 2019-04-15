@@ -30,8 +30,6 @@ QVariant Monitor_Pvt_Wrapper::position() const
         return QVariant::fromValue(QGeoCoordinate(
                                        m_list_monitor_pvt.last().latitude,
                                        m_list_monitor_pvt.last().longitude));
-
-        qDebug() << m_list_monitor_pvt.last().latitude << ", " << m_list_monitor_pvt.last().longitude;
     }
     else
     {
