@@ -10,9 +10,11 @@ Monitor_Pvt_Wrapper::Monitor_Pvt_Wrapper(QObject *parent) : QObject(parent)
 void Monitor_Pvt_Wrapper::add_monitor_pvt(const Monitor_Pvt &monitor_pvt)
 {
     m_list_monitor_pvt << monitor_pvt;
-    m_path.append(QVariant::fromValue(QGeoCoordinate(monitor_pvt.latitude, monitor_pvt.longitude)));
+    m_path.append(QVariant::fromValue(QGeoCoordinate(
+                                          monitor_pvt.latitude,
+                                          monitor_pvt.longitude)));
 
-    //emit dataChanged();
+    emit dataChanged();
 }
 
 void Monitor_Pvt_Wrapper::clear_data()
@@ -20,7 +22,7 @@ void Monitor_Pvt_Wrapper::clear_data()
     m_list_monitor_pvt.clear();
     m_path.clear();
 
-    //emit dataChanged();
+    emit dataChanged();
 }
 
 QVariant Monitor_Pvt_Wrapper::position() const
