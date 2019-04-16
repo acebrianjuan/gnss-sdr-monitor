@@ -306,8 +306,8 @@ void Main_Window::set_port()
     settings.endGroup();
 
     socket_gnss_synchro->disconnectFromHost();
-    socket_gnss_synchro->bind(QHostAddress::LocalHost, port_gnss_synchro);
-    socket_monitor_pvt->bind(QHostAddress::LocalHost, port_monitor_pvt);
+    socket_gnss_synchro->bind(QHostAddress::Any, port_gnss_synchro);
+    socket_monitor_pvt->bind(QHostAddress::Any, port_monitor_pvt);
 }
 
 void Main_Window::expand_plot(const QModelIndex &index)
