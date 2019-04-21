@@ -1,8 +1,20 @@
 set(Boost_USE_STATIC_LIBS OFF)
-find_package(Boost COMPONENTS system serialization REQUIRED)
+find_package(Boost REQUIRED)
 if(NOT Boost_FOUND)
      message(FATAL_ERROR "Fatal error: Boost required.")
-endif(NOT Boost_FOUND)
+endif()
+
+find_package(Protobuf REQUIRED)
+if(${Protobuf_VERSION} VERSION_LESS "3.0.0")
+     message(FATAL_ERROR "Fatal error: Protocol Buffers > v3.0.0 required.")
+endif()
+protobuf_generate_cpp(PROTO_SRCS PROTO_HDRS ${CMAKE_SOURCE_DIR}/src/protobuf/gnss_synchro.proto)
+set_property(SOURCE ${PROTO_SRCS} PROPERTY SKIP_AUTOGEN ON)
+set_property(SOURCE ${PROTO_HDRS} PROPERTY SKIP_AUTOGEN ON)
+
+protobuf_generate_cpp(PROTO_SRCS2 PROTO_HDRS2 ${CMAKE_SOURCE_DIR}/src/protobuf/monitor_pvt.proto)
+set_property(SOURCE ${PROTO_SRCS2} PROPERTY SKIP_AUTOGEN ON)
+set_property(SOURCE ${PROTO_HDRS2} PROPERTY SKIP_AUTOGEN ON)
 
 find_package(Qt5 COMPONENTS Core Gui Widgets Network PrintSupport Quick QuickWidgets Positioning Charts REQUIRED)
 if(NOT Qt5_FOUND)
@@ -39,6 +51,8 @@ set(SOURCES
     main_window.cpp
     monitor_pvt_wrapper.cpp
     preferences_dialog.cpp
+    ${PROTO_SRCS}
+    ${PROTO_SRCS2}
 )
 
 set(UI_SOURCES
@@ -52,4 +66,4 @@ set(RESOURCES
 
 add_executable(${TARGET} ${SOURCES} ${UI_SOURCES} ${RESOURCES})
 
-target_link_libraries(${TARGET} ${QT5_LIBRARIES} ${Boost_LIBRARIES})
+target_link_libraries(${TARGET} PUBLIC ${QT5_LIBRARIES} Boost::boost protobuf::libprotobuf)

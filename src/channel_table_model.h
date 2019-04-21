@@ -34,9 +34,9 @@
 #ifndef CHANNEL_TABLE_MODEL_H
 #define CHANNEL_TABLE_MODEL_H
 
-#include <QAbstractTableModel>
+#include "gnss_synchro.pb.h"
 #include <boost/circular_buffer.hpp>
-#include "gnss_synchro.h"
+#include <QAbstractTableModel>
 
 class Channel_Table_Model : public QAbstractTableModel
 {
@@ -45,11 +45,11 @@ public:
 
     void update();
 
-    void populate_channels(std::vector<Gnss_Synchro> stocks);
-    void populate_channel(Gnss_Synchro ch);
+    void populate_channels(const gnss_sdr::Observables *stocks);
+    void populate_channel(const gnss_sdr::GnssSynchro *ch);
     void clear_channel(int ch_id);
     void clear_channels();
-    QString get_signal_pretty_name(Gnss_Synchro ch);
+    QString get_signal_pretty_name(const gnss_sdr::GnssSynchro *ch);
     QList<QVariant> get_list_from_cbuf(boost::circular_buffer<double> cbuf);
     int get_columns();
     void set_buffer_size();
@@ -65,10 +65,10 @@ public:
 protected:
     int columns;
     int buffer_size;
-    std::vector<Gnss_Synchro> stocks;
+    gnss_sdr::Observables stocks;
 
     std::vector<int> channels_id;
-    std::map<int, Gnss_Synchro> channels;
+    std::map<int, gnss_sdr::GnssSynchro> channels;
     std::map<int, QString> channels_signal;
     std::map<int, boost::circular_buffer<double>> channels_time;
     std::map<int, boost::circular_buffer<double>> channels_prompt_i;
@@ -77,10 +77,10 @@ protected:
     std::map<int, boost::circular_buffer<double>> channels_doppler;
 
 public slots:
-    Gnss_Synchro get_channel_data(int key);
+    gnss_sdr::GnssSynchro get_channel_data(int key);
 
 private:
     std::map<std::string, QString> map_signal_pretty_name;
 };
 
-#endif // CHANNEL_TABLE_MODEL_H
+#endif  // CHANNEL_TABLE_MODEL_H
