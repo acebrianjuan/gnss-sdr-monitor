@@ -1,8 +1,7 @@
 #ifndef MONITOR_PVT_WRAPPER_H
 #define MONITOR_PVT_WRAPPER_H
 
-#include "monitor_pvt.h"
-
+#include "monitor_pvt.pb.h"
 #include <QObject>
 #include <QVariant>
 
@@ -14,7 +13,7 @@ class Monitor_Pvt_Wrapper : public QObject
 
 public:
     explicit Monitor_Pvt_Wrapper(QObject *parent = nullptr);
-    void add_monitor_pvt(const Monitor_Pvt &monitor_pvt);
+    void add_monitor_pvt(const gnss_sdr::MonitorPvt &monitor_pvt);
     QVariant position() const;
     QVariantList path() const;
 
@@ -25,8 +24,8 @@ public slots:
     void clear_data();
 
 private:
-    QList<Monitor_Pvt> m_list_monitor_pvt;
+    QList<gnss_sdr::MonitorPvt> m_list_monitor_pvt;
     QVariantList m_path;
 };
 
-#endif // MONITOR_PVT_WRAPPER_H
+#endif  // MONITOR_PVT_WRAPPER_H

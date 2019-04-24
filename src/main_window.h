@@ -33,24 +33,25 @@
 #ifndef MAIN_WINDOW_H
 #define MAIN_WINDOW_H
 
-#include <QMainWindow>
-#include <QAbstractTableModel>
-#include <QtNetwork/QUdpSocket>
-#include <QSettings>
-#include <QQuickWidget>
-#include <QTimer>
-#include <QChartView>
-
-#include "gnss_synchro.h"
-#include "monitor_pvt.h"
-#include "monitor_pvt_wrapper.h"
 #include "channel_table_model.h"
+#include "gnss_synchro.pb.h"
+#include "monitor_pvt.pb.h"
+#include "monitor_pvt_wrapper.h"
+#include <QAbstractTableModel>
+#include <QChartView>
+#include <QMainWindow>
+#include <QQuickWidget>
+#include <QSettings>
+#include <QTimer>
+#include <QtNetwork/QUdpSocket>
 
-namespace Ui {
+namespace Ui
+{
 class Main_Window;
 }
 
-namespace QtCharts {
+namespace QtCharts
+{
 class QChart;
 }
 
@@ -62,8 +63,8 @@ public:
     explicit Main_Window(QWidget *parent = nullptr);
     ~Main_Window();
 
-    std::vector<Gnss_Synchro> read_gnss_synchro(char buff[], int bytes);
-    Monitor_Pvt read_monitor_pvt(char buff[], int bytes);
+    gnss_sdr::Observables read_gnss_synchro(char buff[], int bytes);
+    gnss_sdr::MonitorPvt read_monitor_pvt(char buff[], int bytes);
     void save_settings();
     void load_settings();
 
@@ -74,9 +75,9 @@ private:
     Channel_Table_Model *model;
     QUdpSocket *socket_gnss_synchro;
     QUdpSocket *socket_monitor_pvt;
-    std::vector<Gnss_Synchro> stocks;
+    gnss_sdr::Observables stocks;
     Monitor_Pvt_Wrapper *m_monitor_pvt_wrapper;
-    Monitor_Pvt m_monitor_pvt;
+    gnss_sdr::MonitorPvt m_monitor_pvt;
     std::vector<int> channels;
     quint16 port_gnss_synchro;
     quint16 port_monitor_pvt;
@@ -90,9 +91,9 @@ private:
 
     int buffer_size;
 
-    std::map<int, QtCharts::QChartView*> plots_constellation;
-    std::map<int, QtCharts::QChartView*> plots_cn0;
-    std::map<int, QtCharts::QChartView*> plots_doppler;
+    std::map<int, QtCharts::QChartView *> plots_constellation;
+    std::map<int, QtCharts::QChartView *> plots_cn0;
+    std::map<int, QtCharts::QChartView *> plots_doppler;
 
 public slots:
     void toggle_capture();
@@ -111,4 +112,4 @@ protected:
     void closeEvent(QCloseEvent *event) override;
 };
 
-#endif // MAIN_WINDOW_H
+#endif  // MAIN_WINDOW_H
