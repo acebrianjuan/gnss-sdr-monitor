@@ -33,6 +33,7 @@
 
 #include "doppler_delegate.h"
 
+#include <limits>
 #include <QPainter>
 #include <QApplication>
 #include <QDebug>
@@ -41,11 +42,11 @@
 
 Doppler_Delegate::Doppler_Delegate(QWidget *parent) : QStyledItemDelegate(parent)
 {
+    numel = 4000;
 }
 
 Doppler_Delegate::~Doppler_Delegate()
 {
-
 }
 
 void Doppler_Delegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
@@ -61,33 +62,42 @@ void Doppler_Delegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
         y_data << var.at(i).toPointF().y();
     }
 
+    double min_x = std::numeric_limits<double>::max();
+    double max_x = std::numeric_limits<double>::min();
 
-    double min_y = 0;
-    double max_y = 1;
+    double min_y = std::numeric_limits<double>::max();
+    double max_y = std::numeric_limits<double>::min();
+
     int em_w = option.fontMetrics.height();
     int content_w = option.rect.width() - (em_w / 4);
     int content_h = option.fontMetrics.height();
     QPointF val;
-    qreal idx = 0.0;
-    qreal step_w = em_w / 10.0;
-    qreal steps = content_w / step_w;
     QVector<QPointF> fpoints;
-
 
     QStyledItemDelegate::paint(painter, option, index);
 
-    if (points.isEmpty() || steps < 1.0 || content_h <= 0)
+    if (points.isEmpty() || numel < 1.0 || content_h <= 0)
     {
         return;
     }
 
-    while((qreal) points.length() > steps)
+    while((qreal) points.length() > numel)
     {
         points.removeFirst();
     }
 
     foreach (val, points)
     {
+        if (val.x() < min_x)
+        {
+            min_x = val.x();
+        }
+
+        if (val.x() > max_x)
+        {
+            max_x = val.x();
+        }
+
         if (val.y() < min_y)
         {
             min_y = val.y();
@@ -101,8 +111,9 @@ void Doppler_Delegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
 
     foreach (val, points)
     {
-        fpoints.append(QPointF(idx, (qreal) content_h - (content_h * (val.y() - min_y) / (max_y - min_y))));
-        idx = idx + step_w;
+        fpoints.append(QPointF(
+                           (qreal) content_w * (val.x() - min_x) / (max_x - min_x),
+                           (qreal) content_h - (content_h * (val.y() - min_y) / (max_y - min_y))));
     }
 
     QStyleOptionViewItem option_vi = option;

@@ -49,6 +49,9 @@ protected:
     QSize sizeHint(const QStyleOptionViewItem &option,
                    const QModelIndex &index) const;
 
+private:
+    qreal numel;
+
 };
 
 #endif // CN0_DELEGATE_H
