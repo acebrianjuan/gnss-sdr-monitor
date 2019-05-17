@@ -63,10 +63,10 @@ void Cn0_Delegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
     }
 
     double min_x = std::numeric_limits<double>::max();
-    double max_x = std::numeric_limits<double>::min();
+    double max_x = -std::numeric_limits<double>::max();
 
     double min_y = std::numeric_limits<double>::max();
-    double max_y = std::numeric_limits<double>::min();
+    double max_y = -std::numeric_limits<double>::max();
 
     int em_w = option.fontMetrics.height();
     int content_w = option.rect.width() - (em_w / 4);
@@ -111,9 +111,9 @@ void Cn0_Delegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
 
     foreach (val, points)
     {
-        fpoints.append(QPointF(
-                           (qreal) content_w * (val.x() - min_x) / (max_x - min_x),
-                           (qreal) content_h - (content_h * (val.y() - min_y) / (max_y - min_y))));
+        double x = content_w * (val.x() - min_x) / (max_x - min_x);
+        double y = content_h - (content_h * (val.y() - min_y) / (max_y - min_y));
+        fpoints.append(QPointF(x, y));
     }
 
     QStyleOptionViewItem option_vi = option;
