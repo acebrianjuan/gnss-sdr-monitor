@@ -31,8 +31,8 @@
  */
 
 
-#ifndef DOPPLER_DELEGATE_H
-#define DOPPLER_DELEGATE_H
+#ifndef GNSS_SDR_MONITOR_DOPPLER_DELEGATE_H_
+#define GNSS_SDR_MONITOR_DOPPLER_DELEGATE_H_
 
 #include <QStyledItemDelegate>
 
@@ -54,4 +54,4 @@ private:
 
 };
 
-#endif // DOPPLER_DELEGATE_H
+#endif // GNSS_SDR_MONITOR_DOPPLER_DELEGATE_H_

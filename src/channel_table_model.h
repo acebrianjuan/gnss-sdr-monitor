@@ -31,8 +31,8 @@
  */
 
 
-#ifndef CHANNEL_TABLE_MODEL_H
-#define CHANNEL_TABLE_MODEL_H
+#ifndef GNSS_SDR_MONITOR_CHANNEL_TABLE_MODEL_H_
+#define GNSS_SDR_MONITOR_CHANNEL_TABLE_MODEL_H_
 
 #include "gnss_synchro.pb.h"
 #include <boost/circular_buffer.hpp>
@@ -83,4 +83,4 @@ private:
     std::map<std::string, QString> map_signal_pretty_name;
 };
 
-#endif  // CHANNEL_TABLE_MODEL_H
+#endif  // GNSS_SDR_MONITOR_CHANNEL_TABLE_MODEL_H_

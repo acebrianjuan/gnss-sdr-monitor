@@ -30,8 +30,8 @@
  */
 
 
-#ifndef MAIN_WINDOW_H
-#define MAIN_WINDOW_H
+#ifndef GNSS_SDR_MONITOR_MAIN_WINDOW_H_
+#define GNSS_SDR_MONITOR_MAIN_WINDOW_H_
 
 #include "channel_table_model.h"
 #include "gnss_synchro.pb.h"
@@ -112,4 +112,4 @@ protected:
     void closeEvent(QCloseEvent *event) override;
 };
 
-#endif  // MAIN_WINDOW_H
+#endif  // GNSS_SDR_MONITOR_MAIN_WINDOW_H_

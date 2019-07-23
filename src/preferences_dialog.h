@@ -30,8 +30,8 @@
  */
 
 
-#ifndef PREFERENCES_DIALOG_H
-#define PREFERENCES_DIALOG_H
+#ifndef GNSS_SDR_MONITOR_PREFERENCES_DIALOG_H_
+#define GNSS_SDR_MONITOR_PREFERENCES_DIALOG_H_
 
 #include <QDialog>
 
@@ -55,4 +55,4 @@ private slots:
 
 };
 
-#endif // PREFERENCES_DIALOG_H
+#endif // GNSS_SDR_MONITOR_PREFERENCES_DIALOG_H_

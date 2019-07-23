@@ -1,5 +1,5 @@
-#ifndef MONITOR_PVT_WRAPPER_H
-#define MONITOR_PVT_WRAPPER_H
+#ifndef GNSS_SDR_MONITOR_MONITOR_PVT_WRAPPER_H_
+#define GNSS_SDR_MONITOR_MONITOR_PVT_WRAPPER_H_
 
 #include "monitor_pvt.pb.h"
 #include <QObject>
@@ -28,4 +28,4 @@ private:
     QVariantList m_path;
 };
 
-#endif  // MONITOR_PVT_WRAPPER_H
+#endif  // GNSS_SDR_MONITOR_MONITOR_PVT_WRAPPER_H_

@@ -31,8 +31,8 @@
  */
 
 
-#ifndef LED_DELEGATE_H
-#define LED_DELEGATE_H
+#ifndef GNSS_SDR_MONITOR_LED_DELEGATE_H_
+#define GNSS_SDR_MONITOR_LED_DELEGATE_H_
 
 #include <QStyledItemDelegate>
 
@@ -47,4 +47,4 @@ public:
 
 };
 
-#endif // LED_DELEGATE_H
+#endif // GNSS_SDR_MONITOR_LED_DELEGATE_H_
