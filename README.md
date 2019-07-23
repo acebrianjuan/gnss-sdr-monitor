@@ -1,21 +1,12 @@
-# gnss-sdr-monitor
-A graphical user interface to monitor the GNSS-SDR status in real time
+[![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+
+**Welcome to gnss-sdr-monitor!**
+
+This program is a graphical user interface developed with Qt for monitoring the status of GNSS-SDR in real time.
 
 ![](./screenshots/gnss-sdr-monitor.png)
 
 <table style="width:100%">
-  <tr>
-    <th colspan=1>Detail of the main window</th>
-  </tr>
-  <tr>
-    <td><img src="./screenshots/gnss-sdr-monitor_main_window.png"/></td>
-  </tr>
-</table>
-
-<table style="width:100%">
-  <tr>
-    <th colspan=3>Detail of the plots available for each channel</th>
-  </tr>
   <tr>
     <td><img src="./screenshots/gnss-sdr-monitor_constellation.png"/></td>
     <td><img src="./screenshots/gnss-sdr-monitor_cn0.png"/></td>
@@ -23,11 +14,36 @@ A graphical user interface to monitor the GNSS-SDR status in real time
   </tr>
 </table>
 
-<table style="width:100%">
-  <tr>
-    <th colspan=1>Detail of the preferences dialog</th>
-  </tr>
-  <tr>
-    <td><img src="./screenshots/gnss-sdr-monitor_preferences.png"/></td>
-  </tr>
-</table>
+# How to build gnss-sdr-monitor
+
+### Install dependencies using software packages:
+
+~~~~
+$ sudo apt-get install build-essential cmake git libboost-dev libboost-system-dev \
+       libprotobuf-dev protobuf-compiler qtbase5-dev qtdeclarative5-dev qtpositioning5-dev \
+       libqt5charts5-dev qml-module-qtquick2 qml-module-qtquick-controls2 qml-module-window2 \
+       qml-module-qtlocation qml-module-qtpositioning qml-module-qtquick-layouts
+~~~~
+
+### Clone gnss-sdr-monitor Git repository:
+
+~~~~~~
+$ git clone https://github.com/acebrianjuan/gnss-sdr-monitor
+~~~~~~
+
+### Build and install gnss-sdr-monitor:
+
+~~~~~~
+$ git checkout next
+$ cd gnss-sdr/build
+$ cmake ..
+$ make
+~~~~~~
+
+### Run gnss-sdr-monitor:
+
+~~~~~~
+$ cd src/
+$ ./gnss-sdr-monitor
+~~~~~~
+
