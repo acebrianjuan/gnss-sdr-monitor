@@ -4,12 +4,12 @@
  *
  * \author Álvaro Cebrián Juan, 2018. acebrianjuan(at)gmail.com
  *
- * -------------------------------------------------------------------------
+ * -----------------------------------------------------------------------
  *
- * Copyright (C) 2010-2018  (see AUTHORS file for a list of contributors)
+ * Copyright (C) 2010-2019  (see AUTHORS file for a list of contributors)
  *
  * GNSS-SDR is a software defined Global Navigation
- *          Satellite Systems receiver
+ *      Satellite Systems receiver
  *
  * This file is part of GNSS-SDR.
  *
@@ -26,7 +26,7 @@
  * You should have received a copy of the GNU General Public License
  * along with GNSS-SDR. If not, see <https://www.gnu.org/licenses/>.
  *
- * -------------------------------------------------------------------------
+ * -----------------------------------------------------------------------
  */
 
 
