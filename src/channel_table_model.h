@@ -45,7 +45,7 @@ public:
 
     void update();
 
-    void populate_channels(const gnss_sdr::Observables *stocks);
+    void populate_channels(const gnss_sdr::Observables *m_stocks);
     void populate_channel(const gnss_sdr::GnssSynchro *ch);
     void clear_channel(int ch_id);
     void clear_channels();
@@ -63,24 +63,24 @@ public:
 
 
 protected:
-    int columns;
-    int buffer_size;
-    gnss_sdr::Observables stocks;
+    int m_columns;
+    int m_bufferSize;
+    gnss_sdr::Observables m_stocks;
 
-    std::vector<int> channels_id;
-    std::map<int, gnss_sdr::GnssSynchro> channels;
-    std::map<int, QString> channels_signal;
-    std::map<int, boost::circular_buffer<double>> channels_time;
-    std::map<int, boost::circular_buffer<double>> channels_prompt_i;
-    std::map<int, boost::circular_buffer<double>> channels_prompt_q;
-    std::map<int, boost::circular_buffer<double>> channels_cn0;
-    std::map<int, boost::circular_buffer<double>> channels_doppler;
+    std::vector<int> m_channelsId;
+    std::map<int, gnss_sdr::GnssSynchro> m_channels;
+    std::map<int, QString> m_channelsSignal;
+    std::map<int, boost::circular_buffer<double>> m_channelsTime;
+    std::map<int, boost::circular_buffer<double>> m_channelsPromptI;
+    std::map<int, boost::circular_buffer<double>> m_channelsPromptQ;
+    std::map<int, boost::circular_buffer<double>> m_channelsCn0;
+    std::map<int, boost::circular_buffer<double>> m_channelsDoppler;
 
 public slots:
     gnss_sdr::GnssSynchro get_channel_data(int key);
 
 private:
-    std::map<std::string, QString> map_signal_pretty_name;
+    std::map<std::string, QString> m_mapSignalPrettyName;
 };
 
 #endif  // GNSS_SDR_MONITOR_CHANNEL_TABLE_MODEL_H_

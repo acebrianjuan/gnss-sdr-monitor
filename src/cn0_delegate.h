@@ -50,7 +50,7 @@ protected:
                    const QModelIndex &index) const;
 
 private:
-    qreal numel;
+    qreal m_numel;
 
 };
 

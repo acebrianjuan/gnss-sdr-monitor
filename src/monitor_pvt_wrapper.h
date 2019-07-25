@@ -56,7 +56,7 @@ public slots:
     void clear_data();
 
 private:
-    QList<gnss_sdr::MonitorPvt> m_list_monitor_pvt;
+    QList<gnss_sdr::MonitorPvt> m_listMonitorPvt;
     QVariantList m_path;
 };
 

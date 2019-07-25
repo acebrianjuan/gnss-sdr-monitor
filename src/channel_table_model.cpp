@@ -41,16 +41,16 @@
 
 Channel_Table_Model::Channel_Table_Model()
 {
-    map_signal_pretty_name["1C"] = "L1 C/A";
-    map_signal_pretty_name["1B"] = "E1";
-    map_signal_pretty_name["1G"] = "L1 C/A";
-    map_signal_pretty_name["2S"] = "L2C";
-    map_signal_pretty_name["2G"] = "L2 C/A";
-    map_signal_pretty_name["5X"] = "E5a";
-    map_signal_pretty_name["L5"] = "L5";
+    m_mapSignalPrettyName["1C"] = "L1 C/A";
+    m_mapSignalPrettyName["1B"] = "E1";
+    m_mapSignalPrettyName["1G"] = "L1 C/A";
+    m_mapSignalPrettyName["2S"] = "L2C";
+    m_mapSignalPrettyName["2G"] = "L2 C/A";
+    m_mapSignalPrettyName["5X"] = "E5a";
+    m_mapSignalPrettyName["L5"] = "L5";
 
-    columns = 11;
-    buffer_size = DEFAULT_BUFFER_SIZE;
+    m_columns = 11;
+    m_bufferSize = DEFAULT_BUFFER_SIZE;
 }
 
 void Channel_Table_Model::update()
@@ -61,12 +61,12 @@ void Channel_Table_Model::update()
 
 int Channel_Table_Model::rowCount(const QModelIndex &parent) const
 {
-    return channels.size();
+    return m_channels.size();
 }
 
 int Channel_Table_Model::columnCount(const QModelIndex &parent) const
 {
-    return columns;
+    return m_columns;
 }
 
 QVariant Channel_Table_Model::data(const QModelIndex &index, int role) const
@@ -75,22 +75,22 @@ QVariant Channel_Table_Model::data(const QModelIndex &index, int role) const
     {
         try
         {
-            int channel_id = channels_id.at(index.row());
+            int channel_id = m_channelsId.at(index.row());
 
-            gnss_sdr::GnssSynchro channel = channels.at(channel_id);
+            gnss_sdr::GnssSynchro channel = m_channels.at(channel_id);
 
-            QString channel_signal = channels_signal.at(channel_id);
+            QString channel_signal = m_channelsSignal.at(channel_id);
 
             boost::circular_buffer<double> channel_time_cbuf =
-                    channels_time.at(channel_id);
+                    m_channelsTime.at(channel_id);
             boost::circular_buffer<double> channel_prompt_i_cbuf =
-                    channels_prompt_i.at(channel_id);
+                    m_channelsPromptI.at(channel_id);
             boost::circular_buffer<double> channel_prompt_q_cbuf =
-                    channels_prompt_q.at(channel_id);
+                    m_channelsPromptQ.at(channel_id);
             boost::circular_buffer<double> channel_cn0_cbuf =
-                    channels_cn0.at(channel_id);
+                    m_channelsCn0.at(channel_id);
             boost::circular_buffer<double> channel_doppler_cbuf =
-                    channels_doppler.at(channel_id);
+                    m_channelsDoppler.at(channel_id);
 
             QList<QVariant> channel_prompt_iq;
             QList<QVariant> channel_cn0;
@@ -256,86 +256,86 @@ void Channel_Table_Model::populate_channel(const gnss_sdr::GnssSynchro *ch)
 {
     if (ch->fs() != 0)  // Channel is valid.
     {
-        if (channels.find(ch->channel_id()) != channels.end())  // Channel exists.
+        if (m_channels.find(ch->channel_id()) != m_channels.end())  // Channel exists.
         {
-            if (channels.at(ch->channel_id()).prn() != ch->prn())
+            if (m_channels.at(ch->channel_id()).prn() != ch->prn())
             {
                 // Reset channel.
                 clear_channel(ch->channel_id());
             }
         }
 
-        size_t map_size = channels.size();
+        size_t map_size = m_channels.size();
 
-        channels[ch->channel_id()] = *ch;
+        m_channels[ch->channel_id()] = *ch;
 
-        if (channels_time.find(ch->channel_id()) == channels_time.end())
+        if (m_channelsTime.find(ch->channel_id()) == m_channelsTime.end())
         {
-            channels_time[ch->channel_id()].resize(buffer_size);
-            channels_time[ch->channel_id()].clear();
+            m_channelsTime[ch->channel_id()].resize(m_bufferSize);
+            m_channelsTime[ch->channel_id()].clear();
         }
-        channels_time[ch->channel_id()].push_back(ch->rx_time());
+        m_channelsTime[ch->channel_id()].push_back(ch->rx_time());
 
-        if (channels_prompt_i.find(ch->channel_id()) == channels_prompt_i.end())
+        if (m_channelsPromptI.find(ch->channel_id()) == m_channelsPromptI.end())
         {
-            channels_prompt_i[ch->channel_id()].resize(buffer_size);
-            channels_prompt_i[ch->channel_id()].clear();
+            m_channelsPromptI[ch->channel_id()].resize(m_bufferSize);
+            m_channelsPromptI[ch->channel_id()].clear();
         }
-        channels_prompt_i[ch->channel_id()].push_back(ch->prompt_i());
+        m_channelsPromptI[ch->channel_id()].push_back(ch->prompt_i());
 
-        if (channels_prompt_q.find(ch->channel_id()) == channels_prompt_q.end())
+        if (m_channelsPromptQ.find(ch->channel_id()) == m_channelsPromptQ.end())
         {
-            channels_prompt_q[ch->channel_id()].resize(buffer_size);
-            channels_prompt_q[ch->channel_id()].clear();
+            m_channelsPromptQ[ch->channel_id()].resize(m_bufferSize);
+            m_channelsPromptQ[ch->channel_id()].clear();
         }
-        channels_prompt_q[ch->channel_id()].push_back(ch->prompt_q());
+        m_channelsPromptQ[ch->channel_id()].push_back(ch->prompt_q());
 
-        if (channels_cn0.find(ch->channel_id()) == channels_cn0.end())
+        if (m_channelsCn0.find(ch->channel_id()) == m_channelsCn0.end())
         {
-            channels_cn0[ch->channel_id()].resize(buffer_size);
-            channels_cn0[ch->channel_id()].clear();
+            m_channelsCn0[ch->channel_id()].resize(m_bufferSize);
+            m_channelsCn0[ch->channel_id()].clear();
         }
-        channels_cn0[ch->channel_id()].push_back(ch->cn0_db_hz());
+        m_channelsCn0[ch->channel_id()].push_back(ch->cn0_db_hz());
 
-        if (channels_doppler.find(ch->channel_id()) == channels_doppler.end())
+        if (m_channelsDoppler.find(ch->channel_id()) == m_channelsDoppler.end())
         {
-            channels_doppler[ch->channel_id()].resize(buffer_size);
-            channels_doppler[ch->channel_id()].clear();
+            m_channelsDoppler[ch->channel_id()].resize(m_bufferSize);
+            m_channelsDoppler[ch->channel_id()].clear();
         }
-        channels_doppler[ch->channel_id()].push_back(ch->carrier_doppler_hz());
+        m_channelsDoppler[ch->channel_id()].push_back(ch->carrier_doppler_hz());
 
-        channels_signal[ch->channel_id()] = get_signal_pretty_name(ch);
+        m_channelsSignal[ch->channel_id()] = get_signal_pretty_name(ch);
 
-        if (channels.size() != map_size)
+        if (m_channels.size() != map_size)
         {
-            channels_id.push_back(ch->channel_id());
+            m_channelsId.push_back(ch->channel_id());
         }
     }
 }
 
 void Channel_Table_Model::clear_channel(int ch_id)
 {
-    channels_id.erase(std::remove(channels_id.begin(), channels_id.end(), ch_id),
-                      channels_id.end());
-    channels.erase(ch_id);
-    channels_signal.erase(ch_id);
-    channels_time.erase(ch_id);
-    channels_prompt_i.erase(ch_id);
-    channels_prompt_q.erase(ch_id);
-    channels_cn0.erase(ch_id);
-    channels_doppler.erase(ch_id);
+    m_channelsId.erase(std::remove(m_channelsId.begin(), m_channelsId.end(), ch_id),
+                      m_channelsId.end());
+    m_channels.erase(ch_id);
+    m_channelsSignal.erase(ch_id);
+    m_channelsTime.erase(ch_id);
+    m_channelsPromptI.erase(ch_id);
+    m_channelsPromptQ.erase(ch_id);
+    m_channelsCn0.erase(ch_id);
+    m_channelsDoppler.erase(ch_id);
 }
 
 void Channel_Table_Model::clear_channels()
 {
-    channels_id.clear();
-    channels.clear();
-    channels_signal.clear();
-    channels_time.clear();
-    channels_prompt_i.clear();
-    channels_prompt_q.clear();
-    channels_cn0.clear();
-    channels_doppler.clear();
+    m_channelsId.clear();
+    m_channels.clear();
+    m_channelsSignal.clear();
+    m_channelsTime.clear();
+    m_channelsPromptI.clear();
+    m_channelsPromptQ.clear();
+    m_channelsCn0.clear();
+    m_channelsDoppler.clear();
 }
 
 QString
@@ -354,10 +354,10 @@ Channel_Table_Model::get_signal_pretty_name(const gnss_sdr::GnssSynchro *ch)
             system_name = QStringLiteral("Galileo");
         }
 
-        if (map_signal_pretty_name.find(ch->signal()) !=
-                map_signal_pretty_name.end())
+        if (m_mapSignalPrettyName.find(ch->signal()) !=
+                m_mapSignalPrettyName.end())
         {
-            system_name.append(" ").append(map_signal_pretty_name.at(ch->signal()));
+            system_name.append(" ").append(m_mapSignalPrettyName.at(ch->signal()));
         }
     }
 
@@ -377,7 +377,7 @@ Channel_Table_Model::get_list_from_cbuf(boost::circular_buffer<double> cbuf)
     return list;
 }
 
-int Channel_Table_Model::get_columns() { return columns; }
+int Channel_Table_Model::get_columns() { return m_columns; }
 
 void Channel_Table_Model::set_buffer_size()
 {
@@ -386,8 +386,8 @@ void Channel_Table_Model::set_buffer_size()
     int size = settings.value("buffer_size", DEFAULT_BUFFER_SIZE).toInt();
     settings.endGroup();
 
-    buffer_size = size;
+    m_bufferSize = size;
     clear_channels();
 }
 
-int Channel_Table_Model::get_channel_id(int row) { return channels_id.at(row); }
+int Channel_Table_Model::get_channel_id(int row) { return m_channelsId.at(row); }

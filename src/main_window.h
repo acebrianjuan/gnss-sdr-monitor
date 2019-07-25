@@ -68,33 +68,6 @@ public:
     void save_settings();
     void load_settings();
 
-private:
-    Ui::Main_Window *ui;
-    QDockWidget *map_dock;
-    QQuickWidget *map_widget;
-    Channel_Table_Model *model;
-    QUdpSocket *socket_gnss_synchro;
-    QUdpSocket *socket_monitor_pvt;
-    gnss_sdr::Observables stocks;
-    Monitor_Pvt_Wrapper *m_monitor_pvt_wrapper;
-    gnss_sdr::MonitorPvt m_monitor_pvt;
-    std::vector<int> channels;
-    quint16 port_gnss_synchro;
-    quint16 port_monitor_pvt;
-    QSettings settings;
-    QTimer updateTimer;
-
-    QAction *start;
-    QAction *stop;
-    QAction *clear;
-    QAction *close_plots_action;
-
-    int buffer_size;
-
-    std::map<int, QtCharts::QChartView *> plots_constellation;
-    std::map<int, QtCharts::QChartView *> plots_cn0;
-    std::map<int, QtCharts::QChartView *> plots_doppler;
-
 public slots:
     void toggle_capture();
     void receive_gnss_synchro();
@@ -110,6 +83,34 @@ public slots:
 
 protected:
     void closeEvent(QCloseEvent *event) override;
+
+private:
+    Ui::Main_Window *ui;
+
+    QDockWidget *m_mapDock;
+    QQuickWidget *m_mapWidget;
+    Channel_Table_Model *m_model;
+    QUdpSocket *m_socketGnssSynchro;
+    QUdpSocket *m_socketMonitorPvt;
+    gnss_sdr::Observables m_stocks;
+    Monitor_Pvt_Wrapper *m_monitorPvtWrapper;
+    gnss_sdr::MonitorPvt m_monitorPvt;
+    std::vector<int> m_channels;
+    quint16 m_portGnssSynchro;
+    quint16 m_portMonitorPvt;
+    QSettings m_settings;
+    QTimer m_updateTimer;
+
+    QAction *m_start;
+    QAction *m_stop;
+    QAction *m_clear;
+    QAction *m_closePlotsAction;
+
+    int m_bufferSize;
+
+    std::map<int, QtCharts::QChartView *> m_plotsConstellation;
+    std::map<int, QtCharts::QChartView *> m_plotsCn0;
+    std::map<int, QtCharts::QChartView *> m_plotsDoppler;
 };
 
 #endif  // GNSS_SDR_MONITOR_MAIN_WINDOW_H_

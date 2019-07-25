@@ -42,7 +42,7 @@
 
 Doppler_Delegate::Doppler_Delegate(QWidget *parent) : QStyledItemDelegate(parent)
 {
-    numel = 4000;
+    m_numel = 4000;
 }
 
 Doppler_Delegate::~Doppler_Delegate()
@@ -76,12 +76,12 @@ void Doppler_Delegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
 
     QStyledItemDelegate::paint(painter, option, index);
 
-    if (points.isEmpty() || numel < 1.0 || content_h <= 0)
+    if (points.isEmpty() || m_numel < 1.0 || content_h <= 0)
     {
         return;
     }
 
-    while((qreal) points.length() > numel)
+    while((qreal) points.length() > m_numel)
     {
         points.removeFirst();
     }
