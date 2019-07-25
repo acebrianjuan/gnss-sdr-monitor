@@ -107,6 +107,7 @@ public slots:
     void close_plots();
     void delete_plots();
     //void map_contents();
+    void about();
 
 protected:
     void closeEvent(QCloseEvent *event) override;

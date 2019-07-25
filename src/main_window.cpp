@@ -126,6 +126,8 @@ Main_Window::Main_Window(QWidget *parent)
         &Main_Window::receive_monitor_pvt);
     connect(qApp, &QApplication::aboutToQuit, this, &Main_Window::quit);
     connect(ui->tableView, &QTableView::clicked, this, &Main_Window::expand_plot);
+    connect(ui->actionAbout, &QAction::triggered, this, &Main_Window::about);
+    connect(ui->actionAboutQt, &QAction::triggered, qApp, &QApplication::aboutQt);
 
     // Load settings from last session.
     load_settings();
@@ -558,3 +560,13 @@ void Main_Window::map_contents()
     qDebug() << "plots_doppler: " << plots_doppler.size();
 }
 */
+
+void Main_Window::about()
+{
+    const QString text = "<h3>gnss-sdr-monitor</h3>"
+                         "A graphical user interface to monitor the GNSS-SDR status in real time."
+                         "<p>Written by Álvaro Cebrián Juan and licensed under GNU GPLv3 license.</p>"
+                         "<p>Report bugs and suggestions to acebrianjuan@gmail.com</p>";
+
+    QMessageBox::about(this, "About gnss-sdr-monitor", text);
+}
