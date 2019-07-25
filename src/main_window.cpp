@@ -56,8 +56,6 @@ Main_Window::Main_Window(QWidget *parent)
     updateTimer.setSingleShot(true);
     connect(&updateTimer, &QTimer::timeout, [this] { model->update(); });
 
-    // connect(&updateTimer, &QTimer::timeout, this, &Main_Window::map_contents);
-
     ui->setupUi(this);
 
     // Monitor_Pvt_Wrapper.
@@ -67,7 +65,7 @@ Main_Window::Main_Window(QWidget *parent)
     map_dock = new QDockWidget("Map", this);
     map_widget = new QQuickWidget(this);
     map_widget->rootContext()->setContextProperty("m_monitor_pvt_wrapper",
-        m_monitor_pvt_wrapper);
+                                                  m_monitor_pvt_wrapper);
     map_widget->setSource(QUrl(QStringLiteral("qrc:/qml/main.qml")));
     map_widget->setResizeMode(QQuickWidget::SizeRootObjectToView);
     map_dock->setWidget(map_widget);
@@ -82,7 +80,7 @@ Main_Window::Main_Window(QWidget *parent)
 
     connect(ui->actionQuit, &QAction::triggered, qApp, &QApplication::quit);
     connect(ui->actionPreferences, &QAction::triggered, this,
-        &Main_Window::show_preferences);
+            &Main_Window::show_preferences);
 
     // QToolbar.
     start = ui->mainToolBar->addAction("Start");
@@ -97,7 +95,7 @@ Main_Window::Main_Window(QWidget *parent)
     connect(stop, &QAction::triggered, this, &Main_Window::toggle_capture);
     connect(clear, &QAction::triggered, this, &Main_Window::clear_entries);
     connect(close_plots_action, &QAction::triggered, this,
-        &Main_Window::close_plots);
+            &Main_Window::close_plots);
 
     // Model.
     model = new Channel_Table_Model();
@@ -121,9 +119,9 @@ Main_Window::Main_Window(QWidget *parent)
 
     // Connect Signals & Slots.
     connect(socket_gnss_synchro, &QUdpSocket::readyRead, this,
-        &Main_Window::receive_gnss_synchro);
+            &Main_Window::receive_gnss_synchro);
     connect(socket_monitor_pvt, &QUdpSocket::readyRead, this,
-        &Main_Window::receive_monitor_pvt);
+            &Main_Window::receive_monitor_pvt);
     connect(qApp, &QApplication::aboutToQuit, this, &Main_Window::quit);
     connect(ui->tableView, &QTableView::clicked, this, &Main_Window::expand_plot);
     connect(ui->actionAbout, &QAction::triggered, this, &Main_Window::about);
@@ -145,52 +143,52 @@ void Main_Window::closeEvent(QCloseEvent *event)
 void Main_Window::toggle_capture()
 {
     if (start->isEnabled())
-        {
-            start->setEnabled(false);
-            stop->setEnabled(true);
-        }
+    {
+        start->setEnabled(false);
+        stop->setEnabled(true);
+    }
     else
-        {
-            start->setEnabled(true);
-            stop->setEnabled(false);
-        }
+    {
+        start->setEnabled(true);
+        stop->setEnabled(false);
+    }
 }
 
 void Main_Window::receive_gnss_synchro()
 {
     bool newData = false;
     while (socket_gnss_synchro->hasPendingDatagrams())
-        {
-            newData = true;
-            QNetworkDatagram datagram = socket_gnss_synchro->receiveDatagram();
-            stocks = read_gnss_synchro(datagram.data().data(), datagram.data().size());
+    {
+        newData = true;
+        QNetworkDatagram datagram = socket_gnss_synchro->receiveDatagram();
+        stocks = read_gnss_synchro(datagram.data().data(), datagram.data().size());
 
-            if (stop->isEnabled())
-                {
-                    model->populate_channels(&stocks);
-                    clear->setEnabled(true);
-                }
-        }
-    if (newData && !updateTimer.isActive())
+        if (stop->isEnabled())
         {
-            updateTimer.start();
+            model->populate_channels(&stocks);
+            clear->setEnabled(true);
         }
+    }
+    if (newData && !updateTimer.isActive())
+    {
+        updateTimer.start();
+    }
 }
 
 void Main_Window::receive_monitor_pvt()
 {
     while (socket_monitor_pvt->hasPendingDatagrams())
-        {
-            QNetworkDatagram datagram = socket_monitor_pvt->receiveDatagram();
-            m_monitor_pvt =
+    {
+        QNetworkDatagram datagram = socket_monitor_pvt->receiveDatagram();
+        m_monitor_pvt =
                 read_monitor_pvt(datagram.data().data(), datagram.data().size());
 
-            if (stop->isEnabled())
-                {
-                    m_monitor_pvt_wrapper->add_monitor_pvt(m_monitor_pvt);
-                    // clear->setEnabled(true);
-                }
+        if (stop->isEnabled())
+        {
+            m_monitor_pvt_wrapper->add_monitor_pvt(m_monitor_pvt);
+            // clear->setEnabled(true);
         }
+    }
 }
 
 void Main_Window::clear_entries()
@@ -207,14 +205,14 @@ gnss_sdr::Observables Main_Window::read_gnss_synchro(char buff[], int bytes)
     std::string data(buff, bytes);
     stocks.ParseFromString(data);
     try
-        {
-            std::string data(buff, bytes);
-            stocks.ParseFromString(data);
-        }
+    {
+        std::string data(buff, bytes);
+        stocks.ParseFromString(data);
+    }
     catch (std::exception &e)
-        {
-            qDebug() << e.what();
-        }
+    {
+        qDebug() << e.what();
+    }
 
     return stocks;
 }
@@ -222,14 +220,14 @@ gnss_sdr::Observables Main_Window::read_gnss_synchro(char buff[], int bytes)
 gnss_sdr::MonitorPvt Main_Window::read_monitor_pvt(char buff[], int bytes)
 {
     try
-        {
-            std::string data(buff, bytes);
-            m_monitor_pvt.ParseFromString(data);
-        }
+    {
+        std::string data(buff, bytes);
+        m_monitor_pvt.ParseFromString(data);
+    }
     catch (std::exception &e)
-        {
-            qDebug() << e.what();
-        }
+    {
+        qDebug() << e.what();
+    }
 
     return m_monitor_pvt;
 }
@@ -244,10 +242,10 @@ void Main_Window::save_settings()
     settings.beginGroup("tableView");
     settings.beginWriteArray("column");
     for (int i = 0; i < model->get_columns(); i++)
-        {
-            settings.setArrayIndex(i);
-            settings.setValue("width", ui->tableView->columnWidth(i));
-        }
+    {
+        settings.setArrayIndex(i);
+        settings.setValue("width", ui->tableView->columnWidth(i));
+    }
     settings.endArray();
     settings.endGroup();
 
@@ -264,10 +262,10 @@ void Main_Window::load_settings()
     settings.beginGroup("tableView");
     settings.beginReadArray("column");
     for (int i = 0; i < model->get_columns(); i++)
-        {
-            settings.setArrayIndex(i);
-            ui->tableView->setColumnWidth(i, settings.value("width", 100).toInt());
-        }
+    {
+        settings.setArrayIndex(i);
+        ui->tableView->setColumnWidth(i, settings.value("width", 100).toInt());
+    }
     settings.endArray();
     settings.endGroup();
 
@@ -280,9 +278,9 @@ void Main_Window::show_preferences()
 {
     Preferences_Dialog *preferences = new Preferences_Dialog(this);
     connect(preferences, &Preferences_Dialog::accepted, model,
-        &Channel_Table_Model::set_buffer_size);
+            &Channel_Table_Model::set_buffer_size);
     connect(preferences, &Preferences_Dialog::accepted, this,
-        &Main_Window::set_port);
+            &Main_Window::set_port);
     preferences->exec();
 }
 
@@ -308,200 +306,200 @@ void Main_Window::expand_plot(const QModelIndex &index)
     QChartView *chartView = nullptr;
 
     if (index.column() == 5)  // Constellation
+    {
+        if (plots_constellation.find(index.row()) == plots_constellation.end())
         {
-            if (plots_constellation.find(index.row()) == plots_constellation.end())
+            QChart *chart = new QChart();  // has no parent!
+            chart->setTitle("Constellation CH " + QString::number(channel_id));
+            chart->legend()->hide();
+
+            QScatterSeries *series = new QScatterSeries(chart);
+            series->setMarkerSize(8);
+            chart->addSeries(series);
+            chart->createDefaultAxes();
+            chart->axisX()->setTitleText("I prompt");
+            chart->axisY()->setTitleText("Q prompt");
+            chart->layout()->setContentsMargins(0, 0, 0, 0);
+            chart->setContentsMargins(-18, -18, -14, -16);
+
+            chartView = new QChartView(chart);
+            chartView->setRenderHint(QPainter::Antialiasing);
+            chartView->setContentsMargins(0, 0, 0, 0);
+
+            connect(this, &QMainWindow::destroyed, chartView, &QObject::deleteLater);
+
+            // Remove element from map when dialog is closed.
+            connect(chartView, &QObject::destroyed,
+                    [this, index]() { plots_constellation.erase(index.row()); });
+
+            // Update chart on timer timeout.
+            connect(&updateTimer, &QTimer::timeout, chart, [chart, series, index]() {
+                QPointF p;
+                QVector<QPointF> points;
+
+                double min_x = DBL_MAX;
+                double min_y = DBL_MAX;
+
+                double max_x = -DBL_MAX;
+                double max_y = -DBL_MAX;
+
+                QList<QVariant> var = index.data(Qt::DisplayRole).toList();
+                for (int i = 0; i < var.size(); i++)
                 {
-                    QChart *chart = new QChart();  // has no parent!
-                    chart->setTitle("Constellation CH " + QString::number(channel_id));
-                    chart->legend()->hide();
+                    p = var.at(i).toPointF();
+                    points << p;
 
-                    QScatterSeries *series = new QScatterSeries(chart);
-                    series->setMarkerSize(8);
-                    chart->addSeries(series);
-                    chart->createDefaultAxes();
-                    chart->axisX()->setTitleText("I prompt");
-                    chart->axisY()->setTitleText("Q prompt");
-                    chart->layout()->setContentsMargins(0, 0, 0, 0);
-                    chart->setContentsMargins(-18, -18, -14, -16);
+                    min_x = std::min(min_x, p.x());
+                    min_y = std::min(min_y, p.y());
 
-                    chartView = new QChartView(chart);
-                    chartView->setRenderHint(QPainter::Antialiasing);
-                    chartView->setContentsMargins(0, 0, 0, 0);
-
-                    connect(this, &QMainWindow::destroyed, chartView, &QObject::deleteLater);
-
-                    // Remove element from map when dialog is closed.
-                    connect(chartView, &QObject::destroyed,
-                        [this, index]() { plots_constellation.erase(index.row()); });
-
-                    // Update chart on timer timeout.
-                    connect(&updateTimer, &QTimer::timeout, chart, [chart, series, index]() {
-                        QPointF p;
-                        QVector<QPointF> points;
-
-                        double min_x = DBL_MAX;
-                        double min_y = DBL_MAX;
-
-                        double max_x = -DBL_MAX;
-                        double max_y = -DBL_MAX;
-
-                        QList<QVariant> var = index.data(Qt::DisplayRole).toList();
-                        for (int i = 0; i < var.size(); i++)
-                            {
-                                p = var.at(i).toPointF();
-                                points << p;
-
-                                min_x = std::min(min_x, p.x());
-                                min_y = std::min(min_y, p.y());
-
-                                max_x = std::max(max_x, p.x());
-                                max_y = std::max(max_y, p.y());
-                            }
-
-                        series->replace(points);
-
-                        chart->axisX()->setRange(min_x, max_x);
-                        chart->axisY()->setRange(min_y, max_y);
-                    });
-
-                    plots_constellation[index.row()] = chartView;
+                    max_x = std::max(max_x, p.x());
+                    max_y = std::max(max_y, p.y());
                 }
-            else
-                {
-                    chartView = plots_constellation.at(index.row());
-                }
+
+                series->replace(points);
+
+                chart->axisX()->setRange(min_x, max_x);
+                chart->axisY()->setRange(min_y, max_y);
+            });
+
+            plots_constellation[index.row()] = chartView;
         }
+        else
+        {
+            chartView = plots_constellation.at(index.row());
+        }
+    }
     else if (index.column() == 6)  // CN0
+    {
+        if (plots_cn0.find(index.row()) == plots_cn0.end())
         {
-            if (plots_cn0.find(index.row()) == plots_cn0.end())
+            QChart *chart = new QChart();  // has no parent!
+            chart->setTitle("CN0 CH " + QString::number(channel_id));
+            chart->legend()->hide();
+
+            QLineSeries *series = new QLineSeries(chart);
+            chart->addSeries(series);
+            chart->createDefaultAxes();
+            chart->axisX()->setTitleText("TOW [s]");
+            chart->axisY()->setTitleText("C/N0 [db-Hz]");
+            chart->layout()->setContentsMargins(0, 0, 0, 0);
+            chart->setContentsMargins(-18, -18, -14, -16);
+
+            chartView = new QChartView(chart);
+            chartView->setRenderHint(QPainter::Antialiasing);
+            chartView->setContentsMargins(0, 0, 0, 0);
+
+            connect(this, &QMainWindow::destroyed, chartView, &QObject::deleteLater);
+
+            // Remove element from map when dialog is closed.
+            connect(chartView, &QObject::destroyed,
+                    [this, index]() { plots_cn0.erase(index.row()); });
+
+            // Update chart on timer timeout.
+            connect(&updateTimer, &QTimer::timeout, chart, [chart, series, index]() {
+                QPointF p;
+                QVector<QPointF> points;
+
+                double min_x = DBL_MAX;
+                double min_y = DBL_MAX;
+
+                double max_x = -DBL_MAX;
+                double max_y = -DBL_MAX;
+
+                QList<QVariant> var = index.data(Qt::DisplayRole).toList();
+                for (int i = 0; i < var.size(); i++)
                 {
-                    QChart *chart = new QChart();  // has no parent!
-                    chart->setTitle("CN0 CH " + QString::number(channel_id));
-                    chart->legend()->hide();
+                    p = var.at(i).toPointF();
+                    points << p;
 
-                    QLineSeries *series = new QLineSeries(chart);
-                    chart->addSeries(series);
-                    chart->createDefaultAxes();
-                    chart->axisX()->setTitleText("TOW [s]");
-                    chart->axisY()->setTitleText("C/N0 [db-Hz]");
-                    chart->layout()->setContentsMargins(0, 0, 0, 0);
-                    chart->setContentsMargins(-18, -18, -14, -16);
+                    min_x = std::min(min_x, p.x());
+                    min_y = std::min(min_y, p.y());
 
-                    chartView = new QChartView(chart);
-                    chartView->setRenderHint(QPainter::Antialiasing);
-                    chartView->setContentsMargins(0, 0, 0, 0);
-
-                    connect(this, &QMainWindow::destroyed, chartView, &QObject::deleteLater);
-
-                    // Remove element from map when dialog is closed.
-                    connect(chartView, &QObject::destroyed,
-                        [this, index]() { plots_cn0.erase(index.row()); });
-
-                    // Update chart on timer timeout.
-                    connect(&updateTimer, &QTimer::timeout, chart, [chart, series, index]() {
-                        QPointF p;
-                        QVector<QPointF> points;
-
-                        double min_x = DBL_MAX;
-                        double min_y = DBL_MAX;
-
-                        double max_x = -DBL_MAX;
-                        double max_y = -DBL_MAX;
-
-                        QList<QVariant> var = index.data(Qt::DisplayRole).toList();
-                        for (int i = 0; i < var.size(); i++)
-                            {
-                                p = var.at(i).toPointF();
-                                points << p;
-
-                                min_x = std::min(min_x, p.x());
-                                min_y = std::min(min_y, p.y());
-
-                                max_x = std::max(max_x, p.x());
-                                max_y = std::max(max_y, p.y());
-                            }
-
-                        series->replace(points);
-
-                        chart->axisX()->setRange(min_x, max_x);
-                        chart->axisY()->setRange(min_y, max_y);
-                    });
-
-                    plots_cn0[index.row()] = chartView;
+                    max_x = std::max(max_x, p.x());
+                    max_y = std::max(max_y, p.y());
                 }
-            else
-                {
-                    chartView = plots_cn0.at(index.row());
-                }
+
+                series->replace(points);
+
+                chart->axisX()->setRange(min_x, max_x);
+                chart->axisY()->setRange(min_y, max_y);
+            });
+
+            plots_cn0[index.row()] = chartView;
         }
+        else
+        {
+            chartView = plots_cn0.at(index.row());
+        }
+    }
     else if (index.column() == 7)  // Doppler
+    {
+        if (plots_doppler.find(index.row()) == plots_doppler.end())
         {
-            if (plots_doppler.find(index.row()) == plots_doppler.end())
+            QChart *chart = new QChart();  // has no parent!
+            chart->setTitle("Doppler CH " + QString::number(channel_id));
+            chart->legend()->hide();
+
+            QLineSeries *series = new QLineSeries(chart);
+            chart->addSeries(series);
+            chart->createDefaultAxes();
+            chart->axisX()->setTitleText("TOW [s]");
+            chart->axisY()->setTitleText("Doppler [Hz]");
+            chart->layout()->setContentsMargins(0, 0, 0, 0);
+            chart->setContentsMargins(-18, -18, -14, -16);
+
+            chartView = new QChartView(chart);
+            chartView->setRenderHint(QPainter::Antialiasing);
+            chartView->setContentsMargins(0, 0, 0, 0);
+
+            connect(this, &QMainWindow::destroyed, chartView, &QObject::deleteLater);
+
+            // Remove element from map when dialog is closed.
+            connect(chartView, &QObject::destroyed,
+                    [this, index]() { plots_doppler.erase(index.row()); });
+
+            // Update chart on timer timeout.
+            connect(&updateTimer, &QTimer::timeout, chart, [chart, series, index]() {
+                QPointF p;
+                QVector<QPointF> points;
+
+                double min_x = DBL_MAX;
+                double min_y = DBL_MAX;
+
+                double max_x = -DBL_MAX;
+                double max_y = -DBL_MAX;
+
+                QList<QVariant> var = index.data(Qt::DisplayRole).toList();
+                for (int i = 0; i < var.size(); i++)
                 {
-                    QChart *chart = new QChart();  // has no parent!
-                    chart->setTitle("Doppler CH " + QString::number(channel_id));
-                    chart->legend()->hide();
+                    p = var.at(i).toPointF();
+                    points << p;
 
-                    QLineSeries *series = new QLineSeries(chart);
-                    chart->addSeries(series);
-                    chart->createDefaultAxes();
-                    chart->axisX()->setTitleText("TOW [s]");
-                    chart->axisY()->setTitleText("Doppler [Hz]");
-                    chart->layout()->setContentsMargins(0, 0, 0, 0);
-                    chart->setContentsMargins(-18, -18, -14, -16);
+                    min_x = std::min(min_x, p.x());
+                    min_y = std::min(min_y, p.y());
 
-                    chartView = new QChartView(chart);
-                    chartView->setRenderHint(QPainter::Antialiasing);
-                    chartView->setContentsMargins(0, 0, 0, 0);
-
-                    connect(this, &QMainWindow::destroyed, chartView, &QObject::deleteLater);
-
-                    // Remove element from map when dialog is closed.
-                    connect(chartView, &QObject::destroyed,
-                        [this, index]() { plots_doppler.erase(index.row()); });
-
-                    // Update chart on timer timeout.
-                    connect(&updateTimer, &QTimer::timeout, chart, [chart, series, index]() {
-                        QPointF p;
-                        QVector<QPointF> points;
-
-                        double min_x = DBL_MAX;
-                        double min_y = DBL_MAX;
-
-                        double max_x = -DBL_MAX;
-                        double max_y = -DBL_MAX;
-
-                        QList<QVariant> var = index.data(Qt::DisplayRole).toList();
-                        for (int i = 0; i < var.size(); i++)
-                            {
-                                p = var.at(i).toPointF();
-                                points << p;
-
-                                min_x = std::min(min_x, p.x());
-                                min_y = std::min(min_y, p.y());
-
-                                max_x = std::max(max_x, p.x());
-                                max_y = std::max(max_y, p.y());
-                            }
-
-                        series->replace(points);
-
-                        chart->axisX()->setRange(min_x, max_x);
-                        chart->axisY()->setRange(min_y, max_y);
-                    });
-
-                    plots_doppler[index.row()] = chartView;
+                    max_x = std::max(max_x, p.x());
+                    max_y = std::max(max_y, p.y());
                 }
-            else
-                {
-                    chartView = plots_doppler.at(index.row());
-                }
+
+                series->replace(points);
+
+                chart->axisX()->setRange(min_x, max_x);
+                chart->axisY()->setRange(min_y, max_y);
+            });
+
+            plots_doppler[index.row()] = chartView;
         }
+        else
+        {
+            chartView = plots_doppler.at(index.row());
+        }
+    }
 
     if (!chartView)  // similar: if (chartView == nullptr)
-        {
-            return;
-        }
+    {
+        return;
+    }
 
     chartView->resize(400, 180);
     chartView->show();
@@ -510,56 +508,47 @@ void Main_Window::expand_plot(const QModelIndex &index)
 void Main_Window::close_plots()
 {
     for (auto const &ch : plots_constellation)
-        {
-            auto const &chartView = ch.second;
-            chartView->close();
-        }
+    {
+        auto const &chartView = ch.second;
+        chartView->close();
+    }
 
     for (auto const &ch : plots_cn0)
-        {
-            auto const &chartView = ch.second;
-            chartView->close();
-        }
+    {
+        auto const &chartView = ch.second;
+        chartView->close();
+    }
 
     for (auto const &ch : plots_doppler)
-        {
-            auto const &chartView = ch.second;
-            chartView->close();
-        }
+    {
+        auto const &chartView = ch.second;
+        chartView->close();
+    }
 }
 
 void Main_Window::delete_plots()
 {
     for (auto const &ch : plots_constellation)
-        {
-            auto const &chartView = ch.second;
-            chartView->deleteLater();
-        }
+    {
+        auto const &chartView = ch.second;
+        chartView->deleteLater();
+    }
     plots_constellation.clear();
 
     for (auto const &ch : plots_cn0)
-        {
-            auto const &chartView = ch.second;
-            chartView->deleteLater();
-        }
+    {
+        auto const &chartView = ch.second;
+        chartView->deleteLater();
+    }
     plots_cn0.clear();
 
     for (auto const &ch : plots_doppler)
-        {
-            auto const &chartView = ch.second;
-            chartView->deleteLater();
-        }
+    {
+        auto const &chartView = ch.second;
+        chartView->deleteLater();
+    }
     plots_doppler.clear();
 }
-
-/*
-void Main_Window::map_contents()
-{
-    qDebug() << "plots_constellation: " << plots_constellation.size();
-    qDebug() << "plots_cn0: " << plots_cn0.size();
-    qDebug() << "plots_doppler: " << plots_doppler.size();
-}
-*/
 
 void Main_Window::about()
 {
