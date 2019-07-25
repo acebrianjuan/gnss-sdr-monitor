@@ -36,11 +36,11 @@
 
 #include <QStyledItemDelegate>
 
-class Constellation_Delegate : public QStyledItemDelegate
+class ConstellationDelegate : public QStyledItemDelegate
 {
 public:
-    Constellation_Delegate(QWidget *parent = nullptr);
-    ~Constellation_Delegate();
+    ConstellationDelegate(QWidget *parent = nullptr);
+    ~ConstellationDelegate();
 
 protected:
     void paint(QPainter *painter, const QStyleOptionViewItem &option,

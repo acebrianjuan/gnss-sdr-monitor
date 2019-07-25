@@ -39,7 +39,7 @@
 
 #define DEFAULT_BUFFER_SIZE 1000
 
-Channel_Table_Model::Channel_Table_Model()
+ChannelTableModel::ChannelTableModel()
 {
     m_mapSignalPrettyName["1C"] = "L1 C/A";
     m_mapSignalPrettyName["1B"] = "E1";
@@ -53,23 +53,23 @@ Channel_Table_Model::Channel_Table_Model()
     m_bufferSize = DEFAULT_BUFFER_SIZE;
 }
 
-void Channel_Table_Model::update()
+void ChannelTableModel::update()
 {
     beginResetModel();
     endResetModel();
 }
 
-int Channel_Table_Model::rowCount(const QModelIndex &parent) const
+int ChannelTableModel::rowCount(const QModelIndex &parent) const
 {
     return m_channels.size();
 }
 
-int Channel_Table_Model::columnCount(const QModelIndex &parent) const
+int ChannelTableModel::columnCount(const QModelIndex &parent) const
 {
     return m_columns;
 }
 
-QVariant Channel_Table_Model::data(const QModelIndex &index, int role) const
+QVariant ChannelTableModel::data(const QModelIndex &index, int role) const
 {
     if (role == Qt::DisplayRole || role == Qt::ToolTipRole)
     {
@@ -195,7 +195,7 @@ QVariant Channel_Table_Model::data(const QModelIndex &index, int role) const
     return QVariant::Invalid;
 }
 
-QVariant Channel_Table_Model::headerData(int section,
+QVariant ChannelTableModel::headerData(int section,
                                          Qt::Orientation orientation,
                                          int role) const
 {
@@ -243,16 +243,16 @@ QVariant Channel_Table_Model::headerData(int section,
     return QVariant::Invalid;
 }
 
-void Channel_Table_Model::populate_channels(
+void ChannelTableModel::populateChannels(
         const gnss_sdr::Observables *stocks)
 {
     for (std::size_t i = 0; i < stocks->observable_size(); i++)
     {
-        populate_channel(&stocks->observable(i));
+        populateChannel(&stocks->observable(i));
     }
 }
 
-void Channel_Table_Model::populate_channel(const gnss_sdr::GnssSynchro *ch)
+void ChannelTableModel::populateChannel(const gnss_sdr::GnssSynchro *ch)
 {
     if (ch->fs() != 0)  // Channel is valid.
     {
@@ -261,7 +261,7 @@ void Channel_Table_Model::populate_channel(const gnss_sdr::GnssSynchro *ch)
             if (m_channels.at(ch->channel_id()).prn() != ch->prn())
             {
                 // Reset channel.
-                clear_channel(ch->channel_id());
+                clearChannel(ch->channel_id());
             }
         }
 
@@ -304,7 +304,7 @@ void Channel_Table_Model::populate_channel(const gnss_sdr::GnssSynchro *ch)
         }
         m_channelsDoppler[ch->channel_id()].push_back(ch->carrier_doppler_hz());
 
-        m_channelsSignal[ch->channel_id()] = get_signal_pretty_name(ch);
+        m_channelsSignal[ch->channel_id()] = getSignalPrettyName(ch);
 
         if (m_channels.size() != map_size)
         {
@@ -313,7 +313,7 @@ void Channel_Table_Model::populate_channel(const gnss_sdr::GnssSynchro *ch)
     }
 }
 
-void Channel_Table_Model::clear_channel(int ch_id)
+void ChannelTableModel::clearChannel(int ch_id)
 {
     m_channelsId.erase(std::remove(m_channelsId.begin(), m_channelsId.end(), ch_id),
                       m_channelsId.end());
@@ -326,7 +326,7 @@ void Channel_Table_Model::clear_channel(int ch_id)
     m_channelsDoppler.erase(ch_id);
 }
 
-void Channel_Table_Model::clear_channels()
+void ChannelTableModel::clearChannels()
 {
     m_channelsId.clear();
     m_channels.clear();
@@ -339,7 +339,7 @@ void Channel_Table_Model::clear_channels()
 }
 
 QString
-Channel_Table_Model::get_signal_pretty_name(const gnss_sdr::GnssSynchro *ch)
+ChannelTableModel::getSignalPrettyName(const gnss_sdr::GnssSynchro *ch)
 {
     QString system_name;
 
@@ -365,7 +365,7 @@ Channel_Table_Model::get_signal_pretty_name(const gnss_sdr::GnssSynchro *ch)
 }
 
 QList<QVariant>
-Channel_Table_Model::get_list_from_cbuf(boost::circular_buffer<double> cbuf)
+ChannelTableModel::getListFromCbuf(boost::circular_buffer<double> cbuf)
 {
     QList<QVariant> list;
 
@@ -377,9 +377,9 @@ Channel_Table_Model::get_list_from_cbuf(boost::circular_buffer<double> cbuf)
     return list;
 }
 
-int Channel_Table_Model::get_columns() { return m_columns; }
+int ChannelTableModel::getColumns() { return m_columns; }
 
-void Channel_Table_Model::set_buffer_size()
+void ChannelTableModel::setBufferSize()
 {
     QSettings settings;
     settings.beginGroup("Preferences_Dialog");
@@ -387,7 +387,7 @@ void Channel_Table_Model::set_buffer_size()
     settings.endGroup();
 
     m_bufferSize = size;
-    clear_channels();
+    clearChannels();
 }
 
-int Channel_Table_Model::get_channel_id(int row) { return m_channelsId.at(row); }
+int ChannelTableModel::getChannelId(int row) { return m_channelsId.at(row); }

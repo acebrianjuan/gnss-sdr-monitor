@@ -36,11 +36,11 @@
 
 #include <QStyledItemDelegate>
 
-class Cn0_Delegate : public QStyledItemDelegate
+class Cn0Delegate : public QStyledItemDelegate
 {
 public:
-    Cn0_Delegate(QWidget *parent = nullptr);
-    ~Cn0_Delegate();
+    Cn0Delegate(QWidget *parent = nullptr);
+    ~Cn0Delegate();
 
 protected:
     void paint(QPainter *painter, const QStyleOptionViewItem &option,

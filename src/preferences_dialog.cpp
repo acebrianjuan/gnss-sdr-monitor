@@ -35,9 +35,9 @@
 #include <QSettings>
 #include <QDebug>
 
-Preferences_Dialog::Preferences_Dialog(QWidget *parent) :
+PreferencesDialog::PreferencesDialog(QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::Preferences_Dialog)
+    ui(new Ui::PreferencesDialog)
 {
     ui->setupUi(this);
 
@@ -48,15 +48,15 @@ Preferences_Dialog::Preferences_Dialog(QWidget *parent) :
     ui->port_monitor_pvt_spinBox->setValue(settings.value("port_monitor_pvt", 1337).toInt());
     settings.endGroup();
 
-    connect(this, &Preferences_Dialog::accepted, this, &Preferences_Dialog::on_accept);
+    connect(this, &PreferencesDialog::accepted, this, &PreferencesDialog::onAccept);
 }
 
-Preferences_Dialog::~Preferences_Dialog()
+PreferencesDialog::~PreferencesDialog()
 {
     delete ui;
 }
 
-void Preferences_Dialog::on_accept()
+void PreferencesDialog::onAccept()
 {
     QSettings settings;
     settings.beginGroup("Preferences_Dialog");

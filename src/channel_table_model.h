@@ -38,22 +38,22 @@
 #include <boost/circular_buffer.hpp>
 #include <QAbstractTableModel>
 
-class Channel_Table_Model : public QAbstractTableModel
+class ChannelTableModel : public QAbstractTableModel
 {
 public:
-    Channel_Table_Model();
+    ChannelTableModel();
 
     void update();
 
-    void populate_channels(const gnss_sdr::Observables *m_stocks);
-    void populate_channel(const gnss_sdr::GnssSynchro *ch);
-    void clear_channel(int ch_id);
-    void clear_channels();
-    QString get_signal_pretty_name(const gnss_sdr::GnssSynchro *ch);
-    QList<QVariant> get_list_from_cbuf(boost::circular_buffer<double> cbuf);
-    int get_columns();
-    void set_buffer_size();
-    int get_channel_id(int row);
+    void populateChannels(const gnss_sdr::Observables *m_stocks);
+    void populateChannel(const gnss_sdr::GnssSynchro *ch);
+    void clearChannel(int ch_id);
+    void clearChannels();
+    QString getSignalPrettyName(const gnss_sdr::GnssSynchro *ch);
+    QList<QVariant> getListFromCbuf(boost::circular_buffer<double> cbuf);
+    int getColumns();
+    void setBufferSize();
+    int getChannelId(int row);
 
     // List of virtual functions that must be implemented in a read-only table model.
     int rowCount(const QModelIndex &parent) const;
@@ -61,6 +61,8 @@ public:
     QVariant data(const QModelIndex &index, int role) const;
     QVariant headerData(int section, Qt::Orientation orientation, int role) const;
 
+public slots:
+    gnss_sdr::GnssSynchro getChannelData(int key);
 
 protected:
     int m_columns;
@@ -75,9 +77,6 @@ protected:
     std::map<int, boost::circular_buffer<double>> m_channelsPromptQ;
     std::map<int, boost::circular_buffer<double>> m_channelsCn0;
     std::map<int, boost::circular_buffer<double>> m_channelsDoppler;
-
-public slots:
-    gnss_sdr::GnssSynchro get_channel_data(int key);
 
 private:
     std::map<std::string, QString> m_mapSignalPrettyName;

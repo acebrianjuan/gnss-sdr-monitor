@@ -43,7 +43,7 @@ int main(int argc, char *argv[])
     app.setOrganizationDomain("gnss-sdr.org");
     app.setApplicationName("gnss-sdr-monitor");
 
-    Main_Window w;
+    MainWindow w;
     w.show();
 
     return app.exec();

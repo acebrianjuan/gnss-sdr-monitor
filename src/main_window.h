@@ -47,7 +47,7 @@
 
 namespace Ui
 {
-class Main_Window;
+class MainWindow;
 }
 
 namespace QtCharts
@@ -55,45 +55,45 @@ namespace QtCharts
 class QChart;
 }
 
-class Main_Window : public QMainWindow
+class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
 public:
-    explicit Main_Window(QWidget *parent = nullptr);
-    ~Main_Window();
+    explicit MainWindow(QWidget *parent = nullptr);
+    ~MainWindow();
 
-    gnss_sdr::Observables read_gnss_synchro(char buff[], int bytes);
-    gnss_sdr::MonitorPvt read_monitor_pvt(char buff[], int bytes);
-    void save_settings();
-    void load_settings();
+    gnss_sdr::Observables readGnssSynchro(char buff[], int bytes);
+    gnss_sdr::MonitorPvt readMonitorPvt(char buff[], int bytes);
+    void saveSettings();
+    void loadSettings();
 
 public slots:
-    void toggle_capture();
-    void receive_gnss_synchro();
-    void receive_monitor_pvt();
-    void clear_entries();
+    void toggleCapture();
+    void receiveGnssSynchro();
+    void receiveMonitorPvt();
+    void clearEntries();
     void quit();
-    void show_preferences();
-    void set_port();
-    void expand_plot(const QModelIndex &index);
-    void close_plots();
-    void delete_plots();
+    void showPreferences();
+    void setPort();
+    void expandPlot(const QModelIndex &index);
+    void closePlots();
+    void deletePlots();
     void about();
 
 protected:
     void closeEvent(QCloseEvent *event) override;
 
 private:
-    Ui::Main_Window *ui;
+    Ui::MainWindow *ui;
 
     QDockWidget *m_mapDock;
     QQuickWidget *m_mapWidget;
-    Channel_Table_Model *m_model;
+    ChannelTableModel *m_model;
     QUdpSocket *m_socketGnssSynchro;
     QUdpSocket *m_socketMonitorPvt;
     gnss_sdr::Observables m_stocks;
-    Monitor_Pvt_Wrapper *m_monitorPvtWrapper;
+    MonitorPvtWrapper *m_monitorPvtWrapper;
     gnss_sdr::MonitorPvt m_monitorPvt;
     std::vector<int> m_channels;
     quint16 m_portGnssSynchro;

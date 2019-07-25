@@ -36,16 +36,16 @@
 #include <QPainter>
 #include <QDebug>
 
-LED_Delegate::LED_Delegate(QObject *parent)
+LedDelegate::LedDelegate(QObject *parent)
 {
 }
 
-LED_Delegate::~LED_Delegate()
+LedDelegate::~LedDelegate()
 {
 
 }
 
-void LED_Delegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
+void LedDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
                          const QModelIndex &index) const
 {
     if (option.state & QStyle::State_Selected)
@@ -78,7 +78,7 @@ void LED_Delegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
     painter->restore();
 }
 
-QSize LED_Delegate::sizeHint(const QStyleOptionViewItem &option,
+QSize LedDelegate::sizeHint(const QStyleOptionViewItem &option,
                              const QModelIndex &index) const
 {
     return QSize(QStyledItemDelegate::sizeHint(option, index).height(),

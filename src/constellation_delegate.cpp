@@ -39,15 +39,15 @@
 
 #define SPARKLINE_MIN_EM_WIDTH 10
 
-Constellation_Delegate::Constellation_Delegate(QWidget *parent) : QStyledItemDelegate(parent)
+ConstellationDelegate::ConstellationDelegate(QWidget *parent) : QStyledItemDelegate(parent)
 {
 }
 
-Constellation_Delegate::~Constellation_Delegate()
+ConstellationDelegate::~ConstellationDelegate()
 {
 }
 
-void Constellation_Delegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
+void ConstellationDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
                                    const QModelIndex &index) const
 {
     QList<QPointF> points;
@@ -185,7 +185,7 @@ void Constellation_Delegate::paint(QPainter *painter, const QStyleOptionViewItem
     */
 }
 
-QSize Constellation_Delegate::sizeHint(const QStyleOptionViewItem &option,
+QSize ConstellationDelegate::sizeHint(const QStyleOptionViewItem &option,
                                        const QModelIndex &index) const
 {
     return QSize(option.fontMetrics.height() * SPARKLINE_MIN_EM_WIDTH, QStyledItemDelegate::sizeHint(option, index).height());

@@ -36,11 +36,11 @@
 
 #include <QStyledItemDelegate>
 
-class LED_Delegate : public QStyledItemDelegate
+class LedDelegate : public QStyledItemDelegate
 {
 public:
-    LED_Delegate(QObject *parent = nullptr);
-    ~LED_Delegate();
+    LedDelegate(QObject *parent = nullptr);
+    ~LedDelegate();
 
     void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
     QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const;

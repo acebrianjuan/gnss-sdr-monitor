@@ -37,15 +37,15 @@
 #include <QObject>
 #include <QVariant>
 
-class Monitor_Pvt_Wrapper : public QObject
+class MonitorPvtWrapper : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(QVariant position READ position NOTIFY dataChanged)
     Q_PROPERTY(QVariantList path READ path NOTIFY dataChanged)
 
 public:
-    explicit Monitor_Pvt_Wrapper(QObject *parent = nullptr);
-    void add_monitor_pvt(const gnss_sdr::MonitorPvt &monitor_pvt);
+    explicit MonitorPvtWrapper(QObject *parent = nullptr);
+    void addMonitorPvt(const gnss_sdr::MonitorPvt &monitor_pvt);
     QVariant position() const;
     QVariantList path() const;
 
@@ -53,7 +53,7 @@ signals:
     void dataChanged();
 
 public slots:
-    void clear_data();
+    void clearData();
 
 private:
     QList<gnss_sdr::MonitorPvt> m_listMonitorPvt;

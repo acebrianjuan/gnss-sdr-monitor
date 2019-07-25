@@ -36,22 +36,22 @@
 #include <QDialog>
 
 namespace Ui {
-class Preferences_Dialog;
+class PreferencesDialog;
 }
 
-class Preferences_Dialog : public QDialog
+class PreferencesDialog : public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit Preferences_Dialog(QWidget *parent = nullptr);
-    ~Preferences_Dialog();
+    explicit PreferencesDialog(QWidget *parent = nullptr);
+    ~PreferencesDialog();
 
 private:
-    Ui::Preferences_Dialog *ui;
+    Ui::PreferencesDialog *ui;
 
 private slots:
-    void on_accept();
+    void onAccept();
 
 };
 

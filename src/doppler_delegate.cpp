@@ -40,16 +40,16 @@
 
 #define SPARKLINE_MIN_EM_WIDTH 10
 
-Doppler_Delegate::Doppler_Delegate(QWidget *parent) : QStyledItemDelegate(parent)
+DopplerDelegate::DopplerDelegate(QWidget *parent) : QStyledItemDelegate(parent)
 {
     m_numel = 4000;
 }
 
-Doppler_Delegate::~Doppler_Delegate()
+DopplerDelegate::~DopplerDelegate()
 {
 }
 
-void Doppler_Delegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
+void DopplerDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
                              const QModelIndex &index) const
 {
     QList<QPointF> points;
@@ -170,7 +170,7 @@ void Doppler_Delegate::paint(QPainter *painter, const QStyleOptionViewItem &opti
     */
 }
 
-QSize Doppler_Delegate::sizeHint(const QStyleOptionViewItem &option,
+QSize DopplerDelegate::sizeHint(const QStyleOptionViewItem &option,
                                  const QModelIndex &index) const
 {
     return QSize(option.fontMetrics.height() * SPARKLINE_MIN_EM_WIDTH, QStyledItemDelegate::sizeHint(option, index).height());

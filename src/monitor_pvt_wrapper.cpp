@@ -34,9 +34,9 @@
 #include <QDebug>
 #include <QGeoCoordinate>
 
-Monitor_Pvt_Wrapper::Monitor_Pvt_Wrapper(QObject *parent) : QObject(parent) {}
+MonitorPvtWrapper::MonitorPvtWrapper(QObject *parent) : QObject(parent) {}
 
-void Monitor_Pvt_Wrapper::add_monitor_pvt(
+void MonitorPvtWrapper::addMonitorPvt(
     const gnss_sdr::MonitorPvt &monitor_pvt)
 {
     m_listMonitorPvt << monitor_pvt;
@@ -46,7 +46,7 @@ void Monitor_Pvt_Wrapper::add_monitor_pvt(
     emit dataChanged();
 }
 
-void Monitor_Pvt_Wrapper::clear_data()
+void MonitorPvtWrapper::clearData()
 {
     m_listMonitorPvt.clear();
     m_path.clear();
@@ -54,7 +54,7 @@ void Monitor_Pvt_Wrapper::clear_data()
     emit dataChanged();
 }
 
-QVariant Monitor_Pvt_Wrapper::position() const
+QVariant MonitorPvtWrapper::position() const
 {
     if (!m_listMonitorPvt.isEmpty())
         {
@@ -68,7 +68,7 @@ QVariant Monitor_Pvt_Wrapper::position() const
         }
 }
 
-QVariantList Monitor_Pvt_Wrapper::path() const
+QVariantList MonitorPvtWrapper::path() const
 {
     if (!m_path.isEmpty())
         {

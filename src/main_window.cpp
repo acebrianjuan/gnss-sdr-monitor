@@ -47,8 +47,8 @@
 
 #define DEFAULT_PORT 1337
 
-Main_Window::Main_Window(QWidget *parent)
-    : QMainWindow(parent), ui(new Ui::Main_Window)
+MainWindow::MainWindow(QWidget *parent)
+    : QMainWindow(parent), ui(new Ui::MainWindow)
 {
     // Use a timer to delay updating the model to a fixed amount of times per
     // second
@@ -59,7 +59,7 @@ Main_Window::Main_Window(QWidget *parent)
     ui->setupUi(this);
 
     // Monitor_Pvt_Wrapper.
-    m_monitorPvtWrapper = new Monitor_Pvt_Wrapper();
+    m_monitorPvtWrapper = new MonitorPvtWrapper();
 
     // Map: QQuickWidget.
     m_mapDock = new QDockWidget("Map", this);
@@ -80,7 +80,7 @@ Main_Window::Main_Window(QWidget *parent)
 
     connect(ui->actionQuit, &QAction::triggered, qApp, &QApplication::quit);
     connect(ui->actionPreferences, &QAction::triggered, this,
-            &Main_Window::show_preferences);
+            &MainWindow::showPreferences);
 
     // QToolbar.
     m_start = ui->mainToolBar->addAction("Start");
@@ -91,14 +91,14 @@ Main_Window::Main_Window(QWidget *parent)
     m_start->setEnabled(false);
     m_stop->setEnabled(true);
     m_clear->setEnabled(false);
-    connect(m_start, &QAction::triggered, this, &Main_Window::toggle_capture);
-    connect(m_stop, &QAction::triggered, this, &Main_Window::toggle_capture);
-    connect(m_clear, &QAction::triggered, this, &Main_Window::clear_entries);
+    connect(m_start, &QAction::triggered, this, &MainWindow::toggleCapture);
+    connect(m_stop, &QAction::triggered, this, &MainWindow::toggleCapture);
+    connect(m_clear, &QAction::triggered, this, &MainWindow::clearEntries);
     connect(m_closePlotsAction, &QAction::triggered, this,
-            &Main_Window::close_plots);
+            &MainWindow::closePlots);
 
     // Model.
-    m_model = new Channel_Table_Model();
+    m_model = new ChannelTableModel();
 
     // QTableView.
     // Tie the model to the view.
@@ -106,10 +106,10 @@ Main_Window::Main_Window(QWidget *parent)
     ui->tableView->setShowGrid(false);
     ui->tableView->verticalHeader()->hide();
     ui->tableView->horizontalHeader()->setStretchLastSection(true);
-    ui->tableView->setItemDelegateForColumn(5, new Constellation_Delegate());
-    ui->tableView->setItemDelegateForColumn(6, new Cn0_Delegate());
-    ui->tableView->setItemDelegateForColumn(7, new Doppler_Delegate());
-    ui->tableView->setItemDelegateForColumn(9, new LED_Delegate());
+    ui->tableView->setItemDelegateForColumn(5, new ConstellationDelegate());
+    ui->tableView->setItemDelegateForColumn(6, new Cn0Delegate());
+    ui->tableView->setItemDelegateForColumn(7, new DopplerDelegate());
+    ui->tableView->setItemDelegateForColumn(9, new LedDelegate());
     // ui->tableView->setAlternatingRowColors(true);
     // ui->tableView->setSelectionBehavior(QTableView::SelectRows);
 
@@ -119,28 +119,28 @@ Main_Window::Main_Window(QWidget *parent)
 
     // Connect Signals & Slots.
     connect(m_socketGnssSynchro, &QUdpSocket::readyRead, this,
-            &Main_Window::receive_gnss_synchro);
+            &MainWindow::receiveGnssSynchro);
     connect(m_socketMonitorPvt, &QUdpSocket::readyRead, this,
-            &Main_Window::receive_monitor_pvt);
-    connect(qApp, &QApplication::aboutToQuit, this, &Main_Window::quit);
-    connect(ui->tableView, &QTableView::clicked, this, &Main_Window::expand_plot);
-    connect(ui->actionAbout, &QAction::triggered, this, &Main_Window::about);
+            &MainWindow::receiveMonitorPvt);
+    connect(qApp, &QApplication::aboutToQuit, this, &MainWindow::quit);
+    connect(ui->tableView, &QTableView::clicked, this, &MainWindow::expandPlot);
+    connect(ui->actionAbout, &QAction::triggered, this, &MainWindow::about);
     connect(ui->actionAboutQt, &QAction::triggered, qApp, &QApplication::aboutQt);
 
     // Load settings from last session.
-    load_settings();
+    loadSettings();
 }
 
-Main_Window::~Main_Window() { delete ui; }
+MainWindow::~MainWindow() { delete ui; }
 
-void Main_Window::closeEvent(QCloseEvent *event)
+void MainWindow::closeEvent(QCloseEvent *event)
 {
-    delete_plots();
+    deletePlots();
 
     QMainWindow::closeEvent(event);
 }
 
-void Main_Window::toggle_capture()
+void MainWindow::toggleCapture()
 {
     if (m_start->isEnabled())
     {
@@ -154,18 +154,18 @@ void Main_Window::toggle_capture()
     }
 }
 
-void Main_Window::receive_gnss_synchro()
+void MainWindow::receiveGnssSynchro()
 {
     bool newData = false;
     while (m_socketGnssSynchro->hasPendingDatagrams())
     {
         newData = true;
         QNetworkDatagram datagram = m_socketGnssSynchro->receiveDatagram();
-        m_stocks = read_gnss_synchro(datagram.data().data(), datagram.data().size());
+        m_stocks = readGnssSynchro(datagram.data().data(), datagram.data().size());
 
         if (m_stop->isEnabled())
         {
-            m_model->populate_channels(&m_stocks);
+            m_model->populateChannels(&m_stocks);
             m_clear->setEnabled(true);
         }
     }
@@ -175,32 +175,32 @@ void Main_Window::receive_gnss_synchro()
     }
 }
 
-void Main_Window::receive_monitor_pvt()
+void MainWindow::receiveMonitorPvt()
 {
     while (m_socketMonitorPvt->hasPendingDatagrams())
     {
         QNetworkDatagram datagram = m_socketMonitorPvt->receiveDatagram();
         m_monitorPvt =
-                read_monitor_pvt(datagram.data().data(), datagram.data().size());
+                readMonitorPvt(datagram.data().data(), datagram.data().size());
 
         if (m_stop->isEnabled())
         {
-            m_monitorPvtWrapper->add_monitor_pvt(m_monitorPvt);
+            m_monitorPvtWrapper->addMonitorPvt(m_monitorPvt);
             // clear->setEnabled(true);
         }
     }
 }
 
-void Main_Window::clear_entries()
+void MainWindow::clearEntries()
 {
-    m_model->clear_channels();
+    m_model->clearChannels();
     m_model->update();
     m_clear->setEnabled(false);
 }
 
-void Main_Window::quit() { save_settings(); }
+void MainWindow::quit() { saveSettings(); }
 
-gnss_sdr::Observables Main_Window::read_gnss_synchro(char buff[], int bytes)
+gnss_sdr::Observables MainWindow::readGnssSynchro(char buff[], int bytes)
 {
     std::string data(buff, bytes);
     m_stocks.ParseFromString(data);
@@ -217,7 +217,7 @@ gnss_sdr::Observables Main_Window::read_gnss_synchro(char buff[], int bytes)
     return m_stocks;
 }
 
-gnss_sdr::MonitorPvt Main_Window::read_monitor_pvt(char buff[], int bytes)
+gnss_sdr::MonitorPvt MainWindow::readMonitorPvt(char buff[], int bytes)
 {
     try
     {
@@ -232,7 +232,7 @@ gnss_sdr::MonitorPvt Main_Window::read_monitor_pvt(char buff[], int bytes)
     return m_monitorPvt;
 }
 
-void Main_Window::save_settings()
+void MainWindow::saveSettings()
 {
     m_settings.beginGroup("Main_Window");
     m_settings.setValue("pos", pos());
@@ -241,7 +241,7 @@ void Main_Window::save_settings()
 
     m_settings.beginGroup("tableView");
     m_settings.beginWriteArray("column");
-    for (int i = 0; i < m_model->get_columns(); i++)
+    for (int i = 0; i < m_model->getColumns(); i++)
     {
         m_settings.setArrayIndex(i);
         m_settings.setValue("width", ui->tableView->columnWidth(i));
@@ -252,7 +252,7 @@ void Main_Window::save_settings()
     qDebug() << "Settings Saved";
 }
 
-void Main_Window::load_settings()
+void MainWindow::loadSettings()
 {
     m_settings.beginGroup("Main_Window");
     move(m_settings.value("pos", QPoint(0, 0)).toPoint());
@@ -261,7 +261,7 @@ void Main_Window::load_settings()
 
     m_settings.beginGroup("tableView");
     m_settings.beginReadArray("column");
-    for (int i = 0; i < m_model->get_columns(); i++)
+    for (int i = 0; i < m_model->getColumns(); i++)
     {
         m_settings.setArrayIndex(i);
         ui->tableView->setColumnWidth(i, m_settings.value("width", 100).toInt());
@@ -269,22 +269,22 @@ void Main_Window::load_settings()
     m_settings.endArray();
     m_settings.endGroup();
 
-    set_port();
+    setPort();
 
     qDebug() << "Settings Loaded";
 }
 
-void Main_Window::show_preferences()
+void MainWindow::showPreferences()
 {
-    Preferences_Dialog *preferences = new Preferences_Dialog(this);
-    connect(preferences, &Preferences_Dialog::accepted, m_model,
-            &Channel_Table_Model::set_buffer_size);
-    connect(preferences, &Preferences_Dialog::accepted, this,
-            &Main_Window::set_port);
+    PreferencesDialog *preferences = new PreferencesDialog(this);
+    connect(preferences, &PreferencesDialog::accepted, m_model,
+            &ChannelTableModel::setBufferSize);
+    connect(preferences, &PreferencesDialog::accepted, this,
+            &MainWindow::setPort);
     preferences->exec();
 }
 
-void Main_Window::set_port()
+void MainWindow::setPort()
 {
     QSettings settings;
     settings.beginGroup("Preferences_Dialog");
@@ -297,11 +297,11 @@ void Main_Window::set_port()
     m_socketMonitorPvt->bind(QHostAddress::Any, m_portMonitorPvt);
 }
 
-void Main_Window::expand_plot(const QModelIndex &index)
+void MainWindow::expandPlot(const QModelIndex &index)
 {
     qDebug() << index;
 
-    int channel_id = m_model->get_channel_id(index.row());
+    int channel_id = m_model->getChannelId(index.row());
 
     QChartView *chartView = nullptr;
 
@@ -505,7 +505,7 @@ void Main_Window::expand_plot(const QModelIndex &index)
     chartView->show();
 }
 
-void Main_Window::close_plots()
+void MainWindow::closePlots()
 {
     for (auto const &ch : m_plotsConstellation)
     {
@@ -526,7 +526,7 @@ void Main_Window::close_plots()
     }
 }
 
-void Main_Window::delete_plots()
+void MainWindow::deletePlots()
 {
     for (auto const &ch : m_plotsConstellation)
     {
@@ -550,7 +550,7 @@ void Main_Window::delete_plots()
     m_plotsDoppler.clear();
 }
 
-void Main_Window::about()
+void MainWindow::about()
 {
     const QString text = "<h3>gnss-sdr-monitor</h3>"
                          "A graphical user interface to monitor the GNSS-SDR status in real time."

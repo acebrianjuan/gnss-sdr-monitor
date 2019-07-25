@@ -36,11 +36,11 @@
 
 #include <QStyledItemDelegate>
 
-class Doppler_Delegate : public QStyledItemDelegate
+class DopplerDelegate : public QStyledItemDelegate
 {
 public:
-    Doppler_Delegate(QWidget *parent = nullptr);
-    ~Doppler_Delegate();
+    DopplerDelegate(QWidget *parent = nullptr);
+    ~DopplerDelegate();
 
 protected:
     void paint(QPainter *painter, const QStyleOptionViewItem &option,
