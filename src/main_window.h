@@ -37,6 +37,8 @@
 #include "gnss_synchro.pb.h"
 #include "monitor_pvt.pb.h"
 #include "monitor_pvt_wrapper.h"
+#include "telecommand_widget.h"
+
 #include <QAbstractTableModel>
 #include <QChartView>
 #include <QMainWindow>
@@ -87,8 +89,12 @@ protected:
 private:
     Ui::MainWindow *ui;
 
-    QDockWidget *m_mapDock;
+    QDockWidget *m_mapDockWidget;
+    QDockWidget *m_telecommandDockWidget;
+
     QQuickWidget *m_mapWidget;
+    TelecommandWidget *m_telecommandWidget;
+
     ChannelTableModel *m_model;
     QUdpSocket *m_socketGnssSynchro;
     QUdpSocket *m_socketMonitorPvt;

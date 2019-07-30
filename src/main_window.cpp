@@ -62,14 +62,19 @@ MainWindow::MainWindow(QWidget *parent)
     m_monitorPvtWrapper = new MonitorPvtWrapper();
 
     // Map: QQuickWidget.
-    m_mapDock = new QDockWidget("Map", this);
+    m_mapDockWidget = new QDockWidget("Map", this);
     m_mapWidget = new QQuickWidget(this);
     m_mapWidget->rootContext()->setContextProperty("m_monitor_pvt_wrapper",
                                                   m_monitorPvtWrapper);
     m_mapWidget->setSource(QUrl(QStringLiteral("qrc:/qml/main.qml")));
     m_mapWidget->setResizeMode(QQuickWidget::SizeRootObjectToView);
-    m_mapDock->setWidget(m_mapWidget);
-    addDockWidget(Qt::TopDockWidgetArea, m_mapDock);
+    m_mapDockWidget->setWidget(m_mapWidget);
+    addDockWidget(Qt::TopDockWidgetArea, m_mapDockWidget);
+
+    m_telecommandDockWidget = new QDockWidget("Telecommand", this);
+    m_telecommandWidget = new TelecommandWidget(m_telecommandDockWidget);
+    m_telecommandDockWidget->setWidget(m_telecommandWidget);
+    addDockWidget(Qt::TopDockWidgetArea, m_telecommandDockWidget);
 
     // QMenuBar.
     ui->actionQuit->setIcon(QIcon::fromTheme("application-exit"));
@@ -88,6 +93,9 @@ MainWindow::MainWindow(QWidget *parent)
     m_clear = ui->mainToolBar->addAction("Clear");
     ui->mainToolBar->addSeparator();
     m_closePlotsAction = ui->mainToolBar->addAction("Close Plots");
+    ui->mainToolBar->addSeparator();
+    ui->mainToolBar->addAction(m_mapDockWidget->toggleViewAction());
+    ui->mainToolBar->addAction(m_telecommandDockWidget->toggleViewAction());
     m_start->setEnabled(false);
     m_stop->setEnabled(true);
     m_clear->setEnabled(false);

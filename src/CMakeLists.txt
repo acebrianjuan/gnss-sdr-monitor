@@ -51,6 +51,8 @@ set(SOURCES
     main_window.cpp
     monitor_pvt_wrapper.cpp
     preferences_dialog.cpp
+    telecommand_widget.cpp
+    telnet_manager.cpp
     ${PROTO_SRCS}
     ${PROTO_SRCS2}
 )
@@ -58,6 +60,7 @@ set(SOURCES
 set(UI_SOURCES
     main_window.ui
     preferences_dialog.ui
+    telecommand_widget.ui
 )
 
 set(RESOURCES
