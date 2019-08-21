@@ -51,6 +51,7 @@ public:
 
 signals:
     void dataChanged();
+    void altitudeChanged(qreal newTow, qreal newAltitude);
 
 public slots:
     void clearData();

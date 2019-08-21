@@ -44,6 +44,7 @@ void MonitorPvtWrapper::addMonitorPvt(
         QGeoCoordinate(monitor_pvt.latitude(), monitor_pvt.longitude())));
 
     emit dataChanged();
+    emit altitudeChanged(monitor_pvt.tow_at_current_symbol_ms(), monitor_pvt.height());
 }
 
 void MonitorPvtWrapper::clearData()
