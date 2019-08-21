@@ -53,6 +53,7 @@ set(SOURCES
     preferences_dialog.cpp
     telecommand_widget.cpp
     telnet_manager.cpp
+    altitude_widget.cpp
     ${PROTO_SRCS}
     ${PROTO_SRCS2}
 )
@@ -61,6 +62,7 @@ set(UI_SOURCES
     main_window.ui
     preferences_dialog.ui
     telecommand_widget.ui
+    altitude_widget.ui
 )
 
 set(RESOURCES
