@@ -38,6 +38,7 @@
 #include "monitor_pvt.pb.h"
 #include "monitor_pvt_wrapper.h"
 #include "telecommand_widget.h"
+#include "altitude_widget.h"
 
 #include <QAbstractTableModel>
 #include <QChartView>
@@ -91,9 +92,11 @@ private:
 
     QDockWidget *m_mapDockWidget;
     QDockWidget *m_telecommandDockWidget;
+    QDockWidget *m_altitudeDockWidget;
 
     QQuickWidget *m_mapWidget;
     TelecommandWidget *m_telecommandWidget;
+    AltitudeWidget *m_altitudeWidget;
 
     ChannelTableModel *m_model;
     QUdpSocket *m_socketGnssSynchro;

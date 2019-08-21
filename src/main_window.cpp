@@ -76,6 +76,13 @@ MainWindow::MainWindow(QWidget *parent)
     m_telecommandDockWidget->setWidget(m_telecommandWidget);
     addDockWidget(Qt::TopDockWidgetArea, m_telecommandDockWidget);
 
+    m_altitudeDockWidget = new QDockWidget("Altitude", this);
+    m_altitudeWidget = new AltitudeWidget(m_altitudeDockWidget);
+    m_altitudeDockWidget->setWidget(m_altitudeWidget);
+    addDockWidget(Qt::TopDockWidgetArea, m_altitudeDockWidget);
+    connect(m_monitorPvtWrapper, &MonitorPvtWrapper::altitudeChanged, m_altitudeWidget, &AltitudeWidget::enqueueNewData);
+    connect(&m_updateTimer, &QTimer::timeout, m_altitudeWidget, &AltitudeWidget::redraw);
+
     // QMenuBar.
     ui->actionQuit->setIcon(QIcon::fromTheme("application-exit"));
     ui->actionQuit->setShortcuts(QKeySequence::Quit);
@@ -96,6 +103,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->mainToolBar->addSeparator();
     ui->mainToolBar->addAction(m_mapDockWidget->toggleViewAction());
     ui->mainToolBar->addAction(m_telecommandDockWidget->toggleViewAction());
+    ui->mainToolBar->addAction(m_altitudeDockWidget->toggleViewAction());
     m_start->setEnabled(false);
     m_stop->setEnabled(true);
     m_clear->setEnabled(false);
