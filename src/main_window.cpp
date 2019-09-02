@@ -211,6 +211,9 @@ void MainWindow::clearEntries()
 {
     m_model->clearChannels();
     m_model->update();
+
+    m_altitudeWidget->clear();
+
     m_clear->setEnabled(false);
 }
 

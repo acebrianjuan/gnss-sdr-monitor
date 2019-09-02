@@ -20,6 +20,7 @@ public:
 public slots:
     void enqueueNewData(qreal tow, qreal altitude);
     void redraw();
+    void clear();
 
 private:
     Ui::AltitudeWidget *ui;

@@ -70,3 +70,9 @@ void AltitudeWidget::redraw()
         m_queue.clear();
     }
 }
+
+void AltitudeWidget::clear()
+{
+    m_queue.clear();
+    m_series.clear();
+}
