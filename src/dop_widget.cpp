@@ -56,12 +56,12 @@ DOPWidget::DOPWidget(QWidget *parent) : QWidget(parent)
     m_vdopSeries = new QtCharts::QLineSeries();
     m_vdopSeries->setName("VDOP");
 
-    chartView = new QtCharts::QChartView(this);
+    m_chartView = new QtCharts::QChartView(this);
     QVBoxLayout *layout = new QVBoxLayout(this);
     this->setLayout(layout);
-    layout->addWidget(chartView);
+    layout->addWidget(m_chartView);
 
-    QtCharts::QChart *chart = chartView->chart();
+    QtCharts::QChart *chart = m_chartView->chart();
     chart->addSeries(m_gdopSeries);
     chart->addSeries(m_pdopSeries);
     chart->addSeries(m_hdopSeries);
@@ -74,8 +74,8 @@ DOPWidget::DOPWidget(QWidget *parent) : QWidget(parent)
     chart->layout()->setContentsMargins(0, 0, 0, 0);
     chart->setContentsMargins(-18, -18, -14, -16);
 
-    chartView->setRenderHint(QPainter::Antialiasing);
-    chartView->setContentsMargins(0, 0, 0, 0);
+    m_chartView->setRenderHint(QPainter::Antialiasing);
+    m_chartView->setContentsMargins(0, 0, 0, 0);
 
     min_x = DBL_MAX;
     min_y = DBL_MAX;
@@ -117,7 +117,7 @@ void DOPWidget::populateSeries(QQueue<QPointF> *queue, QtCharts::QLineSeries *se
 {
     if (!queue->isEmpty())
     {
-        QtCharts::QChart *chart = chartView->chart();
+        QtCharts::QChart *chart = m_chartView->chart();
         QPointF p;
 
         for (int i = 0; i < queue->size(); i++)

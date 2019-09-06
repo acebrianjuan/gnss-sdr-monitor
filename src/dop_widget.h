@@ -59,7 +59,7 @@ private:
     QQueue<QPointF> *m_hdopQueue = nullptr;
     QQueue<QPointF> *m_vdopQueue = nullptr;
 
-    QtCharts::QChartView *chartView = nullptr;
+    QtCharts::QChartView *m_chartView = nullptr;
 
     QtCharts::QLineSeries *m_gdopSeries = nullptr;
     QtCharts::QLineSeries *m_pdopSeries = nullptr;
