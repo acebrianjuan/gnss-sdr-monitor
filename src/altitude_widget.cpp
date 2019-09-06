@@ -9,8 +9,8 @@ AltitudeWidget::AltitudeWidget(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    QChart *chart = ui->graphicsView->chart();
-    QChartView *chartView = ui->graphicsView;
+    QtCharts::QChart *chart = ui->graphicsView->chart();
+    QtCharts::QChartView *chartView = ui->graphicsView;
 
     chart->setTitle("Altitude vs Time");
     chart->legend()->hide();
@@ -46,8 +46,8 @@ void AltitudeWidget::redraw()
 {
     if (!m_queue.isEmpty())
     {
-        QChart *chart = ui->graphicsView->chart();
-        QChartView *chartView = ui->graphicsView;
+        QtCharts::QChart *chart = ui->graphicsView->chart();
+        QtCharts::QChartView *chartView = ui->graphicsView;
 
         QPointF p;
 
