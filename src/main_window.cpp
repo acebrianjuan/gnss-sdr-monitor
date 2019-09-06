@@ -83,6 +83,13 @@ MainWindow::MainWindow(QWidget *parent)
     connect(m_monitorPvtWrapper, &MonitorPvtWrapper::altitudeChanged, m_altitudeWidget, &AltitudeWidget::enqueueNewData);
     connect(&m_updateTimer, &QTimer::timeout, m_altitudeWidget, &AltitudeWidget::redraw);
 
+    m_DOPDockWidget = new QDockWidget("DOP", this);
+    m_DOPWidget = new DOPWidget(m_DOPDockWidget);
+    m_DOPDockWidget->setWidget(m_DOPWidget);
+    addDockWidget(Qt::TopDockWidgetArea, m_DOPDockWidget);
+    connect(m_monitorPvtWrapper, &MonitorPvtWrapper::dopChanged, m_DOPWidget, &DOPWidget::enqueueNewData);
+    connect(&m_updateTimer, &QTimer::timeout, m_DOPWidget, &DOPWidget::redraw);
+
     // QMenuBar.
     ui->actionQuit->setIcon(QIcon::fromTheme("application-exit"));
     ui->actionQuit->setShortcuts(QKeySequence::Quit);
@@ -104,6 +111,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->mainToolBar->addAction(m_mapDockWidget->toggleViewAction());
     ui->mainToolBar->addAction(m_telecommandDockWidget->toggleViewAction());
     ui->mainToolBar->addAction(m_altitudeDockWidget->toggleViewAction());
+    ui->mainToolBar->addAction(m_DOPDockWidget->toggleViewAction());
     m_start->setEnabled(false);
     m_stop->setEnabled(true);
     m_clear->setEnabled(false);
@@ -213,6 +221,7 @@ void MainWindow::clearEntries()
     m_model->update();
 
     m_altitudeWidget->clear();
+    m_DOPWidget->clear();
 
     m_clear->setEnabled(false);
 }
