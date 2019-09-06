@@ -2,12 +2,9 @@
 #define GNSS_SDR_MONITOR_ALTITUDE_WIDGET_H_
 
 #include <QWidget>
+#include <QChartView>
 #include <QLineSeries>
 #include <QQueue>
-
-namespace Ui {
-class AltitudeWidget;
-}
 
 class AltitudeWidget : public QWidget
 {
@@ -15,7 +12,6 @@ class AltitudeWidget : public QWidget
 
 public:
     explicit AltitudeWidget(QWidget *parent = nullptr);
-    ~AltitudeWidget();
 
 public slots:
     void enqueueNewData(qreal tow, qreal altitude);
@@ -23,9 +19,9 @@ public slots:
     void clear();
 
 private:
-    Ui::AltitudeWidget *ui;
-    QtCharts::QLineSeries m_series;
-    QQueue<QPointF> m_queue;
+    QQueue<QPointF> *m_queue = nullptr;
+    QtCharts::QChartView *m_chartView = nullptr;
+    QtCharts::QLineSeries *m_series = nullptr;
 
     double min_x;
     double min_y;

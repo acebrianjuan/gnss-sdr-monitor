@@ -63,7 +63,6 @@ set(UI_SOURCES
     main_window.ui
     preferences_dialog.ui
     telecommand_widget.ui
-    altitude_widget.ui
 )
 
 set(RESOURCES
