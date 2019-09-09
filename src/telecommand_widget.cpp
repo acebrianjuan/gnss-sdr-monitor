@@ -49,6 +49,14 @@ TelecommandWidget::TelecommandWidget(QWidget *parent) :
     ui->plainTextEdit->setPlaceholderText("The sent and received messages will be logged here...");
     ui->dateTimeEdit->setDate(QDate::currentDate());
 
+    // Disable the command buttons.
+    ui->statusPushButton->setEnabled(false);
+    ui->standbyPushButton->setEnabled(false);
+    ui->resetPushButton->setEnabled(false);
+    ui->coldStartPushButton->setEnabled(false);
+    ui->warmStartPushButton->setEnabled(false);
+    ui->hotStartPushButton->setEnabled(false);
+
     m_timer.setInterval(1000);
     connect(&m_timer, &QTimer::timeout, this, &TelecommandWidget::reconnect);
 
@@ -221,7 +229,7 @@ void TelecommandWidget::statusConnected()
     ui->addressLineEdit->setEnabled(false);
     ui->portLineEdit->setEnabled(false);
 
-    // Disable the command buttons.
+    // Enable the command buttons.
     ui->statusPushButton->setEnabled(true);
     ui->standbyPushButton->setEnabled(true);
     ui->resetPushButton->setEnabled(true);
@@ -239,7 +247,7 @@ void TelecommandWidget::statusDisconnected()
     ui->addressLineEdit->setEnabled(true);
     ui->portLineEdit->setEnabled(true);
 
-    // Enable the command buttons.
+    // Disable the command buttons.
     ui->statusPushButton->setEnabled(false);
     ui->standbyPushButton->setEnabled(false);
     ui->resetPushButton->setEnabled(false);
