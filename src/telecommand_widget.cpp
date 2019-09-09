@@ -43,6 +43,7 @@ TelecommandWidget::TelecommandWidget(QWidget *parent) :
 
     ui->autoScrollCheckBox->setChecked(true);
     ui->reconnectCheckBox->setChecked(true);
+    ui->clearCheckBox->setChecked(true);
 
     ui->connectPushButton->setEnabled(false);
     ui->plainTextEdit->setPlaceholderText("The sent and received messages will be logged here...");
@@ -136,6 +137,11 @@ void TelecommandWidget::onResetClicked()
     if (ui->reconnectCheckBox->isChecked())
     {
         m_timer.start();
+    }
+
+    if (ui->clearCheckBox->isChecked())
+    {
+        emit resetClicked();
     }
 }
 

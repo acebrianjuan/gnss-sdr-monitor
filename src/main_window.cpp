@@ -75,6 +75,7 @@ MainWindow::MainWindow(QWidget *parent)
     m_telecommandWidget = new TelecommandWidget(m_telecommandDockWidget);
     m_telecommandDockWidget->setWidget(m_telecommandWidget);
     addDockWidget(Qt::TopDockWidgetArea, m_telecommandDockWidget);
+    connect(m_telecommandWidget, &TelecommandWidget::resetClicked, this, &MainWindow::clearEntries);
 
     m_altitudeDockWidget = new QDockWidget("Altitude", this);
     m_altitudeWidget = new AltitudeWidget(m_altitudeDockWidget);

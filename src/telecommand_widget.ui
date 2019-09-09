@@ -55,6 +55,13 @@
       </widget>
      </item>
      <item>
+      <widget class="QCheckBox" name="clearCheckBox">
+       <property name="text">
+        <string>Clear on Reset</string>
+       </property>
+      </widget>
+     </item>
+     <item>
       <spacer name="horizontalSpacer">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>

@@ -60,6 +60,7 @@ signals:
     // Forwarded from TelnetManager.
     void connected();
     void disconnected();
+    void resetClicked();
 
 public slots:
     void onAddressEditTextchanged();
