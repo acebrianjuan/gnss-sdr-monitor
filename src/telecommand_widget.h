@@ -66,13 +66,13 @@ public slots:
     void onPortEditTextchanged();
     void handleInputsChanged();
 
-    void resetClicked();
-    void standbyClicked();
-    void coldstartClicked();
-    void warmstartClicked();
-    void hotstartClicked();
-    void statusClicked();
-    void connectClicked();
+    void onResetClicked();
+    void onStandbyClicked();
+    void onColdstartClicked();
+    void onWarmstartClicked();
+    void onHotstartClicked();
+    void onStatusClicked();
+    void onConnectClicked();
     void reconnect();
 
     void printText(QByteArray data);

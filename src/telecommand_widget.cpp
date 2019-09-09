@@ -55,13 +55,13 @@ TelecommandWidget::TelecommandWidget(QWidget *parent) :
     connect(ui->portLineEdit, &QLineEdit::textChanged, this, &TelecommandWidget::onPortEditTextchanged);
     connect(this, &TelecommandWidget::inputsChanged, this, &TelecommandWidget::handleInputsChanged);
 
-    connect(ui->resetPushButton, &QPushButton::clicked, this, &TelecommandWidget::resetClicked);
-    connect(ui->standbyPushButton, &QPushButton::clicked, this, &TelecommandWidget::standbyClicked);
-    connect(ui->coldStartPushButton, &QPushButton::clicked, this, &TelecommandWidget::coldstartClicked);
-    connect(ui->warmStartPushButton, &QPushButton::clicked, this, &TelecommandWidget::warmstartClicked);
-    connect(ui->hotStartPushButton, &QPushButton::clicked, this, &TelecommandWidget::hotstartClicked);
-    connect(ui->statusPushButton, &QPushButton::clicked, this, &TelecommandWidget::statusClicked);
-    connect(ui->connectPushButton, &QPushButton::clicked, this, &TelecommandWidget::connectClicked);
+    connect(ui->resetPushButton, &QPushButton::clicked, this, &TelecommandWidget::onResetClicked);
+    connect(ui->standbyPushButton, &QPushButton::clicked, this, &TelecommandWidget::onStandbyClicked);
+    connect(ui->coldStartPushButton, &QPushButton::clicked, this, &TelecommandWidget::onColdstartClicked);
+    connect(ui->warmStartPushButton, &QPushButton::clicked, this, &TelecommandWidget::onWarmstartClicked);
+    connect(ui->hotStartPushButton, &QPushButton::clicked, this, &TelecommandWidget::onHotstartClicked);
+    connect(ui->statusPushButton, &QPushButton::clicked, this, &TelecommandWidget::onStatusClicked);
+    connect(ui->connectPushButton, &QPushButton::clicked, this, &TelecommandWidget::onConnectClicked);
 
     connect(&m_telnetManager, &TelnetManager::txData, this, &TelecommandWidget::printText);
     connect(&m_telnetManager, &TelnetManager::rxData, this, &TelecommandWidget::printText);
@@ -129,7 +129,7 @@ void TelecommandWidget::onPortEditTextchanged()
     emit inputsChanged();
 }
 
-void TelecommandWidget::resetClicked()
+void TelecommandWidget::onResetClicked()
 {
     m_telnetManager.sendCommand(TelnetManager::Command::Reset);
 
@@ -139,32 +139,32 @@ void TelecommandWidget::resetClicked()
     }
 }
 
-void TelecommandWidget::standbyClicked()
+void TelecommandWidget::onStandbyClicked()
 {
     m_telnetManager.sendCommand(TelnetManager::Command::Standby);
 }
 
-void TelecommandWidget::coldstartClicked()
+void TelecommandWidget::onColdstartClicked()
 {
     m_telnetManager.sendCommand(TelnetManager::Command::ColdStart);
 }
 
-void TelecommandWidget::warmstartClicked()
+void TelecommandWidget::onWarmstartClicked()
 {
     m_telnetManager.sendCommand(TelnetManager::Command::WarmStart, getArgs());
 }
 
-void TelecommandWidget::hotstartClicked()
+void TelecommandWidget::onHotstartClicked()
 {
     m_telnetManager.sendCommand(TelnetManager::Command::HotStart, getArgs());
 }
 
-void TelecommandWidget::statusClicked()
+void TelecommandWidget::onStatusClicked()
 {
     m_telnetManager.sendCommand(TelnetManager::Command::Status);
 }
 
-void TelecommandWidget::connectClicked()
+void TelecommandWidget::onConnectClicked()
 {
     // What's the current state of the socket?
     QAbstractSocket::SocketState state = m_telnetManager.getState();
