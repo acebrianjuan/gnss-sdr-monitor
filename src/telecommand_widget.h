@@ -66,6 +66,7 @@ public slots:
     void onAddressEditTextchanged();
     void onPortEditTextchanged();
     void handleInputsChanged();
+    void clear();
 
     void onResetClicked();
     void onStandbyClicked();

@@ -74,6 +74,13 @@
        </property>
       </spacer>
      </item>
+     <item>
+      <widget class="QPushButton" name="clearPushButton">
+       <property name="text">
+        <string>Clear Log</string>
+       </property>
+      </widget>
+     </item>
     </layout>
    </item>
    <item>

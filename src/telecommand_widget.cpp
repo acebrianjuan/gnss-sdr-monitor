@@ -63,6 +63,7 @@ TelecommandWidget::TelecommandWidget(QWidget *parent) :
     connect(ui->addressLineEdit, &QLineEdit::textChanged, this, &TelecommandWidget::onAddressEditTextchanged);
     connect(ui->portLineEdit, &QLineEdit::textChanged, this, &TelecommandWidget::onPortEditTextchanged);
     connect(this, &TelecommandWidget::inputsChanged, this, &TelecommandWidget::handleInputsChanged);
+    connect(ui->clearPushButton, &QPushButton::clicked, this, &TelecommandWidget::clear);
 
     connect(ui->resetPushButton, &QPushButton::clicked, this, &TelecommandWidget::onResetClicked);
     connect(ui->standbyPushButton, &QPushButton::clicked, this, &TelecommandWidget::onStandbyClicked);
@@ -126,6 +127,11 @@ void TelecommandWidget::handleInputsChanged()
         ui->connectPushButton->setEnabled(true);
         ui->connectPushButton->setStyleSheet("background-color:#2ECC40;");
     }
+}
+
+void TelecommandWidget::clear()
+{
+    ui->plainTextEdit->clear();
 }
 
 void TelecommandWidget::onAddressEditTextchanged()
