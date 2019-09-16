@@ -71,7 +71,7 @@ int ChannelTableModel::columnCount(const QModelIndex &parent) const
 
 QVariant ChannelTableModel::data(const QModelIndex &index, int role) const
 {
-    if (role == Qt::DisplayRole || role == Qt::ToolTipRole)
+    if (role == Qt::DisplayRole || role == Qt::ToolTipRole || role == Qt::DecorationRole)
     {
         try
         {
@@ -181,6 +181,25 @@ QVariant ChannelTableModel::data(const QModelIndex &index, int role) const
                     return QVariant::Invalid;
                 }
             }
+            else if (index.column() == 1 && role == Qt::DecorationRole)
+            {
+                if (channel.system() == "G")
+                {
+                    return QIcon(":/images/flag-us.png");
+                }
+                else if (channel.system() == "R")
+                {
+                    return QIcon(":/images/flag-ru.png");
+                }
+                else if (channel.system() == "E")
+                {
+                    return QIcon(":/images/flag-eu.png");
+                }
+                else if (channel.system() == "C")
+                {
+                    return QIcon(":/images/flag-cn.png");
+                }
+            }
         }
         catch (const std::exception &ex)
         {
@@ -196,8 +215,8 @@ QVariant ChannelTableModel::data(const QModelIndex &index, int role) const
 }
 
 QVariant ChannelTableModel::headerData(int section,
-                                         Qt::Orientation orientation,
-                                         int role) const
+                                       Qt::Orientation orientation,
+                                       int role) const
 {
     if (role == Qt::DisplayRole)
     {
@@ -316,7 +335,7 @@ void ChannelTableModel::populateChannel(const gnss_sdr::GnssSynchro *ch)
 void ChannelTableModel::clearChannel(int ch_id)
 {
     m_channelsId.erase(std::remove(m_channelsId.begin(), m_channelsId.end(), ch_id),
-                      m_channelsId.end());
+                       m_channelsId.end());
     m_channels.erase(ch_id);
     m_channelsSignal.erase(ch_id);
     m_channelsTime.erase(ch_id);
