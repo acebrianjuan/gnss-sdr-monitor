@@ -42,11 +42,16 @@
 
 DopplerDelegate::DopplerDelegate(QWidget *parent) : QStyledItemDelegate(parent)
 {
-    m_numel = 4000;
+    m_bufferSize = 4000;
 }
 
 DopplerDelegate::~DopplerDelegate()
 {
+}
+
+void DopplerDelegate::setBufferSize(int size)
+{
+    m_bufferSize = size;
 }
 
 void DopplerDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
@@ -102,12 +107,12 @@ void DopplerDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     QVector<QPointF> fpoints;
     QStyledItemDelegate::paint(painter, option, index);
 
-    if (points.isEmpty() || m_numel < 1.0 || contentHeight <= 0)
+    if (points.isEmpty() || m_bufferSize < 1.0 || contentHeight <= 0)
     {
         return;
     }
 
-    while((qreal) points.length() > m_numel)
+    while(points.length() > m_bufferSize)
     {
         points.removeFirst();
     }
