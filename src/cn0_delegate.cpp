@@ -50,7 +50,7 @@ Cn0Delegate::~Cn0Delegate()
 }
 
 void Cn0Delegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
-                         const QModelIndex &index) const
+                        const QModelIndex &index) const
 {
     QList<QPointF> points;
     QVector<double> x_data, y_data;
@@ -69,14 +69,40 @@ void Cn0Delegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
     double max_y = -std::numeric_limits<double>::max();
 
     int em_w = option.fontMetrics.height();
-    int content_w = option.rect.width() - (em_w / 4);
-    int content_h = option.fontMetrics.height();
+
+    int hGap = em_w / 4;
+    int vGap = (option.rect.height() - option.fontMetrics.height()) / 2;
+    int cGap = em_w / 4;
+    double ratio = 0.7;
+
+    int cellWidth = option.rect.width();
+    int cellHeight = option.rect.height();
+
+    int contentWidth = cellWidth - 2 * hGap;
+    int contentHeight = option.fontMetrics.height();
+
+    int usableContentWidth = contentWidth - cGap;
+    int sparklineWidth = ratio * usableContentWidth;
+    int textWidth = (1 - ratio) * usableContentWidth;
+
+    // Offset for translating the origin of the painting coordinate system to the top left corner of the cell.
+    QPoint offset = option.rect.topLeft();
+
+    // Translated origins.
+    QPoint cellOrigin = QPoint(0, 0);
+    QPoint sparklineOrigin = QPoint(hGap, vGap);
+    QPoint textOrigin = QPoint(hGap + sparklineWidth + cGap, vGap);
+
+    // Translated rectangles.
+    QRect cellRect = QRect(cellOrigin, QSize(cellWidth, cellHeight));
+    QRect sparklineRect = QRect(sparklineOrigin, QSize(sparklineWidth, contentHeight));
+    QRect textRect = QRect(textOrigin, QSize(textWidth, contentHeight));
+
     QPointF val;
     QVector<QPointF> fpoints;
-
     QStyledItemDelegate::paint(painter, option, index);
 
-    if (points.isEmpty() || m_numel < 1.0 || content_h <= 0)
+    if (points.isEmpty() || m_numel < 1.0 || contentHeight <= 0)
     {
         return;
     }
@@ -111,8 +137,8 @@ void Cn0Delegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
 
     foreach (val, points)
     {
-        double x = content_w * (val.x() - min_x) / (max_x - min_x);
-        double y = content_h - (content_h * (val.y() - min_y) / (max_y - min_y));
+        double x = sparklineWidth * (val.x() - min_x) / (max_x - min_x);
+        double y = contentHeight - (contentHeight * (val.y() - min_y) / (max_y - min_y));
         fpoints.append(QPointF(x, y));
     }
 
@@ -145,33 +171,68 @@ void Cn0Delegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
         painter->setPen(option_vi.palette.color(cg, QPalette::Text));
     }
 
+    // Enable antialiasing.
     painter->setRenderHint(QPainter::Antialiasing, true);
-    painter->translate(
-                option.rect.x() + (em_w / 8) + 0.5,
-                option.rect.y() + ((option.rect.height() - option.fontMetrics.height()) / 2));
+
+    // Translate painting origin to sparklineOrigin.
+    painter->translate(offset.x() + hGap, offset.y() + vGap);
+
+    // Draw CN0 sparkline.
     painter->drawPolyline(QPolygonF(fpoints));
 
+    // Translate painting origin to cellOrigin.
+    painter->translate(-hGap, -vGap);
+
+    // Display value of the last CN0 sample next to the sparkline.
+    painter->drawText(textRect, QString::number(var.last().toPointF().y()));
+
+    // Draw visual guides for debugging.
+    //drawGuides(painter, cellRect, sparklineRect, textRect);
+
     painter->restore();
-
-
-    /*
-    // DEBUG: Paint borders.
-    painter->setPen(Qt::red); // Red pen.
-
-    painter->drawRect(option.rect);  // Cell border.
-
-    painter->drawRect(option.rect.x() + (em_w / 8) + 0.5,
-                      option.rect.y() + ((option.rect.height() - option.fontMetrics.height()) / 2),
-                      content_w, content_h);  // Sparkline border.
-
-    painter->setPen(Qt::cyan); // cyan pen.
-    painter->drawLine(option.rect.x(), option.rect.y() + option.rect.height() / 2,
-                      option.rect.x() + option.rect.width(), option.rect.y() + option.rect.height() / 2); // Centerline.
-    */
 }
 
 QSize Cn0Delegate::sizeHint(const QStyleOptionViewItem &option,
-                             const QModelIndex &index) const
+                            const QModelIndex &index) const
 {
     return QSize(option.fontMetrics.height() * SPARKLINE_MIN_EM_WIDTH, QStyledItemDelegate::sizeHint(option, index).height());
+}
+
+void Cn0Delegate::drawGuides(QPainter *painter, QRect cellRect, QRect sparklineRect, QRect textRect) const
+{
+    // Set pen color to red.
+    painter->setPen(Qt::red);
+
+    // Draw cell border.
+    painter->drawRect(cellRect);
+
+    // Draw sparkline border.
+    painter->drawRect(sparklineRect);
+
+    // Draw text border.
+    painter->drawRect(textRect);
+
+    // Draw centerline in cyan.
+    painter->setPen(Qt::cyan);
+    painter->drawLine(cellRect.x(), cellRect.y() + cellRect.height() / 2,
+                      cellRect.x() + cellRect.width(), cellRect.y() + cellRect.height() / 2);
+
+    // Create a new pen with increased width for drawing origins.
+    QPen pen = QPen();
+    pen.setWidth(5);
+
+    // Draw cell origin.
+    pen.setColor(Qt::red);
+    painter->setPen(pen);
+    painter->drawPoint(cellRect.topLeft());
+
+    // Draw sparkline origin.
+    pen.setColor(Qt::green);
+    painter->setPen(pen);
+    painter->drawPoint(sparklineRect.topLeft());
+
+    // Draw text origin.
+    pen.setColor(Qt::blue);
+    painter->setPen(pen);
+    painter->drawPoint(textRect.topLeft());
 }
