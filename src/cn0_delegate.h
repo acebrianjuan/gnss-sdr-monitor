@@ -42,6 +42,9 @@ public:
     Cn0Delegate(QWidget *parent = nullptr);
     ~Cn0Delegate();
 
+public slots:
+    void setBufferSize(int size);
+
 protected:
     void paint(QPainter *painter, const QStyleOptionViewItem &option,
                const QModelIndex &index) const;
@@ -52,7 +55,7 @@ protected:
 private:
     void drawGuides(QPainter *painter, QRect cellRect, QRect sparklineRect, QRect textRect) const;
 
-    qreal m_numel;
+    int m_bufferSize;
 
 };
 
