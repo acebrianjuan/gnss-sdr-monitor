@@ -50,6 +50,8 @@ protected:
                    const QModelIndex &index) const;
 
 private:
+    void drawGuides(QPainter *painter, QRect cellRect, QRect sparklineRect, QRect textRect) const;
+
     qreal m_numel;
 
 };
