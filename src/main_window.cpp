@@ -45,13 +45,11 @@
 #include <iostream>
 #include <sstream>
 
-#define DEFAULT_PORT 1337
-
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow)
 {
     // Use a timer to delay updating the model to a fixed amount of times per
-    // second
+    // second.
     m_updateTimer.setInterval(500);
     m_updateTimer.setSingleShot(true);
     connect(&m_updateTimer, &QTimer::timeout, [this] { m_model->update(); });
@@ -61,22 +59,23 @@ MainWindow::MainWindow(QWidget *parent)
     // Monitor_Pvt_Wrapper.
     m_monitorPvtWrapper = new MonitorPvtWrapper();
 
-    // Map: QQuickWidget.
-    m_mapDockWidget = new QDockWidget("Map", this);
-    m_mapWidget = new QQuickWidget(this);
-    m_mapWidget->rootContext()->setContextProperty("m_monitor_pvt_wrapper",
-                                                  m_monitorPvtWrapper);
-    m_mapWidget->setSource(QUrl(QStringLiteral("qrc:/qml/main.qml")));
-    m_mapWidget->setResizeMode(QQuickWidget::SizeRootObjectToView);
-    m_mapDockWidget->setWidget(m_mapWidget);
-    addDockWidget(Qt::TopDockWidgetArea, m_mapDockWidget);
-
+    // Telecommand widget.
     m_telecommandDockWidget = new QDockWidget("Telecommand", this);
     m_telecommandWidget = new TelecommandWidget(m_telecommandDockWidget);
     m_telecommandDockWidget->setWidget(m_telecommandWidget);
     addDockWidget(Qt::TopDockWidgetArea, m_telecommandDockWidget);
     connect(m_telecommandWidget, &TelecommandWidget::resetClicked, this, &MainWindow::clearEntries);
 
+    // Map widget.
+    m_mapDockWidget = new QDockWidget("Map", this);
+    m_mapWidget = new QQuickWidget(this);
+    m_mapWidget->rootContext()->setContextProperty("m_monitor_pvt_wrapper", m_monitorPvtWrapper);
+    m_mapWidget->setSource(QUrl(QStringLiteral("qrc:/qml/main.qml")));
+    m_mapWidget->setResizeMode(QQuickWidget::SizeRootObjectToView);
+    m_mapDockWidget->setWidget(m_mapWidget);
+    addDockWidget(Qt::TopDockWidgetArea, m_mapDockWidget);
+
+    // Altitude widget.
     m_altitudeDockWidget = new QDockWidget("Altitude", this);
     m_altitudeWidget = new AltitudeWidget(m_altitudeDockWidget);
     m_altitudeDockWidget->setWidget(m_altitudeWidget);
@@ -84,6 +83,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(m_monitorPvtWrapper, &MonitorPvtWrapper::altitudeChanged, m_altitudeWidget, &AltitudeWidget::enqueueNewData);
     connect(&m_updateTimer, &QTimer::timeout, m_altitudeWidget, &AltitudeWidget::redraw);
 
+    // Dilution of precision widget.
     m_DOPDockWidget = new QDockWidget("DOP", this);
     m_DOPWidget = new DOPWidget(m_DOPDockWidget);
     m_DOPDockWidget->setWidget(m_DOPWidget);
@@ -99,8 +99,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->actionPreferences->setShortcuts(QKeySequence::Preferences);
 
     connect(ui->actionQuit, &QAction::triggered, qApp, &QApplication::quit);
-    connect(ui->actionPreferences, &QAction::triggered, this,
-            &MainWindow::showPreferences);
+    connect(ui->actionPreferences, &QAction::triggered, this, &MainWindow::showPreferences);
 
     // QToolbar.
     m_start = ui->mainToolBar->addAction("Start");
@@ -109,8 +108,8 @@ MainWindow::MainWindow(QWidget *parent)
     ui->mainToolBar->addSeparator();
     m_closePlotsAction = ui->mainToolBar->addAction("Close Plots");
     ui->mainToolBar->addSeparator();
-    ui->mainToolBar->addAction(m_mapDockWidget->toggleViewAction());
     ui->mainToolBar->addAction(m_telecommandDockWidget->toggleViewAction());
+    ui->mainToolBar->addAction(m_mapDockWidget->toggleViewAction());
     ui->mainToolBar->addAction(m_altitudeDockWidget->toggleViewAction());
     ui->mainToolBar->addAction(m_DOPDockWidget->toggleViewAction());
     m_start->setEnabled(false);
@@ -119,8 +118,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(m_start, &QAction::triggered, this, &MainWindow::toggleCapture);
     connect(m_stop, &QAction::triggered, this, &MainWindow::toggleCapture);
     connect(m_clear, &QAction::triggered, this, &MainWindow::clearEntries);
-    connect(m_closePlotsAction, &QAction::triggered, this,
-            &MainWindow::closePlots);
+    connect(m_closePlotsAction, &QAction::triggered, this, &MainWindow::closePlots);
 
     // Model.
     m_model = new ChannelTableModel();
@@ -143,10 +141,8 @@ MainWindow::MainWindow(QWidget *parent)
     m_socketMonitorPvt = new QUdpSocket(this);
 
     // Connect Signals & Slots.
-    connect(m_socketGnssSynchro, &QUdpSocket::readyRead, this,
-            &MainWindow::receiveGnssSynchro);
-    connect(m_socketMonitorPvt, &QUdpSocket::readyRead, this,
-            &MainWindow::receiveMonitorPvt);
+    connect(m_socketGnssSynchro, &QUdpSocket::readyRead, this, &MainWindow::receiveGnssSynchro);
+    connect(m_socketMonitorPvt, &QUdpSocket::readyRead, this, &MainWindow::receiveMonitorPvt);
     connect(qApp, &QApplication::aboutToQuit, this, &MainWindow::quit);
     connect(ui->tableView, &QTableView::clicked, this, &MainWindow::expandPlot);
     connect(ui->actionAbout, &QAction::triggered, this, &MainWindow::about);
@@ -317,8 +313,8 @@ void MainWindow::setPort()
 {
     QSettings settings;
     settings.beginGroup("Preferences_Dialog");
-    m_portGnssSynchro = settings.value("port_gnss_synchro", DEFAULT_PORT).toInt();
-    m_portMonitorPvt = settings.value("port_monitor_pvt", DEFAULT_PORT).toInt();
+    m_portGnssSynchro = settings.value("port_gnss_synchro", 1111).toInt();
+    m_portMonitorPvt = settings.value("port_monitor_pvt", 1112).toInt();
     settings.endGroup();
 
     m_socketGnssSynchro->disconnectFromHost();
@@ -366,11 +362,11 @@ void MainWindow::expandPlot(const QModelIndex &index)
                 QPointF p;
                 QVector<QPointF> points;
 
-                double min_x = DBL_MAX;
-                double min_y = DBL_MAX;
+                double min_x = std::numeric_limits<double>::max();
+                double max_x = -std::numeric_limits<double>::max();
 
-                double max_x = -DBL_MAX;
-                double max_y = -DBL_MAX;
+                double min_y = std::numeric_limits<double>::max();
+                double max_y = -std::numeric_limits<double>::max();
 
                 QList<QVariant> var = index.data(Qt::DisplayRole).toList();
                 for (int i = 0; i < var.size(); i++)
@@ -429,11 +425,11 @@ void MainWindow::expandPlot(const QModelIndex &index)
                 QPointF p;
                 QVector<QPointF> points;
 
-                double min_x = DBL_MAX;
-                double min_y = DBL_MAX;
+                double min_x = std::numeric_limits<double>::max();
+                double max_x = -std::numeric_limits<double>::max();
 
-                double max_x = -DBL_MAX;
-                double max_y = -DBL_MAX;
+                double min_y = std::numeric_limits<double>::max();
+                double max_y = -std::numeric_limits<double>::max();
 
                 QList<QVariant> var = index.data(Qt::DisplayRole).toList();
                 for (int i = 0; i < var.size(); i++)
@@ -492,11 +488,11 @@ void MainWindow::expandPlot(const QModelIndex &index)
                 QPointF p;
                 QVector<QPointF> points;
 
-                double min_x = DBL_MAX;
-                double min_y = DBL_MAX;
+                double min_x = std::numeric_limits<double>::max();
+                double max_x = -std::numeric_limits<double>::max();
 
-                double max_x = -DBL_MAX;
-                double max_y = -DBL_MAX;
+                double min_y = std::numeric_limits<double>::max();
+                double max_y = -std::numeric_limits<double>::max();
 
                 QList<QVariant> var = index.data(Qt::DisplayRole).toList();
                 for (int i = 0; i < var.size(); i++)
@@ -525,7 +521,7 @@ void MainWindow::expandPlot(const QModelIndex &index)
         }
     }
 
-    if (!chartView)  // similar: if (chartView == nullptr)
+    if (!chartView)  // Equivalent to: if (chartView == nullptr)
     {
         return;
     }
