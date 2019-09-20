@@ -44,8 +44,8 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) :
     QSettings settings;
     settings.beginGroup("Preferences_Dialog");
     ui->buffer_size_spinBox->setValue(settings.value("buffer_size", 1000).toInt());
-    ui->port_gnss_synchro_spinBox->setValue(settings.value("port_gnss_synchro", 1337).toInt());
-    ui->port_monitor_pvt_spinBox->setValue(settings.value("port_monitor_pvt", 1337).toInt());
+    ui->port_gnss_synchro_spinBox->setValue(settings.value("port_gnss_synchro", 1111).toInt());
+    ui->port_monitor_pvt_spinBox->setValue(settings.value("port_monitor_pvt", 1112).toInt());
     settings.endGroup();
 
     connect(this, &PreferencesDialog::accepted, this, &PreferencesDialog::onAccept);
