@@ -42,7 +42,8 @@
 
 Cn0Delegate::Cn0Delegate(QWidget *parent) : QStyledItemDelegate(parent)
 {
-    m_bufferSize = 4000;
+    // Default buffer size.
+    m_bufferSize = 1000;
 }
 
 Cn0Delegate::~Cn0Delegate()
@@ -78,7 +79,6 @@ void Cn0Delegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
     int hGap = em_w / 4;
     int vGap = (option.rect.height() - option.fontMetrics.height()) / 2;
     int cGap = em_w / 4;
-    double ratio = 0.7;
 
     int cellWidth = option.rect.width();
     int cellHeight = option.rect.height();
@@ -87,8 +87,8 @@ void Cn0Delegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
     int contentHeight = option.fontMetrics.height();
 
     int usableContentWidth = contentWidth - cGap;
-    int sparklineWidth = ratio * usableContentWidth;
-    int textWidth = (1 - ratio) * usableContentWidth;
+    int textWidth = option.fontMetrics.width("00.0");
+    int sparklineWidth = usableContentWidth - textWidth;
 
     // Offset for translating the origin of the painting coordinate system to the top left corner of the cell.
     QPoint offset = option.rect.topLeft();
@@ -189,7 +189,7 @@ void Cn0Delegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
     painter->translate(-hGap, -vGap);
 
     // Display value of the last CN0 sample next to the sparkline.
-    painter->drawText(textRect, QString::number(var.last().toPointF().y()));
+    painter->drawText(textRect, QString::number(var.last().toPointF().y(), 'f', 1));
 
     // Draw visual guides for debugging.
     //drawGuides(painter, cellRect, sparklineRect, textRect);
