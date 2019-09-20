@@ -42,7 +42,8 @@
 
 DopplerDelegate::DopplerDelegate(QWidget *parent) : QStyledItemDelegate(parent)
 {
-    m_bufferSize = 4000;
+    // Default buffer size.
+    m_bufferSize = 1000;
 }
 
 DopplerDelegate::~DopplerDelegate()
@@ -55,7 +56,7 @@ void DopplerDelegate::setBufferSize(int size)
 }
 
 void DopplerDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
-                             const QModelIndex &index) const
+                            const QModelIndex &index) const
 {
     QList<QPointF> points;
     QVector<double> x_data, y_data;
@@ -78,7 +79,6 @@ void DopplerDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     int hGap = em_w / 4;
     int vGap = (option.rect.height() - option.fontMetrics.height()) / 2;
     int cGap = em_w / 4;
-    double ratio = 0.7;
 
     int cellWidth = option.rect.width();
     int cellHeight = option.rect.height();
@@ -87,8 +87,8 @@ void DopplerDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     int contentHeight = option.fontMetrics.height();
 
     int usableContentWidth = contentWidth - cGap;
-    int sparklineWidth = ratio * usableContentWidth;
-    int textWidth = (1 - ratio) * usableContentWidth;
+    int textWidth = option.fontMetrics.width("-00000.0");
+    int sparklineWidth = usableContentWidth - textWidth;
 
     // Offset for translating the origin of the painting coordinate system to the top left corner of the cell.
     QPoint offset = option.rect.topLeft();
@@ -189,7 +189,7 @@ void DopplerDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     painter->translate(-hGap, -vGap);
 
     // Display value of the last Doppler sample next to the sparkline.
-    painter->drawText(textRect, QString::number(var.last().toPointF().y()));
+    painter->drawText(textRect, QString::number(var.last().toPointF().y(), 'f', 1));
 
     // Draw visual guides for debugging.
     //drawGuides(painter, cellRect, sparklineRect, textRect);
@@ -198,7 +198,7 @@ void DopplerDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
 }
 
 QSize DopplerDelegate::sizeHint(const QStyleOptionViewItem &option,
-                                 const QModelIndex &index) const
+                                const QModelIndex &index) const
 {
     return QSize(option.fontMetrics.height() * SPARKLINE_MIN_EM_WIDTH, QStyledItemDelegate::sizeHint(option, index).height());
 }
