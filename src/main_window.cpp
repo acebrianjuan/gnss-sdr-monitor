@@ -161,6 +161,36 @@ void MainWindow::closeEvent(QCloseEvent *event)
     QMainWindow::closeEvent(event);
 }
 
+void MainWindow::updateChart(QtCharts::QChart *chart, QtCharts::QXYSeries *series, const QModelIndex &index)
+{
+    QPointF p;
+    QVector<QPointF> points;
+
+    double min_x = std::numeric_limits<double>::max();
+    double max_x = -std::numeric_limits<double>::max();
+
+    double min_y = std::numeric_limits<double>::max();
+    double max_y = -std::numeric_limits<double>::max();
+
+    QList<QVariant> var = index.data(Qt::DisplayRole).toList();
+    for (int i = 0; i < var.size(); i++)
+    {
+        p = var.at(i).toPointF();
+        points << p;
+
+        min_x = std::min(min_x, p.x());
+        min_y = std::min(min_y, p.y());
+
+        max_x = std::max(max_x, p.x());
+        max_y = std::max(max_y, p.y());
+    }
+
+    series->replace(points);
+
+    chart->axisX()->setRange(min_x, max_x);
+    chart->axisY()->setRange(min_y, max_y);
+}
+
 void MainWindow::toggleCapture()
 {
     if (m_start->isEnabled())
@@ -351,40 +381,19 @@ void MainWindow::expandPlot(const QModelIndex &index)
             chartView->setRenderHint(QPainter::Antialiasing);
             chartView->setContentsMargins(0, 0, 0, 0);
 
+            // Draw chart now.
+            updateChart(chart, series, index);
+
+            // Delete the chartView object when MainWindow is closed.
             connect(this, &QMainWindow::destroyed, chartView, &QObject::deleteLater);
 
-            // Remove element from map when dialog is closed.
+            // Remove element from map when chartView widget is closed.
             connect(chartView, &QObject::destroyed,
                     [this, index]() { m_plotsConstellation.erase(index.row()); });
 
             // Update chart on timer timeout.
-            connect(&m_updateTimer, &QTimer::timeout, chart, [chart, series, index]() {
-                QPointF p;
-                QVector<QPointF> points;
-
-                double min_x = std::numeric_limits<double>::max();
-                double max_x = -std::numeric_limits<double>::max();
-
-                double min_y = std::numeric_limits<double>::max();
-                double max_y = -std::numeric_limits<double>::max();
-
-                QList<QVariant> var = index.data(Qt::DisplayRole).toList();
-                for (int i = 0; i < var.size(); i++)
-                {
-                    p = var.at(i).toPointF();
-                    points << p;
-
-                    min_x = std::min(min_x, p.x());
-                    min_y = std::min(min_y, p.y());
-
-                    max_x = std::max(max_x, p.x());
-                    max_y = std::max(max_y, p.y());
-                }
-
-                series->replace(points);
-
-                chart->axisX()->setRange(min_x, max_x);
-                chart->axisY()->setRange(min_y, max_y);
+            connect(&m_updateTimer, &QTimer::timeout, chart, [this, chart, series, index]() {
+                updateChart(chart, series, index);
             });
 
             m_plotsConstellation[index.row()] = chartView;
@@ -414,40 +423,19 @@ void MainWindow::expandPlot(const QModelIndex &index)
             chartView->setRenderHint(QPainter::Antialiasing);
             chartView->setContentsMargins(0, 0, 0, 0);
 
+            // Draw chart now.
+            updateChart(chart, series, index);
+
+            // Delete the chartView object when MainWindow is closed.
             connect(this, &QMainWindow::destroyed, chartView, &QObject::deleteLater);
 
-            // Remove element from map when dialog is closed.
+            // Remove element from map when chartView widget is closed.
             connect(chartView, &QObject::destroyed,
                     [this, index]() { m_plotsCn0.erase(index.row()); });
 
             // Update chart on timer timeout.
-            connect(&m_updateTimer, &QTimer::timeout, chart, [chart, series, index]() {
-                QPointF p;
-                QVector<QPointF> points;
-
-                double min_x = std::numeric_limits<double>::max();
-                double max_x = -std::numeric_limits<double>::max();
-
-                double min_y = std::numeric_limits<double>::max();
-                double max_y = -std::numeric_limits<double>::max();
-
-                QList<QVariant> var = index.data(Qt::DisplayRole).toList();
-                for (int i = 0; i < var.size(); i++)
-                {
-                    p = var.at(i).toPointF();
-                    points << p;
-
-                    min_x = std::min(min_x, p.x());
-                    min_y = std::min(min_y, p.y());
-
-                    max_x = std::max(max_x, p.x());
-                    max_y = std::max(max_y, p.y());
-                }
-
-                series->replace(points);
-
-                chart->axisX()->setRange(min_x, max_x);
-                chart->axisY()->setRange(min_y, max_y);
+            connect(&m_updateTimer, &QTimer::timeout, chart, [this, chart, series, index]() {
+                updateChart(chart, series, index);
             });
 
             m_plotsCn0[index.row()] = chartView;
@@ -477,40 +465,19 @@ void MainWindow::expandPlot(const QModelIndex &index)
             chartView->setRenderHint(QPainter::Antialiasing);
             chartView->setContentsMargins(0, 0, 0, 0);
 
+            // Draw chart now.
+            updateChart(chart, series, index);
+
+            // Delete the chartView object when MainWindow is closed.
             connect(this, &QMainWindow::destroyed, chartView, &QObject::deleteLater);
 
-            // Remove element from map when dialog is closed.
+            // Remove element from map when chartView widget is closed.
             connect(chartView, &QObject::destroyed,
                     [this, index]() { m_plotsDoppler.erase(index.row()); });
 
             // Update chart on timer timeout.
-            connect(&m_updateTimer, &QTimer::timeout, chart, [chart, series, index]() {
-                QPointF p;
-                QVector<QPointF> points;
-
-                double min_x = std::numeric_limits<double>::max();
-                double max_x = -std::numeric_limits<double>::max();
-
-                double min_y = std::numeric_limits<double>::max();
-                double max_y = -std::numeric_limits<double>::max();
-
-                QList<QVariant> var = index.data(Qt::DisplayRole).toList();
-                for (int i = 0; i < var.size(); i++)
-                {
-                    p = var.at(i).toPointF();
-                    points << p;
-
-                    min_x = std::min(min_x, p.x());
-                    min_y = std::min(min_y, p.y());
-
-                    max_x = std::max(max_x, p.x());
-                    max_y = std::max(max_y, p.y());
-                }
-
-                series->replace(points);
-
-                chart->axisX()->setRange(min_x, max_x);
-                chart->axisY()->setRange(min_y, max_y);
+            connect(&m_updateTimer, &QTimer::timeout, chart, [this, chart, series, index]() {
+                updateChart(chart, series, index);
             });
 
             m_plotsDoppler[index.row()] = chartView;

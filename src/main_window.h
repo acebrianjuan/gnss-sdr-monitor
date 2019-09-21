@@ -48,6 +48,8 @@
 #include <QSettings>
 #include <QTimer>
 #include <QtNetwork/QUdpSocket>
+#include <QChart>
+#include <QXYSeries>
 
 namespace Ui
 {
@@ -89,6 +91,8 @@ protected:
     void closeEvent(QCloseEvent *event) override;
 
 private:
+    void updateChart(QtCharts::QChart *chart, QtCharts::QXYSeries *series, const QModelIndex &index);
+
     Ui::MainWindow *ui;
 
     QDockWidget *m_mapDockWidget;
