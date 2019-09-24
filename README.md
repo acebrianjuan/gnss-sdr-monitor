@@ -21,7 +21,7 @@ This program is a graphical user interface developed with Qt for monitoring the 
 ~~~~
 $ sudo apt-get install build-essential cmake git libboost-dev libboost-system-dev \
        libprotobuf-dev protobuf-compiler qtbase5-dev qtdeclarative5-dev qtpositioning5-dev \
-       libqt5charts5-dev qml-module-qtquick2 qml-module-qtquick-controls2 qml-module-window2 \
+       libqt5charts5-dev qml-module-qtquick2 qml-module-qtquick-controls2 qml-module-qtquick-window2 \
        qml-module-qtlocation qml-module-qtpositioning qml-module-qtquick-layouts
 ~~~~
 
