@@ -36,7 +36,6 @@ coverity-scan:
     - cov-build --dir cov-int make -j2
     - tar cvzf gnss-sdr-monitor.tgz cov-int
     - curl -k --form token=$COVERITY_SCAN_TOKEN --form email=$COVERITY_SCAN_EMAIL --form file=@$(pwd)/gnss-sdr-monitor.tgz --form version="0" --form description=" " https://scan.coverity.com/builds?project=$COVERITY_SCAN_USER%2Fgnss-sdr-monitor --progress-bar | tee -a "log_upload.txt" ; test ${PIPESTATUS[0]} -eq 0
-  when: manual
   allow_failure: true
 
 
