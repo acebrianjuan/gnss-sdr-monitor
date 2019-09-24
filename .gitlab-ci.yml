@@ -19,3 +19,24 @@ ubuntu18.04:
     - cmake ..
     - NPROC=$(grep -c ^processor /proc/cpuinfo)
     - make -j$(($NPROC+1))
+
+
+coverity-scan:
+  image: ubuntu:bionic
+  stage: build
+  script:
+    - apt-get update
+    - apt-get install -y wget curl ca-certificates
+    - wget -O cov-analysis-linux64-2019.03.tar.gz https://scan.coverity.com/download/cxx/linux64 --post-data "project=$COVERITY_SCAN_USER%2Fgnss-sdr-monitor&token=$COVERITY_SCAN_TOKEN" --no-check-certificate
+    - tar xvzf cov-analysis-linux64-2019.03.tar.gz
+    - export PATH=$PATH:$(pwd)/cov-analysis-linux64-2019.03/bin
+    - apt-get install -y --no-install-recommends build-essential cmake git libboost-dev libboost-system-dev libprotobuf-dev protobuf-compiler qtbase5-dev qtdeclarative5-dev qtpositioning5-dev libqt5charts5-dev qml-module-qtquick2 qml-module-qtquick-controls2 qml-module-qtquick-window2 qml-module-qtlocation qml-module-qtpositioning qml-module-qtquick-layouts
+    - cd build
+    - cmake ..
+    - cov-build --dir cov-int make -j2
+    - tar cvzf gnss-sdr-monitor.tgz cov-int
+    - curl -k --form token=$COVERITY_SCAN_TOKEN --form email=$COVERITY_SCAN_EMAIL --form file=@$(pwd)/gnss-sdr-monitor.tgz --form version="0" --form description=" " https://scan.coverity.com/builds?project=$COVERITY_SCAN_USER%2Fgnss-sdr-monitor --progress-bar | tee -a "log_upload.txt" ; test ${PIPESTATUS[0]} -eq 0
+  when: manual
+  allow_failure: true
+
+
