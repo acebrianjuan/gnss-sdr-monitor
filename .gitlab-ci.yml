@@ -9,6 +9,19 @@ stages:
 
 
 # Stage "build"
+ubuntu16.04:
+  image: ubuntu:xenial
+  stage: build
+  script:
+    - apt-get update
+    - apt-get install -y --no-install-recommends build-essential cmake git libboost-dev libboost-system-dev libprotobuf-dev protobuf-compiler qtbase5-dev qtdeclarative5-dev qtpositioning5-dev libqt5charts5-dev qml-module-qtquick2 qml-module-qtquick-controls2 qml-module-qtquick-window2 qml-module-qtlocation qml-module-qtpositioning qml-module-qtquick-layouts
+    - cd build
+    - cmake ..
+    - NPROC=$(grep -c ^processor /proc/cpuinfo)
+    - make -j$(($NPROC+1))
+  allow_failure: true
+
+
 ubuntu18.04:
   image: ubuntu:bionic
   stage: build
