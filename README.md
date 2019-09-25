@@ -15,7 +15,7 @@ This program is a graphical user interface developed with Qt for monitoring the 
 </table>
 
 # How to build gnss-sdr-monitor
-
+## Ubuntu 18.04 or above
 ### Install dependencies using software packages:
 
 ~~~~
