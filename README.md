@@ -34,8 +34,7 @@ $ git clone https://github.com/acebrianjuan/gnss-sdr-monitor
 ### Build and install gnss-sdr-monitor:
 
 ~~~~~~
-$ git checkout next
-$ cd gnss-sdr/build
+$ cd gnss-sdr-monitor/build
 $ cmake ..
 $ make
 ~~~~~~
