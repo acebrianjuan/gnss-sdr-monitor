@@ -35,15 +35,9 @@
 #include <QChart>
 #include <QGraphicsLayout>
 #include <QLayout>
-#include <float.h>
 
 DOPWidget::DOPWidget(QWidget *parent) : QWidget(parent)
 {
-    m_gdopQueue = new QQueue<QPointF>();
-    m_pdopQueue = new QQueue<QPointF>();
-    m_hdopQueue = new QQueue<QPointF>();
-    m_vdopQueue = new QQueue<QPointF>();
-
     m_gdopSeries = new QtCharts::QLineSeries();
     m_gdopSeries->setName("GDOP");
 
@@ -77,35 +71,35 @@ DOPWidget::DOPWidget(QWidget *parent) : QWidget(parent)
     m_chartView->setRenderHint(QPainter::Antialiasing);
     m_chartView->setContentsMargins(0, 0, 0, 0);
 
-    min_x = DBL_MAX;
-    min_y = DBL_MAX;
+    min_x = std::numeric_limits<double>::max();
+    max_x = -std::numeric_limits<double>::max();
 
-    max_x = -DBL_MAX;
-    max_y = -DBL_MAX;
+    min_y = std::numeric_limits<double>::max();
+    max_y = -std::numeric_limits<double>::max();
 }
 
 void DOPWidget::enqueueNewData(qreal tow, qreal gdop, qreal pdop, qreal hdop, qreal vdop)
 {
-    m_gdopQueue->enqueue(QPointF(tow, gdop));
-    m_pdopQueue->enqueue(QPointF(tow, pdop));
-    m_hdopQueue->enqueue(QPointF(tow, hdop));
-    m_vdopQueue->enqueue(QPointF(tow, vdop));
+    m_gdopQueue.enqueue(QPointF(tow, gdop));
+    m_pdopQueue.enqueue(QPointF(tow, pdop));
+    m_hdopQueue.enqueue(QPointF(tow, hdop));
+    m_vdopQueue.enqueue(QPointF(tow, vdop));
 }
 
 void DOPWidget::redraw()
 {
-    populateSeries(m_gdopQueue, m_gdopSeries);
-    populateSeries(m_pdopQueue, m_pdopSeries);
-    populateSeries(m_hdopQueue, m_hdopSeries);
-    populateSeries(m_vdopQueue, m_vdopSeries);
+    populateSeries(&m_gdopQueue, m_gdopSeries);
+    populateSeries(&m_pdopQueue, m_pdopSeries);
+    populateSeries(&m_hdopQueue, m_hdopSeries);
+    populateSeries(&m_vdopQueue, m_vdopSeries);
 }
 
 void DOPWidget::clear()
 {
-    m_gdopQueue->clear();
-    m_pdopQueue->clear();
-    m_hdopQueue->clear();
-    m_vdopQueue->clear();
+    m_gdopQueue.clear();
+    m_pdopQueue.clear();
+    m_hdopQueue.clear();
+    m_vdopQueue.clear();
 
     m_gdopSeries->clear();
     m_pdopSeries->clear();

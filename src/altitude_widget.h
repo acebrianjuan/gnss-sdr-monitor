@@ -52,7 +52,7 @@ public slots:
     void clear();
 
 private:
-    QQueue<QPointF> *m_queue = nullptr;
+    QQueue<QPointF> m_queue;
     QtCharts::QChartView *m_chartView = nullptr;
     QtCharts::QLineSeries *m_series = nullptr;
 

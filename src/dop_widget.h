@@ -54,10 +54,10 @@ public slots:
 private:
     void populateSeries(QQueue<QPointF> *queue, QtCharts::QLineSeries *series);
 
-    QQueue<QPointF> *m_gdopQueue = nullptr;
-    QQueue<QPointF> *m_pdopQueue = nullptr;
-    QQueue<QPointF> *m_hdopQueue = nullptr;
-    QQueue<QPointF> *m_vdopQueue = nullptr;
+    QQueue<QPointF> m_gdopQueue;
+    QQueue<QPointF> m_pdopQueue;
+    QQueue<QPointF> m_hdopQueue;
+    QQueue<QPointF> m_vdopQueue;
 
     QtCharts::QChartView *m_chartView = nullptr;
 

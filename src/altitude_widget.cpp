@@ -35,12 +35,9 @@
 #include <QChart>
 #include <QGraphicsLayout>
 #include <QLayout>
-#include <float.h>
 
 AltitudeWidget::AltitudeWidget(QWidget *parent) : QWidget(parent)
 {
-    m_queue = new QQueue<QPointF>();
-
     m_series = new QtCharts::QLineSeries();
 
     m_chartView = new QtCharts::QChartView(this);
@@ -63,28 +60,28 @@ AltitudeWidget::AltitudeWidget(QWidget *parent) : QWidget(parent)
     m_chartView->setRenderHint(QPainter::Antialiasing);
     m_chartView->setContentsMargins(0, 0, 0, 0);
 
-    min_x = DBL_MAX;
-    min_y = DBL_MAX;
+    min_x = std::numeric_limits<double>::max();
+    max_x = -std::numeric_limits<double>::max();
 
-    max_x = -DBL_MAX;
-    max_y = -DBL_MAX;
+    min_y = std::numeric_limits<double>::max();
+    max_y = -std::numeric_limits<double>::max();
 }
 
 void AltitudeWidget::enqueueNewData(qreal tow, qreal altitude)
 {
-    m_queue->enqueue(QPointF(tow, altitude));
+    m_queue.enqueue(QPointF(tow, altitude));
 }
 
 void AltitudeWidget::redraw()
 {
-    if (!m_queue->isEmpty())
+    if (!m_queue.isEmpty())
     {
         QtCharts::QChart *chart = m_chartView->chart();
         QPointF p;
 
-        for (int i = 0; i < m_queue->size(); i++)
+        for (int i = 0; i < m_queue.size(); i++)
         {
-            p = m_queue->at(i);
+            p = m_queue.at(i);
 
             min_x = std::min(min_x, p.x());
             min_y = std::min(min_y, p.y());
@@ -93,17 +90,17 @@ void AltitudeWidget::redraw()
             max_y = std::max(max_y, p.y());
         }
 
-        m_series->append(*m_queue);
+        m_series->append(m_queue);
 
         chart->axisX()->setRange(min_x, max_x);
         chart->axisY()->setRange(min_y, max_y);
 
-        m_queue->clear();
+        m_queue.clear();
     }
 }
 
 void AltitudeWidget::clear()
 {
-    m_queue->clear();
+    m_queue.clear();
     m_series->clear();
 }
