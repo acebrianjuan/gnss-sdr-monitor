@@ -1,4 +1,4 @@
-[![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)&nbsp;[![Coverity Scan](https://scan.coverity.com/projects/19249/badge.svg)](https://scan.coverity.com/projects/acebrianjuan-gnss-sdr-monitor)
+[![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)&nbsp;[![GitLab Pipeline](https://gitlab.com/acebrianjuan/gnss-sdr-monitor/badges/master/pipeline.svg)](https://gitlab.com/acebrianjuan/gnss-sdr-monitor/pipelines)&nbsp;[![Coverity Scan](https://scan.coverity.com/projects/19249/badge.svg)](https://scan.coverity.com/projects/acebrianjuan-gnss-sdr-monitor)
 
 **Welcome to gnss-sdr-monitor!**
 
