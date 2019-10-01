@@ -39,6 +39,9 @@
 
 #define DEFAULT_BUFFER_SIZE 1000
 
+/*!
+ Constructs an instance of a table model.
+ */
 ChannelTableModel::ChannelTableModel()
 {
     m_mapSignalPrettyName["1C"] = "L1 C/A";
@@ -53,6 +56,9 @@ ChannelTableModel::ChannelTableModel()
     m_bufferSize = DEFAULT_BUFFER_SIZE;
 }
 
+/*!
+ Triggers a reset of the table model which casues the views to be repainted.
+ */
 void ChannelTableModel::update()
 {
     beginResetModel();
@@ -262,8 +268,11 @@ QVariant ChannelTableModel::headerData(int section,
     return QVariant::Invalid;
 }
 
-void ChannelTableModel::populateChannels(
-        const gnss_sdr::Observables *stocks)
+/*!
+ Populates the internal data structures of the table model with the data of the \a stocks collection of GnssSynchro objects.
+ Internally, this function calls populateChannel() on each individual GnssSynchro object in the colection.
+ */
+void ChannelTableModel::populateChannels(const gnss_sdr::Observables *stocks)
 {
     for (std::size_t i = 0; i < stocks->observable_size(); i++)
     {
@@ -271,67 +280,102 @@ void ChannelTableModel::populateChannels(
     }
 }
 
+/*!
+ Populates the internal data structures of the table model with the data of the \a ch GnssSynchro object.
+ */
 void ChannelTableModel::populateChannel(const gnss_sdr::GnssSynchro *ch)
 {
-    if (ch->fs() != 0)  // Channel is valid.
+    // Check if channel is valid, if not, do nothing.
+    if (ch->fs() != 0)
     {
-        if (m_channels.find(ch->channel_id()) != m_channels.end())  // Channel exists.
+        // Channel is valid, now check if it exists in the map of channels.
+        if (m_channels.find(ch->channel_id()) != m_channels.end())
         {
+            // Channel exists, now check if its PRN is the same.
             if (m_channels.at(ch->channel_id()).prn() != ch->prn())
             {
-                // Reset channel.
+                // PRN has changed so reset the channel.
                 clearChannel(ch->channel_id());
             }
         }
 
+        // Check the size of the map of GnssSynchro objects before adding new data.
         size_t map_size = m_channels.size();
 
+        // Add the new GnssSynchro object to the map.
         m_channels[ch->channel_id()] = *ch;
 
+        // Time.
+        // Check if channel exists in the map of time data.
         if (m_channelsTime.find(ch->channel_id()) == m_channelsTime.end())
         {
+            // Channel does not exist so make room for it.
             m_channelsTime[ch->channel_id()].resize(m_bufferSize);
             m_channelsTime[ch->channel_id()].clear();
         }
+        // Populate map with new time data.
         m_channelsTime[ch->channel_id()].push_back(ch->rx_time());
 
+        // In-phase prompt component.
+        // Check if channel exists in the map of in-phase component data.
         if (m_channelsPromptI.find(ch->channel_id()) == m_channelsPromptI.end())
         {
+            // Channel does not exist so make room for it.
             m_channelsPromptI[ch->channel_id()].resize(m_bufferSize);
             m_channelsPromptI[ch->channel_id()].clear();
         }
+        // Populate map with new in-phase component data.
         m_channelsPromptI[ch->channel_id()].push_back(ch->prompt_i());
 
+        // Quadrature prompt component.
+        // Check if channel exists in the map of quadrature component data.
         if (m_channelsPromptQ.find(ch->channel_id()) == m_channelsPromptQ.end())
         {
+            // Channel does not exist so make room for it.
             m_channelsPromptQ[ch->channel_id()].resize(m_bufferSize);
             m_channelsPromptQ[ch->channel_id()].clear();
         }
+        // Populate map with new quadrature component data.
         m_channelsPromptQ[ch->channel_id()].push_back(ch->prompt_q());
 
+        // CN0.
+        // Check if channel exists in the map of CN0 data.
         if (m_channelsCn0.find(ch->channel_id()) == m_channelsCn0.end())
         {
+            // Channel does not exist so make room for it.
             m_channelsCn0[ch->channel_id()].resize(m_bufferSize);
             m_channelsCn0[ch->channel_id()].clear();
         }
+        // Populate map with new CN0 data.
         m_channelsCn0[ch->channel_id()].push_back(ch->cn0_db_hz());
 
+        // Doppler.
+        // Check if channel exists in the map of Doppler data.
         if (m_channelsDoppler.find(ch->channel_id()) == m_channelsDoppler.end())
         {
+            // Channel does not exist so make room for it.
             m_channelsDoppler[ch->channel_id()].resize(m_bufferSize);
             m_channelsDoppler[ch->channel_id()].clear();
         }
+        // Populate map with new Doppler data.
         m_channelsDoppler[ch->channel_id()].push_back(ch->carrier_doppler_hz());
 
+        // Signal name.
+        // Populate map with new signal name.
         m_channelsSignal[ch->channel_id()] = getSignalPrettyName(ch);
 
+        // Check the size of the map of GnssSynchro objects after adding new data.
         if (m_channels.size() != map_size)
         {
+            // Map size has changed so record the new channel number in the vector of channel IDs.
             m_channelsId.push_back(ch->channel_id());
         }
     }
 }
 
+/*!
+ Clears the data of a single channel specified by \a ch_id from the table model.
+ */
 void ChannelTableModel::clearChannel(int ch_id)
 {
     m_channelsId.erase(std::remove(m_channelsId.begin(), m_channelsId.end(), ch_id),
@@ -345,6 +389,9 @@ void ChannelTableModel::clearChannel(int ch_id)
     m_channelsDoppler.erase(ch_id);
 }
 
+/*!
+ Clears the data of all channels from the table model.
+ */
 void ChannelTableModel::clearChannels()
 {
     m_channelsId.clear();
@@ -357,8 +404,10 @@ void ChannelTableModel::clearChannels()
     m_channelsDoppler.clear();
 }
 
-QString
-ChannelTableModel::getSignalPrettyName(const gnss_sdr::GnssSynchro *ch)
+/*!
+ Gets the descriptive string formed by the combination of the GNSS system and signal name for a given \a ch GnssSynchro object.
+ */
+QString ChannelTableModel::getSignalPrettyName(const gnss_sdr::GnssSynchro *ch)
 {
     QString system_name;
 
@@ -373,8 +422,7 @@ ChannelTableModel::getSignalPrettyName(const gnss_sdr::GnssSynchro *ch)
             system_name = QStringLiteral("Galileo");
         }
 
-        if (m_mapSignalPrettyName.find(ch->signal()) !=
-                m_mapSignalPrettyName.end())
+        if (m_mapSignalPrettyName.find(ch->signal()) != m_mapSignalPrettyName.end())
         {
             system_name.append(" ").append(m_mapSignalPrettyName.at(ch->signal()));
         }
@@ -383,8 +431,10 @@ ChannelTableModel::getSignalPrettyName(const gnss_sdr::GnssSynchro *ch)
     return system_name;
 }
 
-QList<QVariant>
-ChannelTableModel::getListFromCbuf(boost::circular_buffer<double> cbuf)
+/*!
+ Gets a list from a circular buffer \a cbuf.
+ */
+QList<QVariant> ChannelTableModel::getListFromCbuf(boost::circular_buffer<double> cbuf)
 {
     QList<QVariant> list;
 
@@ -396,8 +446,17 @@ ChannelTableModel::getListFromCbuf(boost::circular_buffer<double> cbuf)
     return list;
 }
 
-int ChannelTableModel::getColumns() { return m_columns; }
+/*!
+ Gets the number of columns of the table model.
+ */
+int ChannelTableModel::getColumns()
+{
+    return m_columns;
+}
 
+/*!
+ Sets the size of the internal circular buffers that store the data of the table model.
+ */
 void ChannelTableModel::setBufferSize()
 {
     QSettings settings;
@@ -409,4 +468,10 @@ void ChannelTableModel::setBufferSize()
     clearChannels();
 }
 
-int ChannelTableModel::getChannelId(int row) { return m_channelsId.at(row); }
+/*!
+ Gets the id number of the channel occupying the queried \a row of the table model.
+ */
+int ChannelTableModel::getChannelId(int row)
+{
+    return m_channelsId.at(row);
+}
