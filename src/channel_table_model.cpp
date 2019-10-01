@@ -270,7 +270,7 @@ QVariant ChannelTableModel::headerData(int section,
 
 /*!
  Populates the internal data structures of the table model with the data of the \a stocks collection of GnssSynchro objects.
- Internally, this function calls populateChannel() on each individual GnssSynchro object in the colection.
+ Internally, this function calls populateChannel() on each individual GnssSynchro object in the collection.
  */
 void ChannelTableModel::populateChannels(const gnss_sdr::Observables *stocks)
 {
