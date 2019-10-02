@@ -46,6 +46,9 @@ class MonitorPvtWrapper : public QObject
 public:
     explicit MonitorPvtWrapper(QObject *parent = nullptr);
     void addMonitorPvt(const gnss_sdr::MonitorPvt &monitor_pvt);
+
+    gnss_sdr::MonitorPvt getLastMonitorPvt();
+
     QVariant position() const;
     QVariantList path() const;
 

@@ -34,20 +34,37 @@
 #include <QDebug>
 #include <QGeoCoordinate>
 
+/*!
+ Constructs a MonitorPvtWrapper object.
+ */
 MonitorPvtWrapper::MonitorPvtWrapper(QObject *parent) : QObject(parent) {}
 
+/*!
+ Populates the internal data structures with the data of the \a monitor_pvt MonitorPvt object.
+ */
 void MonitorPvtWrapper::addMonitorPvt(
-    const gnss_sdr::MonitorPvt &monitor_pvt)
+        const gnss_sdr::MonitorPvt &monitor_pvt)
 {
     m_listMonitorPvt << monitor_pvt;
     m_path.append(QVariant::fromValue(
-        QGeoCoordinate(monitor_pvt.latitude(), monitor_pvt.longitude())));
+                      QGeoCoordinate(monitor_pvt.latitude(), monitor_pvt.longitude())));
 
     emit dataChanged();
     emit altitudeChanged(monitor_pvt.tow_at_current_symbol_ms(), monitor_pvt.height());
     emit dopChanged(monitor_pvt.tow_at_current_symbol_ms(), monitor_pvt.gdop(), monitor_pvt.pdop(), monitor_pvt.hdop(), monitor_pvt.vdop());
 }
 
+/*!
+ Gets the last MonitorPvt object.
+ */
+gnss_sdr::MonitorPvt MonitorPvtWrapper::getLastMonitorPvt()
+{
+    return m_listMonitorPvt.last();
+}
+
+/*!
+ Clears all the data from the internal data structures.
+ */
 void MonitorPvtWrapper::clearData()
 {
     m_listMonitorPvt.clear();
@@ -56,28 +73,34 @@ void MonitorPvtWrapper::clearData()
     emit dataChanged();
 }
 
+/*!
+ Returns the last known position.
+ */
 QVariant MonitorPvtWrapper::position() const
 {
     if (!m_listMonitorPvt.isEmpty())
-        {
-            return QVariant::fromValue(
-                QGeoCoordinate(m_listMonitorPvt.last().latitude(),
-                    m_listMonitorPvt.last().longitude()));
-        }
+    {
+        return QVariant::fromValue(QGeoCoordinate(
+                                       m_listMonitorPvt.last().latitude(),
+                                       m_listMonitorPvt.last().longitude()));
+    }
     else
-        {
-            return QVariant();
-        }
+    {
+        return QVariant();
+    }
 }
 
+/*!
+ Returns the path formed by the history of recorded positions.
+ */
 QVariantList MonitorPvtWrapper::path() const
 {
     if (!m_path.isEmpty())
-        {
-            return m_path;
-        }
+    {
+        return m_path;
+    }
     else
-        {
-            return QVariantList();
-        }
+    {
+        return QVariantList();
+    }
 }
