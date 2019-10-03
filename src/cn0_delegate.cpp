@@ -182,7 +182,24 @@ void Cn0Delegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
     // Translate painting origin to sparklineOrigin.
     painter->translate(offset.x() + hGap, offset.y() + vGap);
 
+    // Fill area below the CN0 sparkline.
+    QPointF startPoint(fpoints.first().x(), contentHeight);
+    QPointF endPoint(fpoints.last().x(), contentHeight);
+    fpoints.push_front(startPoint);
+    fpoints.push_back(endPoint);
+
+    QLinearGradient gradient(QPointF(0, 0), QPointF(0, contentHeight));
+    gradient.setColorAt(1, Qt::white);
+    gradient.setColorAt(0, Qt::gray);
+
+    painter->setBrush(QBrush(gradient));
+    painter->setPen(Qt::NoPen);
+    painter->drawPolygon(QPolygonF(fpoints));
+
     // Draw CN0 sparkline.
+    fpoints.removeFirst();
+    fpoints.removeLast();
+    painter->setPen(Qt::black);
     painter->drawPolyline(QPolygonF(fpoints));
 
     // Translate painting origin to cellOrigin.
