@@ -37,17 +37,24 @@
 /*!
  Constructs a MonitorPvtWrapper object.
  */
-MonitorPvtWrapper::MonitorPvtWrapper(QObject *parent) : QObject(parent) {}
+MonitorPvtWrapper::MonitorPvtWrapper(QObject *parent) : QObject(parent)
+{
+    m_bufferSize = 100;
+    m_bufferMonitorPvt.resize(m_bufferSize);
+    m_path.resize(m_bufferSize);
+}
 
 /*!
  Populates the internal data structures with the data of the \a monitor_pvt MonitorPvt object.
  */
-void MonitorPvtWrapper::addMonitorPvt(
-        const gnss_sdr::MonitorPvt &monitor_pvt)
+void MonitorPvtWrapper::addMonitorPvt(const gnss_sdr::MonitorPvt &monitor_pvt)
 {
-    m_listMonitorPvt << monitor_pvt;
-    m_path.append(QVariant::fromValue(
-                      QGeoCoordinate(monitor_pvt.latitude(), monitor_pvt.longitude())));
+    m_bufferMonitorPvt.push_back(monitor_pvt);
+
+    Coordinates coord;
+    coord.latitude = monitor_pvt.latitude();
+    coord.longitude = monitor_pvt.longitude();
+    m_path.push_back(coord);
 
     emit dataChanged();
     emit altitudeChanged(monitor_pvt.tow_at_current_symbol_ms(), monitor_pvt.height());
@@ -59,7 +66,7 @@ void MonitorPvtWrapper::addMonitorPvt(
  */
 gnss_sdr::MonitorPvt MonitorPvtWrapper::getLastMonitorPvt()
 {
-    return m_listMonitorPvt.last();
+    return m_bufferMonitorPvt.back();
 }
 
 /*!
@@ -67,10 +74,19 @@ gnss_sdr::MonitorPvt MonitorPvtWrapper::getLastMonitorPvt()
  */
 void MonitorPvtWrapper::clearData()
 {
-    m_listMonitorPvt.clear();
+    m_bufferMonitorPvt.clear();
     m_path.clear();
 
     emit dataChanged();
+}
+
+/*!
+ Sets the size of the internal circular buffers that store the data.
+ */
+void MonitorPvtWrapper::setBufferSize(size_t size)
+{
+    m_bufferSize = size;
+    m_bufferMonitorPvt.resize(m_bufferSize);
 }
 
 /*!
@@ -78,11 +94,10 @@ void MonitorPvtWrapper::clearData()
  */
 QVariant MonitorPvtWrapper::position() const
 {
-    if (!m_listMonitorPvt.isEmpty())
+    if (!m_bufferMonitorPvt.empty())
     {
-        return QVariant::fromValue(QGeoCoordinate(
-                                       m_listMonitorPvt.last().latitude(),
-                                       m_listMonitorPvt.last().longitude()));
+        gnss_sdr::MonitorPvt mpvt = m_bufferMonitorPvt.back();
+        return QVariant::fromValue(QGeoCoordinate(mpvt.latitude(), mpvt.longitude()));
     }
     else
     {
@@ -95,9 +110,15 @@ QVariant MonitorPvtWrapper::position() const
  */
 QVariantList MonitorPvtWrapper::path() const
 {
-    if (!m_path.isEmpty())
+    if (!m_path.empty())
     {
-        return m_path;
+        QVariantList list;
+        for (size_t i = 0; i < m_path.size(); i++)
+        {
+            Coordinates coord = m_path.at(i);
+            list << QVariant::fromValue(QGeoCoordinate(coord.latitude, coord.longitude));
+        }
+        return list;
     }
     else
     {

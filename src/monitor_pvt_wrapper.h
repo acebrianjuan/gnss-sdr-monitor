@@ -36,6 +36,7 @@
 #include "monitor_pvt.pb.h"
 #include <QObject>
 #include <QVariant>
+#include <boost/circular_buffer.hpp>
 
 class MonitorPvtWrapper : public QObject
 {
@@ -52,6 +53,12 @@ public:
     QVariant position() const;
     QVariantList path() const;
 
+    struct Coordinates
+    {
+        double latitude;
+        double longitude;
+    };
+
 signals:
     void dataChanged();
     void altitudeChanged(qreal newTow, qreal newAltitude);
@@ -59,10 +66,12 @@ signals:
 
 public slots:
     void clearData();
+    void setBufferSize(size_t size);
 
 private:
-    QList<gnss_sdr::MonitorPvt> m_listMonitorPvt;
-    QVariantList m_path;
+    size_t m_bufferSize;
+    boost::circular_buffer<gnss_sdr::MonitorPvt> m_bufferMonitorPvt;
+    boost::circular_buffer<Coordinates> m_path;
 };
 
 #endif  // GNSS_SDR_MONITOR_MONITOR_PVT_WRAPPER_H_
