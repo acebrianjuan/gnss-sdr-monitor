@@ -43,7 +43,9 @@ public:
     ~Cn0Delegate();
 
 public slots:
-    void setBufferSize(int size);
+    void setBufferSize(size_t size);
+    void setCn0Range(double min, double max);
+    void setAutoRangeEnabled(bool enabled);
 
 protected:
     void paint(QPainter *painter, const QStyleOptionViewItem &option,
@@ -54,8 +56,10 @@ protected:
 
 private:
     void drawGuides(QPainter *painter, QRect cellRect, QRect sparklineRect, QRect textRect) const;
-
-    int m_bufferSize;
+    size_t m_bufferSize;
+    double m_minCn0;
+    double m_maxCn0;
+    bool m_autoRangeEnabled;
 
 };
 

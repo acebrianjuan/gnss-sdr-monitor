@@ -43,22 +43,54 @@
 Cn0Delegate::Cn0Delegate(QWidget *parent) : QStyledItemDelegate(parent)
 {
     // Default buffer size.
-    m_bufferSize = 1000;
+    m_bufferSize = 100;
+
+    // Default CN0 range.
+    m_minCn0 = 20;
+    m_maxCn0 = 50;
+
+    // Default state of auto range function.
+    m_autoRangeEnabled = false;
 }
 
 Cn0Delegate::~Cn0Delegate()
 {
 }
 
-void Cn0Delegate::setBufferSize(int size)
+/*!
+ Sets the size of the internal vector that stores the sparkline data.
+ */
+void Cn0Delegate::setBufferSize(size_t size)
 {
     m_bufferSize = size;
+}
+
+/*!
+ Sets the manual limits of the vertical axis for rendering the sparkline.
+ */
+void Cn0Delegate::setCn0Range(double min, double max)
+{
+    if (min < max)
+    {
+        m_minCn0 = min;
+        m_maxCn0 = max;
+    }
+}
+
+/*!
+ Sets the state of the auto range function.
+ */
+void Cn0Delegate::setAutoRangeEnabled(bool enabled)
+{
+    m_autoRangeEnabled = enabled;
 }
 
 void Cn0Delegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
                         const QModelIndex &index) const
 {
-    QList<QPointF> points;
+    bool outOfScale = false;
+
+    QVector<QPointF> points;
     QVector<double> x_data, y_data;
     QList<QVariant> var = index.data(Qt::DisplayRole).toList();
     for(int i = 0; i < var.size(); i++)
@@ -71,8 +103,14 @@ void Cn0Delegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
     double min_x = std::numeric_limits<double>::max();
     double max_x = -std::numeric_limits<double>::max();
 
-    double min_y = std::numeric_limits<double>::max();
-    double max_y = -std::numeric_limits<double>::max();
+    double min_y = m_minCn0;
+    double max_y = m_maxCn0;
+
+    if (m_autoRangeEnabled)
+    {
+        min_y = std::numeric_limits<double>::max();
+        max_y = -std::numeric_limits<double>::max();
+    }
 
     int em_w = option.fontMetrics.height();
 
@@ -112,6 +150,7 @@ void Cn0Delegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
         return;
     }
 
+    // Remove first points until the number of elements is within the designated buffer size.
     while(points.length() > m_bufferSize)
     {
         points.removeFirst();
@@ -119,6 +158,7 @@ void Cn0Delegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
 
     foreach (val, points)
     {
+        // Find the min and max values of the time data (horizontal axis).
         if (val.x() < min_x)
         {
             min_x = val.x();
@@ -129,22 +169,46 @@ void Cn0Delegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
             max_x = val.x();
         }
 
-        if (val.y() < min_y)
+        // Find the min and max values of the CN0 data (vertical axis) if auto range is enabled.
+        if (m_autoRangeEnabled)
         {
-            min_y = val.y();
-        }
+            if (val.y() < min_y)
+            {
+                min_y = val.y();
+            }
 
-        if (val.y() > max_y)
-        {
-            max_y = val.y();
+            if (val.y() > max_y)
+            {
+                max_y = val.y();
+            }
         }
     }
 
+    // Map the real CN0 data to the sparkline coordinate system.
     foreach (val, points)
     {
-        double x = sparklineWidth * (val.x() - min_x) / (max_x - min_x);
-        double y = contentHeight - (contentHeight * (val.y() - min_y) / (max_y - min_y));
-        fpoints.append(QPointF(x, y));
+        double x_in = val.x();
+        double y_in = val.y();
+
+        double x_out = 0;
+        double y_out = 0;
+
+        if (!m_autoRangeEnabled)
+        {
+            if (y_in > m_maxCn0)
+            {
+                // Value is out of scale!
+                outOfScale = true;
+
+                // Exit the loop.
+                break;
+            }
+        }
+
+        x_out = sparklineWidth * (x_in - min_x) / (max_x - min_x);
+        y_out = contentHeight - (contentHeight * (y_in - min_y) / (max_y - min_y));
+
+        fpoints.append(QPointF(x_out, y_out));
     }
 
     QStyleOptionViewItem option_vi = option;
@@ -167,7 +231,8 @@ void Cn0Delegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
     if (option_vi.state & QStyle::State_Selected)
     {
 #else
-    if ((option_vi.state & QStyle::State_Selected) && !(option_vi.state & QStyle::State_MouseOver)) {
+    if ((option_vi.state & QStyle::State_Selected) && !(option_vi.state & QStyle::State_MouseOver))
+    {
 #endif
         painter->setPen(option_vi.palette.color(cg, QPalette::HighlightedText));
     }
@@ -179,34 +244,64 @@ void Cn0Delegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
     // Enable antialiasing.
     painter->setRenderHint(QPainter::Antialiasing, true);
 
-    // Translate painting origin to sparklineOrigin.
-    painter->translate(offset.x() + hGap, offset.y() + vGap);
-
-    // Fill area below the CN0 sparkline.
-    QPointF startPoint(fpoints.first().x(), contentHeight);
-    QPointF endPoint(fpoints.last().x(), contentHeight);
-    fpoints.push_front(startPoint);
-    fpoints.push_back(endPoint);
-
-    QLinearGradient gradient(QPointF(0, 0), QPointF(0, contentHeight));
-    gradient.setColorAt(1, Qt::white);
-    gradient.setColorAt(0, Qt::gray);
-
-    painter->setBrush(QBrush(gradient));
-    painter->setPen(Qt::NoPen);
-    painter->drawPolygon(QPolygonF(fpoints));
-
-    // Draw CN0 sparkline.
-    fpoints.removeFirst();
-    fpoints.removeLast();
-    painter->setPen(Qt::black);
-    painter->drawPolyline(QPolygonF(fpoints));
-
     // Translate painting origin to cellOrigin.
-    painter->translate(-hGap, -vGap);
+    painter->translate(offset.x(), offset.y());
+
+    if (outOfScale)
+    {
+        // Sprakline data is out of scale.
+        // Draw an OUT OF SCALE notice in red color.
+        painter->setPen(Qt::red);
+        painter->drawRect(sparklineRect);
+        painter->drawText(sparklineRect, Qt::AlignCenter, "OUT OF SCALE");
+    }
+    else
+    {
+        // Sprakline data is within the scale.
+        // Draw the CN0 sparkline.
+
+        // Translate painting origin to sparklineOrigin.
+        painter->translate(hGap, vGap);
+
+        // Fill area below the CN0 sparkline with a gradient.
+        QPointF startPoint(fpoints.first().x(), contentHeight);
+        QPointF endPoint(fpoints.last().x(), contentHeight);
+        fpoints.push_front(startPoint);
+        fpoints.push_back(endPoint);
+
+        QLinearGradient gradient(QPointF(0, 0), QPointF(0, contentHeight));
+        gradient.setColorAt(1, Qt::white);
+        gradient.setColorAt(0, Qt::gray);
+
+        painter->setBrush(QBrush(gradient));
+        painter->setPen(Qt::NoPen);
+        painter->drawPolygon(QPolygonF(fpoints));
+
+        // Draw CN0 sparkline.
+        fpoints.removeFirst();
+        fpoints.removeLast();
+        painter->setPen(Qt::black);
+        painter->drawPolyline(QPolygonF(fpoints));
+
+        // Translate painting origin back to cellOrigin.
+        painter->translate(-hGap, -vGap);
+    }
+
+    // Get the value of the last CN0 smple.
+    double lastCN0 = var.last().toPointF().y();
+
+    // If the value of the last CN0 sample is outside of the designated scale use red color otherwise use black.
+    if (lastCN0 < m_minCn0 || lastCN0 > m_maxCn0)
+    {
+        painter->setPen(Qt::red);
+    }
+    else
+    {
+        painter->setPen(Qt::black);
+    }
 
     // Display value of the last CN0 sample next to the sparkline.
-    painter->drawText(textRect, QString::number(var.last().toPointF().y(), 'f', 1));
+    painter->drawText(textRect, QString::number(lastCN0, 'f', 1));
 
     // Draw visual guides for debugging.
     //drawGuides(painter, cellRect, sparklineRect, textRect);
@@ -220,10 +315,14 @@ QSize Cn0Delegate::sizeHint(const QStyleOptionViewItem &option,
     return QSize(option.fontMetrics.height() * SPARKLINE_MIN_EM_WIDTH, QStyledItemDelegate::sizeHint(option, index).height());
 }
 
+/*!
+  Draws a set of visual guides to assist in the debugging of the delegate design.
+ */
 void Cn0Delegate::drawGuides(QPainter *painter, QRect cellRect, QRect sparklineRect, QRect textRect) const
 {
     // Set pen color to red.
     painter->setPen(Qt::red);
+    painter->setBrush(Qt::NoBrush);
 
     // Draw cell border.
     painter->drawRect(cellRect);
