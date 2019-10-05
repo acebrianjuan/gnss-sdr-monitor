@@ -36,8 +36,26 @@
 #include <QGraphicsLayout>
 #include <QLayout>
 
+/*!
+ Constructs a dillution of precision widget.
+ */
 DOPWidget::DOPWidget(QWidget *parent) : QWidget(parent)
 {
+    // Default buffer size.
+    m_bufferSize = 100;
+
+    m_gdopBuffer.resize(m_bufferSize);
+    m_gdopBuffer.clear();
+
+    m_pdopBuffer.resize(m_bufferSize);
+    m_pdopBuffer.clear();
+
+    m_hdopBuffer.resize(m_bufferSize);
+    m_hdopBuffer.clear();
+
+    m_vdopBuffer.resize(m_bufferSize);
+    m_vdopBuffer.clear();
+
     m_gdopSeries = new QtCharts::QLineSeries();
     m_gdopSeries->setName("GDOP");
 
@@ -78,28 +96,37 @@ DOPWidget::DOPWidget(QWidget *parent) : QWidget(parent)
     max_y = -std::numeric_limits<double>::max();
 }
 
-void DOPWidget::enqueueNewData(qreal tow, qreal gdop, qreal pdop, qreal hdop, qreal vdop)
+/*!
+ Adds the \a gdop, \a pdop, \a hdop, \a vdop and associated \a tow to the widget's internal data structures.
+ */
+void DOPWidget::addData(qreal tow, qreal gdop, qreal pdop, qreal hdop, qreal vdop)
 {
-    m_gdopQueue.enqueue(QPointF(tow, gdop));
-    m_pdopQueue.enqueue(QPointF(tow, pdop));
-    m_hdopQueue.enqueue(QPointF(tow, hdop));
-    m_vdopQueue.enqueue(QPointF(tow, vdop));
+    m_gdopBuffer.push_back(QPointF(tow, gdop));
+    m_pdopBuffer.push_back(QPointF(tow, pdop));
+    m_hdopBuffer.push_back(QPointF(tow, hdop));
+    m_vdopBuffer.push_back(QPointF(tow, vdop));
 }
 
+/*!
+ Redraws the chart by calling populateSeries() on all series objects.
+ */
 void DOPWidget::redraw()
 {
-    populateSeries(&m_gdopQueue, m_gdopSeries);
-    populateSeries(&m_pdopQueue, m_pdopSeries);
-    populateSeries(&m_hdopQueue, m_hdopSeries);
-    populateSeries(&m_vdopQueue, m_vdopSeries);
+    populateSeries(m_gdopBuffer, m_gdopSeries);
+    populateSeries(m_pdopBuffer, m_pdopSeries);
+    populateSeries(m_hdopBuffer, m_hdopSeries);
+    populateSeries(m_vdopBuffer, m_vdopSeries);
 }
 
+/*!
+ Clears all the data from the widget's internal data structures.
+ */
 void DOPWidget::clear()
 {
-    m_gdopQueue.clear();
-    m_pdopQueue.clear();
-    m_hdopQueue.clear();
-    m_vdopQueue.clear();
+    m_gdopBuffer.clear();
+    m_pdopBuffer.clear();
+    m_hdopBuffer.clear();
+    m_vdopBuffer.clear();
 
     m_gdopSeries->clear();
     m_pdopSeries->clear();
@@ -107,16 +134,42 @@ void DOPWidget::clear()
     m_vdopSeries->clear();
 }
 
-void DOPWidget::populateSeries(QQueue<QPointF> *queue, QtCharts::QLineSeries *series)
+/*!
+ Sets the size of the internal circular buffers that store the widget's data.
+ */
+void DOPWidget::setBufferSize(size_t size)
 {
-    if (!queue->isEmpty())
+    m_bufferSize = size;
+
+    m_gdopBuffer.resize(m_bufferSize);
+    m_pdopBuffer.resize(m_bufferSize);
+    m_hdopBuffer.resize(m_bufferSize);
+    m_vdopBuffer.resize(m_bufferSize);
+}
+
+/*!
+ Replaces the old data in the \a series object with the new data from the \a buffer, casuing the chart to repaint.
+ */
+void DOPWidget::populateSeries(boost::circular_buffer<QPointF> buffer, QtCharts::QLineSeries *series)
+{
+    if (!buffer.empty())
     {
+        double min_x = std::numeric_limits<double>::max();
+        double max_x = -std::numeric_limits<double>::max();
+
+        /*
+        double min_y = std::numeric_limits<double>::max();
+        double max_y = -std::numeric_limits<double>::max();
+        */
+
         QtCharts::QChart *chart = m_chartView->chart();
         QPointF p;
+        QVector<QPointF> vec;
 
-        for (int i = 0; i < queue->size(); i++)
+        for (size_t i = 0; i < buffer.size(); i++)
         {
-            p = queue->at(i);
+            p = buffer.at(i);
+            vec << p;
 
             min_x = std::min(min_x, p.x());
             min_y = std::min(min_y, p.y());
@@ -125,11 +178,9 @@ void DOPWidget::populateSeries(QQueue<QPointF> *queue, QtCharts::QLineSeries *se
             max_y = std::max(max_y, p.y());
         }
 
-        series->append(*queue);
+        series->replace(vec);
 
         chart->axisX()->setRange(min_x, max_x);
         chart->axisY()->setRange(min_y, max_y);
-
-        queue->clear();
     }
 }

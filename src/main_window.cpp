@@ -88,7 +88,7 @@ MainWindow::MainWindow(QWidget *parent)
     m_DOPWidget = new DOPWidget(m_DOPDockWidget);
     m_DOPDockWidget->setWidget(m_DOPWidget);
     addDockWidget(Qt::TopDockWidgetArea, m_DOPDockWidget);
-    connect(m_monitorPvtWrapper, &MonitorPvtWrapper::dopChanged, m_DOPWidget, &DOPWidget::enqueueNewData);
+    connect(m_monitorPvtWrapper, &MonitorPvtWrapper::dopChanged, m_DOPWidget, &DOPWidget::addData);
     connect(&m_updateTimer, &QTimer::timeout, m_DOPWidget, &DOPWidget::redraw);
 
     // QMenuBar.

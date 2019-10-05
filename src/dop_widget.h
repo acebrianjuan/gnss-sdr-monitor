@@ -37,7 +37,7 @@
 #include <QWidget>
 #include <QChartView>
 #include <QLineSeries>
-#include <QQueue>
+#include <boost/circular_buffer.hpp>
 
 class DOPWidget : public QWidget
 {
@@ -47,17 +47,20 @@ public:
     explicit DOPWidget(QWidget *parent = nullptr);
 
 public slots:
-    void enqueueNewData(qreal tow, qreal gdop, qreal pdop, qreal hdop, qreal vdop);
+    void addData(qreal tow, qreal gdop, qreal pdop, qreal hdop, qreal vdop);
     void redraw();
     void clear();
+    void setBufferSize(size_t size);
 
 private:
-    void populateSeries(QQueue<QPointF> *queue, QtCharts::QLineSeries *series);
+    void populateSeries(boost::circular_buffer<QPointF> queue, QtCharts::QLineSeries *series);
 
-    QQueue<QPointF> m_gdopQueue;
-    QQueue<QPointF> m_pdopQueue;
-    QQueue<QPointF> m_hdopQueue;
-    QQueue<QPointF> m_vdopQueue;
+    size_t m_bufferSize;
+
+    boost::circular_buffer<QPointF> m_gdopBuffer;
+    boost::circular_buffer<QPointF> m_pdopBuffer;
+    boost::circular_buffer<QPointF> m_hdopBuffer;
+    boost::circular_buffer<QPointF> m_vdopBuffer;
 
     QtCharts::QChartView *m_chartView = nullptr;
 
