@@ -37,7 +37,7 @@
 #include <QWidget>
 #include <QChartView>
 #include <QLineSeries>
-#include <QQueue>
+#include <boost/circular_buffer.hpp>
 
 class AltitudeWidget : public QWidget
 {
@@ -47,12 +47,14 @@ public:
     explicit AltitudeWidget(QWidget *parent = nullptr);
 
 public slots:
-    void enqueueNewData(qreal tow, qreal altitude);
+    void addData(qreal tow, qreal altitude);
     void redraw();
     void clear();
+    void setBufferSize(size_t size);
 
 private:
-    QQueue<QPointF> m_queue;
+    size_t m_bufferSize;
+    boost::circular_buffer<QPointF> m_altitudeBuffer;
     QtCharts::QChartView *m_chartView = nullptr;
     QtCharts::QLineSeries *m_series = nullptr;
 

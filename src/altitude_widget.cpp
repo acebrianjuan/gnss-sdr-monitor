@@ -36,10 +36,18 @@
 #include <QGraphicsLayout>
 #include <QLayout>
 
+/*!
+ Constructs an altitude widget.
+ */
 AltitudeWidget::AltitudeWidget(QWidget *parent) : QWidget(parent)
 {
-    m_series = new QtCharts::QLineSeries();
+    // Default buffer size.
+    m_bufferSize = 100;
 
+    m_altitudeBuffer.resize(m_bufferSize);
+    m_altitudeBuffer.clear();
+
+    m_series = new QtCharts::QLineSeries();
     m_chartView = new QtCharts::QChartView(this);
 
     QVBoxLayout *layout = new QVBoxLayout(this);
@@ -67,21 +75,35 @@ AltitudeWidget::AltitudeWidget(QWidget *parent) : QWidget(parent)
     max_y = -std::numeric_limits<double>::max();
 }
 
-void AltitudeWidget::enqueueNewData(qreal tow, qreal altitude)
+/*!
+ Adds the \a alitude and associated \a tow to the widget's internal data structures.
+ */
+void AltitudeWidget::addData(qreal tow, qreal altitude)
 {
-    m_queue.enqueue(QPointF(tow, altitude));
+    m_altitudeBuffer.push_back(QPointF(tow, altitude));
 }
 
+/*!
+ Redraws the chart by replacing the old data in the series object with the new data.
+ */
 void AltitudeWidget::redraw()
 {
-    if (!m_queue.isEmpty())
+    if (!m_altitudeBuffer.empty())
     {
+        double min_x = std::numeric_limits<double>::max();
+        double max_x = -std::numeric_limits<double>::max();
+
+        double min_y = std::numeric_limits<double>::max();
+        double max_y = -std::numeric_limits<double>::max();
+
         QtCharts::QChart *chart = m_chartView->chart();
         QPointF p;
+        QVector<QPointF> vec;
 
-        for (int i = 0; i < m_queue.size(); i++)
+        for (size_t i = 0; i < m_altitudeBuffer.size(); i++)
         {
-            p = m_queue.at(i);
+            p = m_altitudeBuffer.at(i);
+            vec << p;
 
             min_x = std::min(min_x, p.x());
             min_y = std::min(min_y, p.y());
@@ -90,17 +112,27 @@ void AltitudeWidget::redraw()
             max_y = std::max(max_y, p.y());
         }
 
-        m_series->append(m_queue);
+        m_series->replace(vec);
 
         chart->axisX()->setRange(min_x, max_x);
         chart->axisY()->setRange(min_y, max_y);
-
-        m_queue.clear();
     }
 }
 
+/*!
+ Clears all the data from the widget's internal data structures.
+ */
 void AltitudeWidget::clear()
 {
-    m_queue.clear();
+    m_altitudeBuffer.clear();
     m_series->clear();
+}
+
+/*!
+ Sets the size of the internal circular buffer that stores the widget's data.
+ */
+void AltitudeWidget::setBufferSize(size_t size)
+{
+    m_bufferSize = size;
+    m_altitudeBuffer.resize(m_bufferSize);
 }

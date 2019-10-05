@@ -80,7 +80,7 @@ MainWindow::MainWindow(QWidget *parent)
     m_altitudeWidget = new AltitudeWidget(m_altitudeDockWidget);
     m_altitudeDockWidget->setWidget(m_altitudeWidget);
     addDockWidget(Qt::TopDockWidgetArea, m_altitudeDockWidget);
-    connect(m_monitorPvtWrapper, &MonitorPvtWrapper::altitudeChanged, m_altitudeWidget, &AltitudeWidget::enqueueNewData);
+    connect(m_monitorPvtWrapper, &MonitorPvtWrapper::altitudeChanged, m_altitudeWidget, &AltitudeWidget::addData);
     connect(&m_updateTimer, &QTimer::timeout, m_altitudeWidget, &AltitudeWidget::redraw);
 
     // Dilution of precision widget.
