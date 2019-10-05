@@ -40,8 +40,12 @@
 MonitorPvtWrapper::MonitorPvtWrapper(QObject *parent) : QObject(parent)
 {
     m_bufferSize = 100;
+
     m_bufferMonitorPvt.resize(m_bufferSize);
+    m_bufferMonitorPvt.clear();
+
     m_path.resize(m_bufferSize);
+    m_path.clear();
 }
 
 /*!
