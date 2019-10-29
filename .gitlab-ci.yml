@@ -12,12 +12,26 @@ stages:
 centos7:
   image: centos:centos7
   stage: build
-  before_script:
-    - pwd
   script:
     - yum install -y wget
     - wget https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
     - rpm -Uvh epel-release-latest-7.noarch.rpm
+    - yum install -y gcc-c++ make cmake git boost-devel protobuf-devel protobuf-compiler qt5-qtbase-devel qt5-qtdeclarative-devel qt5-qtlocation-devel qt5-qtcharts-devel qt5-qtdeclarative-devel
+    - cd build
+    - cmake ..
+    - NPROC=$(grep -c ^processor /proc/cpuinfo)
+    - make -j$(($NPROC+1))
+    - make install
+  allow_failure: true
+
+
+centos8:
+  image: centos:centos8
+  stage: build
+  script:
+    - yum install -y wget
+    - wget https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
+    - rpm -Uvh epel-release-latest-8.noarch.rpm
     - yum install -y gcc-c++ make cmake git boost-devel protobuf-devel protobuf-compiler qt5-qtbase-devel qt5-qtdeclarative-devel qt5-qtlocation-devel qt5-qtcharts-devel qt5-qtdeclarative-devel
     - cd build
     - cmake ..
