@@ -32,6 +32,7 @@ centos8:
     - yum install -y wget
     - wget https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
     - rpm -Uvh epel-release-latest-8.noarch.rpm
+    - dnf install 'dnf-command(config-manager)'
     - yum config-manager --set-enabled PowerTools
     - yum install -y gcc-c++ make cmake git boost-devel protobuf-devel protobuf-compiler qt5-qtbase-devel qt5-qtdeclarative-devel qt5-qtlocation-devel qt5-qtcharts-devel qt5-qtdeclarative-devel
     - cd build
