@@ -1,3 +1,5 @@
+// clang-format off
+
 import QtQuick 2.0
 import QtQuick.Window 2.0
 import QtLocation 5.6
