@@ -34,6 +34,7 @@ centos8:
     - rpm -Uvh epel-release-latest-8.noarch.rpm
     - dnf install -y 'dnf-command(config-manager)'
     - yum config-manager --set-enabled PowerTools
+    - yum config-manager --enablerepo=epel-testing,epel-playground
     - yum install -y gcc-c++ make cmake git boost-devel protobuf-devel protobuf-compiler qt5-qtbase-devel qt5-qtdeclarative-devel qt5-qtlocation-devel qt5-qtcharts-devel qt5-qtdeclarative-devel
     - cd build
     - cmake ..
