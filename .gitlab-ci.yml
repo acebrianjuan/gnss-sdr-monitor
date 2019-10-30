@@ -58,6 +58,21 @@ debian10:
   allow_failure: true
 
 
+fedora28:
+  image: fedora:28
+  stage: build
+  before_script:
+    - source ~/.bash_profile
+  script:
+    - dnf install -y gcc-c++ make cmake git boost-devel protobuf-devel protobuf-compiler qt5-qtbase-devel qt5-qtdeclarative-devel qt5-qtlocation-devel qt5-qtcharts-devel qt5-qtdeclarative-devel
+    - cd build
+    - cmake ..
+    - NPROC=$(grep -c ^processor /proc/cpuinfo)
+    - make -j$(($NPROC+1))
+    - make install
+  allow_failure: true
+
+
 fedora29:
   image: fedora:29
   stage: build
