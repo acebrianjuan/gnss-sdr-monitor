@@ -43,7 +43,7 @@
 DopplerDelegate::DopplerDelegate(QWidget *parent) : QStyledItemDelegate(parent)
 {
     // Default buffer size.
-    m_bufferSize = 1000;
+    m_bufferSize = 100;
 }
 
 DopplerDelegate::~DopplerDelegate()
@@ -220,10 +220,14 @@ QSize DopplerDelegate::sizeHint(const QStyleOptionViewItem &option,
     return QSize(option.fontMetrics.height() * SPARKLINE_MIN_EM_WIDTH, QStyledItemDelegate::sizeHint(option, index).height());
 }
 
+/*!
+  Draws a set of visual guides to assist in the debugging of the delegate design.
+ */
 void DopplerDelegate::drawGuides(QPainter *painter, QRect cellRect, QRect sparklineRect, QRect textRect) const
 {
     // Set pen color to red.
     painter->setPen(Qt::red);
+    painter->setBrush(Qt::NoBrush);
 
     // Draw cell border.
     painter->drawRect(cellRect);
