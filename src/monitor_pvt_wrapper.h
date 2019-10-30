@@ -34,9 +34,9 @@
 #define GNSS_SDR_MONITOR_MONITOR_PVT_WRAPPER_H_
 
 #include "monitor_pvt.pb.h"
+#include <boost/circular_buffer.hpp>
 #include <QObject>
 #include <QVariant>
-#include <boost/circular_buffer.hpp>
 
 class MonitorPvtWrapper : public QObject
 {

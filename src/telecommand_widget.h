@@ -35,13 +35,14 @@
 #define GNSS_SDR_MONITOR_TELECOMMAND_WIDGET_H_
 
 #include "telnet_manager.h"
-#include <QWidget>
 #include <QHostAddress>
-#include <QTcpSocket>
 #include <QSettings>
+#include <QTcpSocket>
 #include <QTimer>
+#include <QWidget>
 
-namespace Ui {
+namespace Ui
+{
 class TelecommandWidget;
 }
 
@@ -100,4 +101,4 @@ private:
     QTimer m_timer;
 };
 
-#endif // GNSS_SDR_MONITOR_TELECOMMAND_WIDGET_H_
+#endif  // GNSS_SDR_MONITOR_TELECOMMAND_WIDGET_H_

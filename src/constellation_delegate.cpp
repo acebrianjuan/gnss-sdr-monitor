@@ -32,10 +32,9 @@
 
 
 #include "constellation_delegate.h"
-
-#include <QPainter>
 #include <QApplication>
 #include <QDebug>
+#include <QPainter>
 
 #define SPARKLINE_MIN_EM_WIDTH 10
 
@@ -48,12 +47,12 @@ ConstellationDelegate::~ConstellationDelegate()
 }
 
 void ConstellationDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
-                                   const QModelIndex &index) const
+    const QModelIndex &index) const
 {
     QList<QPointF> points;
     QVector<double> x_data, y_data;
     QList<QVariant> var = index.data(Qt::DisplayRole).toList();
-    for(int i = 0; i < var.size(); i++)
+    for (int i = 0; i < var.size(); i++)
     {
         points << var.at(i).toPointF();
         x_data << var.at(i).toPointF().x();
@@ -67,7 +66,7 @@ void ConstellationDelegate::paint(QPainter *painter, const QStyleOptionViewItem 
     double max_y = 1;
     int em_w = option.fontMetrics.height();
     int content_w = option.rect.width() - (2 * em_w);
-    int content_h = option.fontMetrics.height();//option.fontMetrics.ascent();
+    int content_h = option.fontMetrics.height();  //option.fontMetrics.ascent();
 
     int cell_origin_x = option.rect.x();
     int cell_origin_y = option.rect.y();
@@ -114,8 +113,8 @@ void ConstellationDelegate::paint(QPainter *painter, const QStyleOptionViewItem 
     QVector<QPointF> fpoints;
     foreach (p, points)
     {
-        fpoints.append(QPointF((qreal) content_w * (p.x() - min_x) / (max_x - min_x),
-                               (qreal) content_h - (content_h * (p.y() - min_y) / (max_y - min_y))));
+        fpoints.append(QPointF((qreal)content_w * (p.x() - min_x) / (max_x - min_x),
+            (qreal)content_h - (content_h * (p.y() - min_y) / (max_y - min_y))));
     }
 
     QStyleOptionViewItem option_vi = option;
@@ -131,7 +130,8 @@ void ConstellationDelegate::paint(QPainter *painter, const QStyleOptionViewItem 
     }
 
     QPalette::ColorGroup cg = option_vi.state & QStyle::State_Enabled
-            ? QPalette::Normal : QPalette::Disabled;
+                                  ? QPalette::Normal
+                                  : QPalette::Disabled;
     if (cg == QPalette::Normal && !(option_vi.state & QStyle::State_Active))
         cg = QPalette::Inactive;
 #if defined(Q_OS_WIN)
@@ -186,7 +186,7 @@ void ConstellationDelegate::paint(QPainter *painter, const QStyleOptionViewItem 
 }
 
 QSize ConstellationDelegate::sizeHint(const QStyleOptionViewItem &option,
-                                       const QModelIndex &index) const
+    const QModelIndex &index) const
 {
     return QSize(option.fontMetrics.height() * SPARKLINE_MIN_EM_WIDTH, QStyledItemDelegate::sizeHint(option, index).height());
 }

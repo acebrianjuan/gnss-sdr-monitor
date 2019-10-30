@@ -35,7 +35,8 @@
 
 #include <QDialog>
 
-namespace Ui {
+namespace Ui
+{
 class PreferencesDialog;
 }
 
@@ -52,7 +53,6 @@ private:
 
 private slots:
     void onAccept();
-
 };
 
-#endif // GNSS_SDR_MONITOR_PREFERENCES_DIALOG_H_
+#endif  // GNSS_SDR_MONITOR_PREFERENCES_DIALOG_H_

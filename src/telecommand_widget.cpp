@@ -35,9 +35,8 @@
 #include "ui_telecommand_widget.h"
 #include <QScrollBar>
 
-TelecommandWidget::TelecommandWidget(QWidget *parent) :
-    QWidget(parent),
-    ui(new Ui::TelecommandWidget)
+TelecommandWidget::TelecommandWidget(QWidget *parent) : QWidget(parent),
+                                                        ui(new Ui::TelecommandWidget)
 {
     ui->setupUi(this);
 
@@ -306,11 +305,7 @@ void TelecommandWidget::loadSettings()
 
 QString TelecommandWidget::getArgs()
 {
-    QString args = QString("%1 %2 %3 %4").arg(
-                ui->dateTimeEdit->text(),
-                ui->latitudeDoubleSpinBox->text(),
-                ui->longitudeDoubleSpinBox->text(),
-                ui->heightDoubleSpinBox->text());
+    QString args = QString("%1 %2 %3 %4").arg(ui->dateTimeEdit->text(), ui->latitudeDoubleSpinBox->text(), ui->longitudeDoubleSpinBox->text(), ui->heightDoubleSpinBox->text());
 
     return args;
 }

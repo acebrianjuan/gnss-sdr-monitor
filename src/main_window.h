@@ -33,23 +33,22 @@
 #ifndef GNSS_SDR_MONITOR_MAIN_WINDOW_H_
 #define GNSS_SDR_MONITOR_MAIN_WINDOW_H_
 
+#include "altitude_widget.h"
 #include "channel_table_model.h"
+#include "dop_widget.h"
 #include "gnss_synchro.pb.h"
 #include "monitor_pvt.pb.h"
 #include "monitor_pvt_wrapper.h"
 #include "telecommand_widget.h"
-#include "altitude_widget.h"
-#include "dop_widget.h"
-
 #include <QAbstractTableModel>
+#include <QChart>
 #include <QChartView>
 #include <QMainWindow>
 #include <QQuickWidget>
 #include <QSettings>
 #include <QTimer>
-#include <QtNetwork/QUdpSocket>
-#include <QChart>
 #include <QXYSeries>
+#include <QtNetwork/QUdpSocket>
 
 namespace Ui
 {

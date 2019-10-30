@@ -32,11 +32,10 @@
 
 
 #include "doppler_delegate.h"
-
-#include <limits>
-#include <QPainter>
 #include <QApplication>
 #include <QDebug>
+#include <QPainter>
+#include <limits>
 
 #define SPARKLINE_MIN_EM_WIDTH 10
 
@@ -56,12 +55,12 @@ void DopplerDelegate::setBufferSize(int size)
 }
 
 void DopplerDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
-                            const QModelIndex &index) const
+    const QModelIndex &index) const
 {
     QList<QPointF> points;
     QVector<double> x_data, y_data;
     QList<QVariant> var = index.data(Qt::DisplayRole).toList();
-    for(int i = 0; i < var.size(); i++)
+    for (int i = 0; i < var.size(); i++)
     {
         points << var.at(i).toPointF();
         x_data << var.at(i).toPointF().x();
@@ -112,7 +111,7 @@ void DopplerDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
         return;
     }
 
-    while(points.length() > m_bufferSize)
+    while (points.length() > m_bufferSize)
     {
         points.removeFirst();
     }
@@ -160,14 +159,16 @@ void DopplerDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
     }
 
     QPalette::ColorGroup cg = option_vi.state & QStyle::State_Enabled
-            ? QPalette::Normal : QPalette::Disabled;
+                                  ? QPalette::Normal
+                                  : QPalette::Disabled;
     if (cg == QPalette::Normal && !(option_vi.state & QStyle::State_Active))
         cg = QPalette::Inactive;
 #if defined(Q_OS_WIN)
     if (option_vi.state & QStyle::State_Selected)
     {
 #else
-    if ((option_vi.state & QStyle::State_Selected) && !(option_vi.state & QStyle::State_MouseOver)) {
+    if ((option_vi.state & QStyle::State_Selected) && !(option_vi.state & QStyle::State_MouseOver))
+    {
 #endif
         painter->setPen(option_vi.palette.color(cg, QPalette::HighlightedText));
     }
@@ -215,7 +216,7 @@ void DopplerDelegate::paint(QPainter *painter, const QStyleOptionViewItem &optio
 }
 
 QSize DopplerDelegate::sizeHint(const QStyleOptionViewItem &option,
-                                const QModelIndex &index) const
+    const QModelIndex &index) const
 {
     return QSize(option.fontMetrics.height() * SPARKLINE_MIN_EM_WIDTH, QStyledItemDelegate::sizeHint(option, index).height());
 }
@@ -241,7 +242,7 @@ void DopplerDelegate::drawGuides(QPainter *painter, QRect cellRect, QRect sparkl
     // Draw centerline in cyan.
     painter->setPen(Qt::cyan);
     painter->drawLine(cellRect.x(), cellRect.y() + cellRect.height() / 2,
-                      cellRect.x() + cellRect.width(), cellRect.y() + cellRect.height() / 2);
+        cellRect.x() + cellRect.width(), cellRect.y() + cellRect.height() / 2);
 
     // Create a new pen with increased width for drawing origins.
     QPen pen = QPen();

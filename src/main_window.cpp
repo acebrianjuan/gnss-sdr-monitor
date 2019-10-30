@@ -232,7 +232,7 @@ void MainWindow::receiveMonitorPvt()
     {
         QNetworkDatagram datagram = m_socketMonitorPvt->receiveDatagram();
         m_monitorPvt =
-                readMonitorPvt(datagram.data().data(), datagram.data().size());
+            readMonitorPvt(datagram.data().data(), datagram.data().size());
 
         if (m_stop->isEnabled())
         {
@@ -333,9 +333,9 @@ void MainWindow::showPreferences()
 {
     PreferencesDialog *preferences = new PreferencesDialog(this);
     connect(preferences, &PreferencesDialog::accepted, m_model,
-            &ChannelTableModel::setBufferSize);
+        &ChannelTableModel::setBufferSize);
     connect(preferences, &PreferencesDialog::accepted, this,
-            &MainWindow::setPort);
+        &MainWindow::setPort);
     preferences->exec();
 }
 
@@ -389,7 +389,7 @@ void MainWindow::expandPlot(const QModelIndex &index)
 
             // Remove element from map when chartView widget is closed.
             connect(chartView, &QObject::destroyed,
-                    [this, index]() { m_plotsConstellation.erase(index.row()); });
+                [this, index]() { m_plotsConstellation.erase(index.row()); });
 
             // Update chart on timer timeout.
             connect(&m_updateTimer, &QTimer::timeout, chart, [this, chart, series, index]() {
@@ -431,7 +431,7 @@ void MainWindow::expandPlot(const QModelIndex &index)
 
             // Remove element from map when chartView widget is closed.
             connect(chartView, &QObject::destroyed,
-                    [this, index]() { m_plotsCn0.erase(index.row()); });
+                [this, index]() { m_plotsCn0.erase(index.row()); });
 
             // Update chart on timer timeout.
             connect(&m_updateTimer, &QTimer::timeout, chart, [this, chart, series, index]() {
@@ -473,7 +473,7 @@ void MainWindow::expandPlot(const QModelIndex &index)
 
             // Remove element from map when chartView widget is closed.
             connect(chartView, &QObject::destroyed,
-                    [this, index]() { m_plotsDoppler.erase(index.row()); });
+                [this, index]() { m_plotsDoppler.erase(index.row()); });
 
             // Update chart on timer timeout.
             connect(&m_updateTimer, &QTimer::timeout, chart, [this, chart, series, index]() {
@@ -544,10 +544,11 @@ void MainWindow::deletePlots()
 
 void MainWindow::about()
 {
-    const QString text = "<h3>gnss-sdr-monitor</h3>"
-                         "A graphical user interface to monitor the GNSS-SDR status in real time."
-                         "<p>Written by Álvaro Cebrián Juan and licensed under GNU GPLv3 license.</p>"
-                         "<p>Report bugs and suggestions to acebrianjuan@gmail.com</p>";
+    const QString text =
+        "<h3>gnss-sdr-monitor</h3>"
+        "A graphical user interface to monitor the GNSS-SDR status in real time."
+        "<p>Written by Álvaro Cebrián Juan and licensed under GNU GPLv3 license.</p>"
+        "<p>Report bugs and suggestions to acebrianjuan@gmail.com</p>";
 
     QMessageBox::about(this, "About gnss-sdr-monitor", text);
 }

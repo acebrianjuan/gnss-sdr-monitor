@@ -34,10 +34,10 @@
 #ifndef GNSS_SDR_MONITOR_ALTITUDE_WIDGET_H_
 #define GNSS_SDR_MONITOR_ALTITUDE_WIDGET_H_
 
-#include <QWidget>
+#include <boost/circular_buffer.hpp>
 #include <QChartView>
 #include <QLineSeries>
-#include <boost/circular_buffer.hpp>
+#include <QWidget>
 
 class AltitudeWidget : public QWidget
 {
@@ -65,4 +65,4 @@ private:
     double max_y;
 };
 
-#endif // GNSS_SDR_MONITOR_ALTITUDE_WIDGET_H_
+#endif  // GNSS_SDR_MONITOR_ALTITUDE_WIDGET_H_

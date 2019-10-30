@@ -47,16 +47,15 @@ public slots:
 
 protected:
     void paint(QPainter *painter, const QStyleOptionViewItem &option,
-               const QModelIndex &index) const;
+        const QModelIndex &index) const;
 
     QSize sizeHint(const QStyleOptionViewItem &option,
-                   const QModelIndex &index) const;
+        const QModelIndex &index) const;
 
 private:
     void drawGuides(QPainter *painter, QRect cellRect, QRect sparklineRect, QRect textRect) const;
 
     int m_bufferSize;
-
 };
 
-#endif // GNSS_SDR_MONITOR_DOPPLER_DELEGATE_H_
+#endif  // GNSS_SDR_MONITOR_DOPPLER_DELEGATE_H_

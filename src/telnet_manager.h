@@ -34,9 +34,9 @@
 #ifndef GNSS_SDR_MONITOR_TELNET_MANAGER_H_
 #define GNSS_SDR_MONITOR_TELNET_MANAGER_H_
 
+#include <QHostAddress>
 #include <QObject>
 #include <QTcpSocket>
-#include <QHostAddress>
 
 class TelnetManager : public QObject
 {
@@ -85,4 +85,4 @@ private:
     quint16 m_port;
 };
 
-#endif // GNSS_SDR_MONITOR_TELNET_MANAGER_H_
+#endif  // GNSS_SDR_MONITOR_TELNET_MANAGER_H_

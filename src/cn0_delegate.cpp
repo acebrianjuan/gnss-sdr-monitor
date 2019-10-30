@@ -32,11 +32,10 @@
 
 
 #include "cn0_delegate.h"
-
-#include <limits>
-#include <QPainter>
 #include <QApplication>
 #include <QDebug>
+#include <QPainter>
+#include <limits>
 
 #define SPARKLINE_MIN_EM_WIDTH 10
 
@@ -86,14 +85,14 @@ void Cn0Delegate::setAutoRangeEnabled(bool enabled)
 }
 
 void Cn0Delegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
-                        const QModelIndex &index) const
+    const QModelIndex &index) const
 {
     bool outOfScale = false;
 
     QVector<QPointF> points;
     QVector<double> x_data, y_data;
     QList<QVariant> var = index.data(Qt::DisplayRole).toList();
-    for(int i = 0; i < var.size(); i++)
+    for (int i = 0; i < var.size(); i++)
     {
         points << var.at(i).toPointF();
         x_data << var.at(i).toPointF().x();
@@ -151,7 +150,7 @@ void Cn0Delegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
     }
 
     // Remove first points until the number of elements is within the designated buffer size.
-    while(points.length() > m_bufferSize)
+    while (points.length() > m_bufferSize)
     {
         points.removeFirst();
     }
@@ -224,7 +223,8 @@ void Cn0Delegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
     }
 
     QPalette::ColorGroup cg = option_vi.state & QStyle::State_Enabled
-            ? QPalette::Normal : QPalette::Disabled;
+                                  ? QPalette::Normal
+                                  : QPalette::Disabled;
     if (cg == QPalette::Normal && !(option_vi.state & QStyle::State_Active))
         cg = QPalette::Inactive;
 #if defined(Q_OS_WIN)
@@ -310,7 +310,7 @@ void Cn0Delegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
 }
 
 QSize Cn0Delegate::sizeHint(const QStyleOptionViewItem &option,
-                            const QModelIndex &index) const
+    const QModelIndex &index) const
 {
     return QSize(option.fontMetrics.height() * SPARKLINE_MIN_EM_WIDTH, QStyledItemDelegate::sizeHint(option, index).height());
 }
@@ -336,7 +336,7 @@ void Cn0Delegate::drawGuides(QPainter *painter, QRect cellRect, QRect sparklineR
     // Draw centerline in cyan.
     painter->setPen(Qt::cyan);
     painter->drawLine(cellRect.x(), cellRect.y() + cellRect.height() / 2,
-                      cellRect.x() + cellRect.width(), cellRect.y() + cellRect.height() / 2);
+        cellRect.x() + cellRect.width(), cellRect.y() + cellRect.height() / 2);
 
     // Create a new pen with increased width for drawing origins.
     QPen pen = QPen();

@@ -82,20 +82,36 @@ void TelnetManager::disconnectTcp()
 
 bool TelnetManager::sendCommand(Command cmd, QString args)
 {
-    if(m_tcpSocket->state() == QAbstractSocket::ConnectedState)
+    if (m_tcpSocket->state() == QAbstractSocket::ConnectedState)
     {
         QByteArray data;
 
         switch (cmd)
         {
-        case Command::Reset: data = "reset\r\n"; break;
-        case Command::Standby: data = "standby\r\n"; break;
-        case Command::ColdStart: data = "coldstart\r\n"; break;
-        case Command::WarmStart: data = QString("%1 %2 %3").arg("warmstart", args, "\r\n").toUtf8(); break;
-        case Command::HotStart: data = QString("%1 %2 %3").arg("hotstart", args, "\r\n").toUtf8(); break;
-        case Command::Status: data = "status\r\n"; break;
-        case Command::Exit: data = "exit\r\n"; break;
-        default: data = ""; break;
+        case Command::Reset:
+            data = "reset\r\n";
+            break;
+        case Command::Standby:
+            data = "standby\r\n";
+            break;
+        case Command::ColdStart:
+            data = "coldstart\r\n";
+            break;
+        case Command::WarmStart:
+            data = QString("%1 %2 %3").arg("warmstart", args, "\r\n").toUtf8();
+            break;
+        case Command::HotStart:
+            data = QString("%1 %2 %3").arg("hotstart", args, "\r\n").toUtf8();
+            break;
+        case Command::Status:
+            data = "status\r\n";
+            break;
+        case Command::Exit:
+            data = "exit\r\n";
+            break;
+        default:
+            data = "";
+            break;
         }
 
         if (!data.isEmpty())

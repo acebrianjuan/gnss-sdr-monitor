@@ -49,10 +49,10 @@ public slots:
 
 protected:
     void paint(QPainter *painter, const QStyleOptionViewItem &option,
-               const QModelIndex &index) const;
+        const QModelIndex &index) const;
 
     QSize sizeHint(const QStyleOptionViewItem &option,
-                   const QModelIndex &index) const;
+        const QModelIndex &index) const;
 
 private:
     void drawGuides(QPainter *painter, QRect cellRect, QRect sparklineRect, QRect textRect) const;
@@ -60,7 +60,6 @@ private:
     double m_minCn0;
     double m_maxCn0;
     bool m_autoRangeEnabled;
-
 };
 
-#endif // GNSS_SDR_MONITOR_CN0_DELEGATE_H_
+#endif  // GNSS_SDR_MONITOR_CN0_DELEGATE_H_

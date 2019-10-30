@@ -88,15 +88,15 @@ QVariant ChannelTableModel::data(const QModelIndex &index, int role) const
             QString channel_signal = m_channelsSignal.at(channel_id);
 
             boost::circular_buffer<double> channel_time_cbuf =
-                    m_channelsTime.at(channel_id);
+                m_channelsTime.at(channel_id);
             boost::circular_buffer<double> channel_prompt_i_cbuf =
-                    m_channelsPromptI.at(channel_id);
+                m_channelsPromptI.at(channel_id);
             boost::circular_buffer<double> channel_prompt_q_cbuf =
-                    m_channelsPromptQ.at(channel_id);
+                m_channelsPromptQ.at(channel_id);
             boost::circular_buffer<double> channel_cn0_cbuf =
-                    m_channelsCn0.at(channel_id);
+                m_channelsCn0.at(channel_id);
             boost::circular_buffer<double> channel_doppler_cbuf =
-                    m_channelsDoppler.at(channel_id);
+                m_channelsDoppler.at(channel_id);
 
             QList<QVariant> channel_prompt_iq;
             QList<QVariant> channel_cn0;
@@ -105,10 +105,10 @@ QVariant ChannelTableModel::data(const QModelIndex &index, int role) const
             for (int i = 0; i < channel_cn0_cbuf.size(); i++)
             {
                 channel_prompt_iq << QPointF(channel_prompt_i_cbuf.at(i),
-                                             channel_prompt_q_cbuf.at(i));
+                    channel_prompt_q_cbuf.at(i));
                 channel_cn0 << QPointF(channel_time_cbuf.at(i), channel_cn0_cbuf.at(i));
                 channel_doppler << QPointF(channel_time_cbuf.at(i),
-                                           channel_doppler_cbuf.at(i));
+                    channel_doppler_cbuf.at(i));
             }
 
             if (role == Qt::DisplayRole)
@@ -221,8 +221,8 @@ QVariant ChannelTableModel::data(const QModelIndex &index, int role) const
 }
 
 QVariant ChannelTableModel::headerData(int section,
-                                       Qt::Orientation orientation,
-                                       int role) const
+    Qt::Orientation orientation,
+    int role) const
 {
     if (role == Qt::DisplayRole)
     {
@@ -379,7 +379,7 @@ void ChannelTableModel::populateChannel(const gnss_sdr::GnssSynchro *ch)
 void ChannelTableModel::clearChannel(int ch_id)
 {
     m_channelsId.erase(std::remove(m_channelsId.begin(), m_channelsId.end(), ch_id),
-                       m_channelsId.end());
+        m_channelsId.end());
     m_channels.erase(ch_id);
     m_channelsSignal.erase(ch_id);
     m_channelsTime.erase(ch_id);

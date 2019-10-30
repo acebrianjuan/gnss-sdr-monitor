@@ -32,9 +32,8 @@
 
 
 #include "led_delegate.h"
-
-#include <QPainter>
 #include <QDebug>
+#include <QPainter>
 
 LedDelegate::LedDelegate(QObject *parent)
 {
@@ -42,11 +41,10 @@ LedDelegate::LedDelegate(QObject *parent)
 
 LedDelegate::~LedDelegate()
 {
-
 }
 
 void LedDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
-                         const QModelIndex &index) const
+    const QModelIndex &index) const
 {
     if (option.state & QStyle::State_Selected)
         painter->fillRect(option.rect, option.palette.highlight());
@@ -72,15 +70,15 @@ void LedDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
     painter->setPen(Qt::NoPen);
 
     painter->drawEllipse(QRectF(option.rect.x() + option.rect.width() / 2 - radius,
-                                option.rect.y() + option.rect.height() / 2 - radius,
-                                2 * radius, 2 * radius));
+        option.rect.y() + option.rect.height() / 2 - radius,
+        2 * radius, 2 * radius));
 
     painter->restore();
 }
 
 QSize LedDelegate::sizeHint(const QStyleOptionViewItem &option,
-                             const QModelIndex &index) const
+    const QModelIndex &index) const
 {
     return QSize(QStyledItemDelegate::sizeHint(option, index).height(),
-                 QStyledItemDelegate::sizeHint(option, index).height());
+        QStyledItemDelegate::sizeHint(option, index).height());
 }

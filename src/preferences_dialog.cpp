@@ -32,12 +32,11 @@
 
 #include "preferences_dialog.h"
 #include "ui_preferences_dialog.h"
-#include <QSettings>
 #include <QDebug>
+#include <QSettings>
 
-PreferencesDialog::PreferencesDialog(QWidget *parent) :
-    QDialog(parent),
-    ui(new Ui::PreferencesDialog)
+PreferencesDialog::PreferencesDialog(QWidget *parent) : QDialog(parent),
+                                                        ui(new Ui::PreferencesDialog)
 {
     ui->setupUi(this);
 
