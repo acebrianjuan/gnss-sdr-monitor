@@ -17,8 +17,7 @@ archlinux:
     - pacman -S --noconfirm gcc make cmake git boost boost-libs protobuf qt5-base qt5-declarative qt5-location qt5-charts qt5-quickcontrols2
     - cd build
     - cmake ..
-    - NPROC=$(grep -c ^processor /proc/cpuinfo)
-    - make -j$(($NPROC+1))
+    - make -j $(nproc)
     - make install
   allow_failure: true
 
@@ -33,8 +32,7 @@ centos7:
     - yum install -y gcc-c++ make cmake git boost-devel protobuf-devel protobuf-compiler qt5-qtbase-devel qt5-qtdeclarative-devel qt5-qtlocation-devel qt5-qtcharts-devel qt5-qtdeclarative-devel
     - cd build
     - cmake ..
-    - NPROC=$(grep -c ^processor /proc/cpuinfo)
-    - make -j$(($NPROC+1))
+    - make -j $(nproc)
     - make install
   allow_failure: true
 
@@ -52,8 +50,7 @@ centos8:
     - dnf install -y gcc-c++ make cmake git boost-devel protobuf-devel protobuf-compiler qt5-qtbase-devel qt5-qtdeclarative-devel qt5-qtlocation-devel qt5-qtcharts-devel qt5-qtdeclarative-devel
     - cd build
     - cmake ..
-    - NPROC=$(grep -c ^processor /proc/cpuinfo)
-    - make -j$(($NPROC+1))
+    - make -j $(nproc)
     - make install
   allow_failure: true
 
@@ -66,8 +63,7 @@ debian10:
     - apt-get install -y --no-install-recommends build-essential cmake git libboost-dev libboost-system-dev libprotobuf-dev protobuf-compiler qtbase5-dev qtdeclarative5-dev qtpositioning5-dev libqt5charts5-dev qml-module-qtquick2 qml-module-qtquick-controls2 qml-module-qtquick-window2 qml-module-qtlocation qml-module-qtpositioning qml-module-qtquick-layouts
     - cd build
     - cmake ..
-    - NPROC=$(grep -c ^processor /proc/cpuinfo)
-    - make -j$(($NPROC+1))
+    - make -j $(nproc)
     - make install
   allow_failure: true
 
@@ -80,8 +76,7 @@ debian11:
     - apt-get install -y --no-install-recommends build-essential cmake git libboost-dev libboost-system-dev libprotobuf-dev protobuf-compiler qtbase5-dev qtdeclarative5-dev qtpositioning5-dev libqt5charts5-dev qml-module-qtquick2 qml-module-qtquick-controls2 qml-module-qtquick-window2 qml-module-qtlocation qml-module-qtpositioning qml-module-qtquick-layouts
     - cd build
     - cmake ..
-    - NPROC=$(grep -c ^processor /proc/cpuinfo)
-    - make -j$(($NPROC+1))
+    - make -j $(nproc)
     - make install
   allow_failure: true
 
@@ -95,8 +90,7 @@ fedora28:
     - dnf install -y gcc-c++ make cmake git boost-devel protobuf-devel protobuf-compiler qt5-qtbase-devel qt5-qtdeclarative-devel qt5-qtlocation-devel qt5-qtcharts-devel qt5-qtdeclarative-devel
     - cd build
     - cmake ..
-    - NPROC=$(grep -c ^processor /proc/cpuinfo)
-    - make -j$(($NPROC+1))
+    - make -j $(nproc)
     - make install
   allow_failure: true
 
@@ -110,8 +104,7 @@ fedora29:
     - dnf install -y gcc-c++ make cmake git boost-devel protobuf-devel protobuf-compiler qt5-qtbase-devel qt5-qtdeclarative-devel qt5-qtlocation-devel qt5-qtcharts-devel qt5-qtdeclarative-devel
     - cd build
     - cmake ..
-    - NPROC=$(grep -c ^processor /proc/cpuinfo)
-    - make -j$(($NPROC+1))
+    - make -j $(nproc)
     - make install
   allow_failure: true
 
@@ -124,8 +117,7 @@ ubuntu18.04:
     - apt-get install -y --no-install-recommends build-essential cmake git libboost-dev libboost-system-dev libprotobuf-dev protobuf-compiler qtbase5-dev qtdeclarative5-dev qtpositioning5-dev libqt5charts5-dev qml-module-qtquick2 qml-module-qtquick-controls2 qml-module-qtquick-window2 qml-module-qtlocation qml-module-qtpositioning qml-module-qtquick-layouts
     - cd build
     - cmake ..
-    - NPROC=$(grep -c ^processor /proc/cpuinfo)
-    - make -j$(($NPROC+1))
+    - make -j $(nproc)
     - make install
 
 
@@ -137,8 +129,7 @@ ubuntu18.10:
     - apt-get install -y --no-install-recommends build-essential cmake git libboost-dev libboost-system-dev libprotobuf-dev protobuf-compiler qtbase5-dev qtdeclarative5-dev qtpositioning5-dev libqt5charts5-dev qml-module-qtquick2 qml-module-qtquick-controls2 qml-module-qtquick-window2 qml-module-qtlocation qml-module-qtpositioning qml-module-qtquick-layouts
     - cd build
     - cmake ..
-    - NPROC=$(grep -c ^processor /proc/cpuinfo)
-    - make -j$(($NPROC+1))
+    - make -j $(nproc)
     - make install
   allow_failure: true
 
@@ -151,8 +142,7 @@ ubuntu19.04:
     - apt-get install -y --no-install-recommends build-essential cmake git libboost-dev libboost-system-dev libprotobuf-dev protobuf-compiler qtbase5-dev qtdeclarative5-dev qtpositioning5-dev libqt5charts5-dev qml-module-qtquick2 qml-module-qtquick-controls2 qml-module-qtquick-window2 qml-module-qtlocation qml-module-qtpositioning qml-module-qtquick-layouts
     - cd build
     - cmake ..
-    - NPROC=$(grep -c ^processor /proc/cpuinfo)
-    - make -j$(($NPROC+1))
+    - make -j $(nproc)
     - make install
   allow_failure: true
 
@@ -165,8 +155,7 @@ ubuntu19.10:
     - apt-get install -y --no-install-recommends build-essential cmake git libboost-dev libboost-system-dev libprotobuf-dev protobuf-compiler qtbase5-dev qtdeclarative5-dev qtpositioning5-dev libqt5charts5-dev qml-module-qtquick2 qml-module-qtquick-controls2 qml-module-qtquick-window2 qml-module-qtlocation qml-module-qtpositioning qml-module-qtquick-layouts
     - cd build
     - cmake ..
-    - NPROC=$(grep -c ^processor /proc/cpuinfo)
-    - make -j$(($NPROC+1))
+    - make -j $(nproc)
     - make install
   allow_failure: true
 
