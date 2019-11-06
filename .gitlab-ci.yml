@@ -112,6 +112,8 @@ fedora29:
 opensuse-leap15.1:
   image: opensuse/leap:15.1
   stage: build
+  before_script:
+    - pwd
   script:
     - zypper -n up
     - zypper -n install gcc-c++ cmake git boost-devel protobuf-devel libqt5-qtnetworkauth-devel libQt5PrintSupport-devel libQt53DQuick-devel libqt5-qtlocation-devel libQt5Charts5-devel
@@ -125,6 +127,8 @@ opensuse-leap15.1:
 opensuse-tumbleweed:
   image: opensuse/tumbleweed
   stage: build
+  before_script:
+    - pwd
   script:
     - zypper -n dup
     - zypper -n install gcc-c++ cmake git boost-devel protobuf-devel libqt5-qtnetworkauth-devel libQt5PrintSupport-devel libQt53DQuick-devel libqt5-qtlocation-devel libQt5Charts5-devel
