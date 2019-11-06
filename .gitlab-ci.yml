@@ -109,6 +109,19 @@ fedora29:
   allow_failure: true
 
 
+opensuse-tumbleweed:
+  image: opensuse/tumbleweed
+  stage: build
+  script:
+    - zypper -n dup
+    - zypper -n install gcc-c++ cmake git boost-devel protobuf-devel libqt5-qtnetworkauth-devel libQt5PrintSupport-devel libQt53DQuick-devel libqt5-qtlocation-devel libQt5Charts5-devel
+    - cd build
+    - cmake ..
+    - make -j $(nproc)
+    - make install
+  allow_failure: true
+
+
 ubuntu18.04:
   image: ubuntu:bionic
   stage: build
