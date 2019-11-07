@@ -4,7 +4,7 @@
 
 **Welcome to gnss-sdr-monitor!**
 
-This program is a graphical user interface developed with Qt for monitoring the status of GNSS-SDR in real time.
+This program is a graphical user interface developed with [Qt](https://www.qt.io/) for monitoring the status of [GNSS-SDR](https://gnss-sdr.org) in real time.
 
 ![](./screenshots/gnss-sdr-monitor.png)
 
