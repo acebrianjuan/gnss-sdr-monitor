@@ -31,7 +31,7 @@ $ sudo apt install build-essential cmake git libboost-dev libboost-system-dev \
        qml-module-qtlocation qml-module-qtpositioning qml-module-qtquick-layouts
 ~~~~
 
-Once you have installed these packages, you can jump directly to [download the source code and build GNSS-SDR](#download-and-build-linux).
+Once you have installed these packages, you can jump directly to [download the source code and build gnss-sdr-monitor](#download-and-build-linux).
 
 #### Arch Linux
 
@@ -42,7 +42,7 @@ $ pacman -S gcc make cmake git boost boost-libs protobuf qt5-base qt5-declarativ
        qt5-charts qt5-quickcontrols2
 ~~~~
 
-Once you have installed these packages, you can jump directly to [download the source code and build GNSS-SDR](#download-and-build-linux).
+Once you have installed these packages, you can jump directly to [download the source code and build gnss-sdr-monitor](#download-and-build-linux).
 
 #### CentOS
 
@@ -57,7 +57,7 @@ $ sudo yum install gcc-c++ make cmake git boost-devel protobuf-devel protobuf-co
        qt5-qtdeclarative-devel
 ~~~~
 
-Once you have installed these packages, you can jump directly to [download the source code and build GNSS-SDR](#download-and-build-linux).
+Once you have installed these packages, you can jump directly to [download the source code and build gnss-sdr-monitor](#download-and-build-linux).
 
 #### Fedora
 
@@ -69,7 +69,7 @@ $ sudo dnf install gcc-c++ make cmake git boost-devel protobuf-devel protobuf-co
        qt5-qtdeclarative-devel
 ~~~~
 
-Once you have installed these packages, you can jump directly to [download the source code and build GNSS-SDR](#download-and-build-linux).
+Once you have installed these packages, you can jump directly to [download the source code and build gnss-sdr-monitor](#download-and-build-linux).
 
 #### openSUSE
 
@@ -80,7 +80,7 @@ $ zypper install gcc-c++ cmake git boost-devel protobuf-devel libqt5-qtnetworkau
        libQt5PrintSupport-devel libQt53DQuick-devel libqt5-qtlocation-devel libQt5Charts5-devel
 ~~~~
 
-Once you have installed these packages, you can jump directly to [download the source code and build GNSS-SDR](#download-and-build-linux).
+Once you have installed these packages, you can jump directly to [download the source code and build gnss-sdr-monitor](#download-and-build-linux).
 
 ### <a name="download-and-build-linux">Clone gnss-sdr-monitor Git repository</a>:
 
