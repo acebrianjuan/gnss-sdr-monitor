@@ -65,7 +65,9 @@ GNSS-SDR.telecommand_tcp_port=3333
 
 And then enter the IP address and TCP port number in the widget.
 
-![telecommand-widget](https://user-images.githubusercontent.com/34104100/73596686-a950b780-4524-11ea-8873-1fb1e809efc8.png)
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/34104100/73596686-a950b780-4524-11ea-8873-1fb1e809efc8.png"/>
+</p>
 
 This will let you send commands to control the GNSS-SDR instance that you are monitoring with the GUI.
 
