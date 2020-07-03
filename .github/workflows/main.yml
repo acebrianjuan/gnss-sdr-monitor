@@ -1,0 +1,31 @@
+name: CI
+
+on: [push, pull_request]
+
+jobs:
+
+  build-ubuntu:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: install dependencies
+      run: sudo apt-get update && sudo apt-get install -y --no-install-recommends build-essential cmake git libboost-dev libboost-system-dev libprotobuf-dev protobuf-compiler qtbase5-dev qtdeclarative5-dev qtpositioning5-dev libqt5charts5-dev qml-module-qtquick2 qml-module-qtquick-controls2 qml-module-qtquick-window2 qml-module-qtlocation qml-module-qtpositioning qml-module-qtquick-layouts
+    - name: configure
+      run: cd build && cmake ..
+    - name: build
+      run: cd build && make -j $(nproc)
+    - name: install
+      run: cd build && sudo make install
+
+  build-macos:
+    runs-on: macos-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: install dependencies
+      run: brew install cmake pkg-config boost protobuf qt
+    - name: configure
+      run: cd build && cmake .. -DQt5_DIR=/usr/local/opt/qt/lib/cmake/Qt5
+    - name: build
+      run: cd build && make -j $(nproc)
+    - name: install
+      run: cd build && sudo make install
