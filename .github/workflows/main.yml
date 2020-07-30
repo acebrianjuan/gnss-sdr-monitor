@@ -4,28 +4,41 @@ on: [push, pull_request]
 
 jobs:
 
-  build-ubuntu:
-    runs-on: ubuntu-latest
+  build-ubuntu20:
+    runs-on: ubuntu-20.04
     steps:
     - uses: actions/checkout@v2
     - name: install dependencies
-      run: sudo apt-get update && sudo apt-get install -y --no-install-recommends build-essential cmake git libboost-dev libboost-system-dev libprotobuf-dev protobuf-compiler qtbase5-dev qtdeclarative5-dev qtpositioning5-dev libqt5charts5-dev qml-module-qtquick2 qml-module-qtquick-controls2 qml-module-qtquick-window2 qml-module-qtlocation qml-module-qtpositioning qml-module-qtquick-layouts
+      run: sudo apt-get update && sudo apt-get install -y --no-install-recommends ninja-build cmake libboost-dev libboost-system-dev libprotobuf-dev protobuf-compiler qtbase5-dev qtdeclarative5-dev qtpositioning5-dev libqt5charts5-dev qml-module-qtquick2 qml-module-qtquick-controls2 qml-module-qtquick-window2 qml-module-qtlocation qml-module-qtpositioning qml-module-qtquick-layouts
     - name: configure
-      run: cd build && cmake ..
+      run: cd build && cmake -GNinja ..
     - name: build
-      run: cd build && make -j $(nproc)
+      run: cd build && ninja
     - name: install
-      run: cd build && sudo make install
+      run: cd build && sudo ninja install
+
+  build-ubuntu18:
+    runs-on: ubuntu-18.04
+    steps:
+    - uses: actions/checkout@v2
+    - name: install dependencies
+      run: sudo apt-get update && sudo apt-get install -y --no-install-recommends ninja-build cmake libboost-dev libboost-system-dev libprotobuf-dev protobuf-compiler qtbase5-dev qtdeclarative5-dev qtpositioning5-dev libqt5charts5-dev qml-module-qtquick2 qml-module-qtquick-controls2 qml-module-qtquick-window2 qml-module-qtlocation qml-module-qtpositioning qml-module-qtquick-layouts
+    - name: configure
+      run: cd build && cmake -GNinja ..
+    - name: build
+      run: cd build && ninja
+    - name: install
+      run: cd build && sudo ninja install
 
   build-macos:
     runs-on: macos-latest
     steps:
     - uses: actions/checkout@v2
     - name: install dependencies
-      run: brew install cmake pkg-config boost protobuf qt
+      run: brew install ninja cmake boost protobuf qt
     - name: configure
-      run: cd build && cmake .. -DQt5_DIR=/usr/local/opt/qt/lib/cmake/Qt5
+      run: cd build && cmake -GNinja -DQt5_DIR=/usr/local/opt/qt/lib/cmake/Qt5 .. 
     - name: build
-      run: cd build && make -j $(nproc)
+      run: cd build && ninja
     - name: install
-      run: cd build && sudo make install
+      run: cd build && sudo ninja install
