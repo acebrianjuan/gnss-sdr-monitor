@@ -149,6 +149,19 @@ ubuntu19.10:
   allow_failure: true
 
 
+ubuntu20.04:
+  image: ubuntu:focal
+  stage: build
+  script:
+    - apt-get update
+    - apt-get install -y --no-install-recommends build-essential cmake git libboost-dev libboost-system-dev libprotobuf-dev protobuf-compiler qtbase5-dev qtdeclarative5-dev qtpositioning5-dev libqt5charts5-dev qml-module-qtquick2 qml-module-qtquick-controls2 qml-module-qtquick-window2 qml-module-qtlocation qml-module-qtpositioning qml-module-qtquick-layouts
+    - cd build
+    - cmake ..
+    - make -j $(nproc)
+    - make install
+  allow_failure: true
+
+
 coverity-scan:
   image: ubuntu:bionic
   stage: build
