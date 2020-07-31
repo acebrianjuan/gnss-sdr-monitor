@@ -136,6 +136,20 @@ ubuntu18.04:
     - make install
 
 
+ubuntu19.04:
+  image: ubuntu:disco
+  stage: build
+  script:
+    - sed -i -re 's/([a-z]{2}\.)?archive.ubuntu.com|security.ubuntu.com/old-releases.ubuntu.com/g' /etc/apt/sources.list
+    - apt-get update
+    - apt-get install -y --no-install-recommends build-essential cmake git libboost-dev libboost-system-dev libprotobuf-dev protobuf-compiler qtbase5-dev qtdeclarative5-dev qtpositioning5-dev libqt5charts5-dev qml-module-qtquick2 qml-module-qtquick-controls2 qml-module-qtquick-window2 qml-module-qtlocation qml-module-qtpositioning qml-module-qtquick-layouts
+    - cd build
+    - cmake ..
+    - make -j $(nproc)
+    - make install
+  allow_failure: true
+
+
 ubuntu19.10:
   image: ubuntu:eoan
   stage: build
