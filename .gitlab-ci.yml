@@ -22,21 +22,6 @@ archlinux:
   allow_failure: true
 
 
-centos7:
-  image: centos:centos7
-  stage: build
-  script:
-    - yum install -y wget
-    - wget https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
-    - rpm -Uvh epel-release-latest-7.noarch.rpm
-    - yum install -y gcc-c++ make cmake git boost-devel protobuf-devel protobuf-compiler qt5-qtbase-devel qt5-qtdeclarative-devel qt5-qtlocation-devel qt5-qtcharts-devel qt5-qtdeclarative-devel
-    - cd build
-    - cmake ..
-    - make -j $(nproc)
-    - make install
-  allow_failure: true
-
-
 centos8:
   image: centos:centos8
   stage: build
@@ -149,32 +134,6 @@ ubuntu18.04:
     - cmake ..
     - make -j $(nproc)
     - make install
-
-
-ubuntu18.10:
-  image: ubuntu:cosmic
-  stage: build
-  script:
-    - apt-get update
-    - apt-get install -y --no-install-recommends build-essential cmake git libboost-dev libboost-system-dev libprotobuf-dev protobuf-compiler qtbase5-dev qtdeclarative5-dev qtpositioning5-dev libqt5charts5-dev qml-module-qtquick2 qml-module-qtquick-controls2 qml-module-qtquick-window2 qml-module-qtlocation qml-module-qtpositioning qml-module-qtquick-layouts
-    - cd build
-    - cmake ..
-    - make -j $(nproc)
-    - make install
-  allow_failure: true
-
-
-ubuntu19.04:
-  image: ubuntu:disco
-  stage: build
-  script:
-    - apt-get update
-    - apt-get install -y --no-install-recommends build-essential cmake git libboost-dev libboost-system-dev libprotobuf-dev protobuf-compiler qtbase5-dev qtdeclarative5-dev qtpositioning5-dev libqt5charts5-dev qml-module-qtquick2 qml-module-qtquick-controls2 qml-module-qtquick-window2 qml-module-qtlocation qml-module-qtpositioning qml-module-qtquick-layouts
-    - cd build
-    - cmake ..
-    - make -j $(nproc)
-    - make install
-  allow_failure: true
 
 
 ubuntu19.10:
