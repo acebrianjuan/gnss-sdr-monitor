@@ -105,7 +105,7 @@ QVariant MonitorPvtWrapper::position() const
     }
     else
     {
-        return QVariant();
+        return QVariant::fromValue(QGeoCoordinate());
     }
 }
 
