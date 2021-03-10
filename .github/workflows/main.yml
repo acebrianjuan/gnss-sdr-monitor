@@ -35,9 +35,9 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: install dependencies
-      run: brew install ninja cmake boost protobuf qt
+      run: brew update && brew install ninja cmake boost protobuf qt@5
     - name: configure
-      run: cd build && cmake -GNinja -DQt5_DIR=/usr/local/opt/qt/lib/cmake/Qt5 .. 
+      run: cd build && cmake -GNinja -DQt5_DIR=/usr/local/opt/qt@5/lib/cmake/Qt5 .. 
     - name: build
       run: cd build && ninja
     - name: install
