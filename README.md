@@ -53,7 +53,7 @@ This will activate the **serialized stream of data from the Monitor block** to t
 Making sure that the GUI setup matches that of the GNSS-SDR configuration file is a critical step for the connection to work. In the menu bar of the GUI go to `Edit > Preferences`, and verify that the port numbers are correct.
 
 <p align="center">
-  <img src="https://user-images.githubusercontent.com/34104100/73596584-8ffb3b80-4523-11ea-8322-6c1f42544ca5.png"/>
+  <img src="https://user-images.githubusercontent.com/34104100/113182152-df85e600-9252-11eb-9138-cc8f4def2d41.png"/>
 </p>
 
 Finally, if you want to make use of the **Telecommand** functionality (which is something I would recommend), append the following lines to the `#GLOBAL OPTIONS#` section of the configuration file.
