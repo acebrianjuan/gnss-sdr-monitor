@@ -187,8 +187,8 @@ void MainWindow::updateChart(QtCharts::QChart *chart, QtCharts::QXYSeries *serie
 
     series->replace(points);
 
-    chart->axisX()->setRange(min_x, max_x);
-    chart->axisY()->setRange(min_y, max_y);
+    chart->axes(Qt::Horizontal).back()->setRange(min_x, max_x);
+    chart->axes(Qt::Vertical).back()->setRange(min_y, max_y);
 }
 
 void MainWindow::toggleCapture()
@@ -370,8 +370,8 @@ void MainWindow::expandPlot(const QModelIndex &index)
             series->setMarkerSize(8);
             chart->addSeries(series);
             chart->createDefaultAxes();
-            chart->axisX()->setTitleText("I prompt");
-            chart->axisY()->setTitleText("Q prompt");
+            chart->axes(Qt::Horizontal).back()->setTitleText("I prompt");
+            chart->axes(Qt::Vertical).back()->setTitleText("Q prompt");
             chart->layout()->setContentsMargins(0, 0, 0, 0);
             chart->setContentsMargins(-18, -18, -14, -16);
 
@@ -412,8 +412,8 @@ void MainWindow::expandPlot(const QModelIndex &index)
             QLineSeries *series = new QLineSeries(chart);
             chart->addSeries(series);
             chart->createDefaultAxes();
-            chart->axisX()->setTitleText("TOW [s]");
-            chart->axisY()->setTitleText("C/N0 [db-Hz]");
+            chart->axes(Qt::Horizontal).back()->setTitleText("TOW [s]");
+            chart->axes(Qt::Vertical).back()->setTitleText("C/N0 [db-Hz]");
             chart->layout()->setContentsMargins(0, 0, 0, 0);
             chart->setContentsMargins(-18, -18, -14, -16);
 
@@ -454,8 +454,8 @@ void MainWindow::expandPlot(const QModelIndex &index)
             QLineSeries *series = new QLineSeries(chart);
             chart->addSeries(series);
             chart->createDefaultAxes();
-            chart->axisX()->setTitleText("TOW [s]");
-            chart->axisY()->setTitleText("Doppler [Hz]");
+            chart->axes(Qt::Horizontal).back()->setTitleText("TOW [s]");
+            chart->axes(Qt::Vertical).back()->setTitleText("Doppler [Hz]");
             chart->layout()->setContentsMargins(0, 0, 0, 0);
             chart->setContentsMargins(-18, -18, -14, -16);
 
