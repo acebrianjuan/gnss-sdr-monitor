@@ -257,8 +257,6 @@ void MainWindow::quit() { saveSettings(); }
 
 gnss_sdr::Observables MainWindow::readGnssSynchro(char buff[], int bytes)
 {
-    std::string data(buff, bytes);
-    m_stocks.ParseFromString(data);
     try
     {
         std::string data(buff, bytes);
