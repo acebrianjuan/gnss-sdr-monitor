@@ -81,8 +81,8 @@ DOPWidget::DOPWidget(QWidget *parent) : QWidget(parent)
 
     chart->setTitle("DOP vs Time");
     chart->createDefaultAxes();
-    chart->axisX()->setTitleText("TOW [s]");
-    chart->axisY()->setTitleText("DOP");
+    chart->axes(Qt::Horizontal).back()->setTitleText("TOW [s]");
+    chart->axes(Qt::Vertical).back()->setTitleText("DOP");
     chart->layout()->setContentsMargins(0, 0, 0, 0);
     chart->setContentsMargins(-18, -18, -14, -16);
 
@@ -180,7 +180,7 @@ void DOPWidget::populateSeries(boost::circular_buffer<QPointF> buffer, QtCharts:
 
         series->replace(vec);
 
-        chart->axisX()->setRange(min_x, max_x);
-        chart->axisY()->setRange(min_y, max_y);
+        chart->axes(Qt::Horizontal).back()->setRange(min_x, max_x);
+        chart->axes(Qt::Vertical).back()->setRange(min_y, max_y);
     }
 }
