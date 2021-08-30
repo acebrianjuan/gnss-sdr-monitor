@@ -60,8 +60,8 @@ AltitudeWidget::AltitudeWidget(QWidget *parent) : QWidget(parent)
     chart->setTitle("Altitude vs Time");
     chart->legend()->hide();
     chart->createDefaultAxes();
-    chart->axisX()->setTitleText("TOW [s]");
-    chart->axisY()->setTitleText("Altitude [m]");
+    chart->axes(Qt::Horizontal).back()->setTitleText("TOW [s]");
+    chart->axes(Qt::Vertical).back()->setTitleText("Altitude [m]");
     chart->layout()->setContentsMargins(0, 0, 0, 0);
     chart->setContentsMargins(-18, -18, -14, -16);
 
@@ -114,8 +114,8 @@ void AltitudeWidget::redraw()
 
         m_series->replace(vec);
 
-        chart->axisX()->setRange(min_x, max_x);
-        chart->axisY()->setRange(min_y, max_y);
+        chart->axes(Qt::Horizontal).back()->setRange(min_x, max_x);
+        chart->axes(Qt::Vertical).back()->setRange(min_y, max_y);
     }
 }
 
