@@ -4,7 +4,7 @@ if(NOT Boost_FOUND)
      message(FATAL_ERROR "Fatal error: Boost required.")
 endif()
 
-find_package(Protobuf REQUIRED)
+find_package(Protobuf REQUIRED CONFIG)
 if(${Protobuf_VERSION} VERSION_LESS "3.0.0")
      message(FATAL_ERROR "Fatal error: Protocol Buffers > v3.0.0 required.")
 endif()

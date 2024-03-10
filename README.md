@@ -149,7 +149,7 @@ $ git clone https://github.com/acebrianjuan/gnss-sdr-monitor
 
 ~~~~~~
 $ cd gnss-sdr-monitor/build
-$ cmake ..
+$ cmake -Dprotobuf_MODULE_COMPATIBLE:BOOL=ON ..
 $ make
 ~~~~~~
 
@@ -165,4 +165,3 @@ $ sudo make install
 $ cd src/
 $ ./gnss-sdr-monitor
 ~~~~~~
-
