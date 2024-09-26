@@ -4,7 +4,7 @@ if(NOT Boost_FOUND)
      message(FATAL_ERROR "Fatal error: Boost required.")
 endif()
 
-find_package(Protobuf REQUIRED CONFIG)
+find_package(Protobuf REQUIRED)
 if(${Protobuf_VERSION} VERSION_LESS "3.0.0")
      message(FATAL_ERROR "Fatal error: Protocol Buffers > v3.0.0 required.")
 endif()
@@ -71,6 +71,6 @@ set(RESOURCES
 
 add_executable(${TARGET} ${SOURCES} ${UI_SOURCES} ${RESOURCES})
 
-target_link_libraries(${TARGET} PUBLIC ${QT5_LIBRARIES} Boost::boost protobuf::libprotobuf)
+target_link_libraries(${TARGET} PUBLIC ${QT5_LIBRARIES} Boost::boost ${Protobuf_LIBRARIES})
 
 install(TARGETS ${TARGET} RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
