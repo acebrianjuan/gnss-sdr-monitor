@@ -71,6 +71,6 @@ set(RESOURCES
 
 add_executable(${TARGET} ${SOURCES} ${UI_SOURCES} ${RESOURCES})
 
-target_link_libraries(${TARGET} PUBLIC ${QT5_LIBRARIES} Boost::boost protobuf::libprotobuf)
+target_link_libraries(${TARGET} PUBLIC ${QT5_LIBRARIES} Boost::boost ${Protobuf_LIBRARIES})
 
 install(TARGETS ${TARGET} RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})

@@ -39,4 +39,16 @@ double gdop = 25;  // Geometric Dilution of Precision
 double pdop = 26;  // Position (3D) Dilution of Precision
 double hdop = 27;  // Horizontal Dilution of Precision
 double vdop = 28;  // Vertical Dilution of Precision
+
+double user_clk_drift_ppm = 29;  // User clock drift [ppm]
+string utc_time = 30;  // PVT UTC time (rfc 3339 datetime string)
+
+double vel_e = 31;  // Velocity East component in the local frame, in m/s
+double vel_n = 32;  // Velocity North component in the local frame, in m/s
+double vel_u = 33;  // Velocity Up component in the local frame, in m/s
+
+double cog = 34;  // Course Over Ground, in deg
+
+uint32 galhas_status = 35;  // Galileo HAS status: 1- HAS messages decoded and applied, 0 - HAS not available
+string geohash = 36;  // Encoded geographic location. See https://en.wikipedia.org/wiki/Geohash
 }
